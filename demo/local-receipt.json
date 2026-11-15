@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "description": "OpenLup first-party demo store",
+  "qualification": "released 0.43.0 seed; application verification only",
+  "setVersion": "0.43.0",
+  "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+  "extraction": {
+    "schemaVersion": 2,
+    "mode": "released",
+    "setVersion": "0.43.0",
+    "sourceRevision": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+    "sourceRevisionVerification": "supplied",
+    "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+    "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
+  },
+  "node": "v24.21.0",
+  "postgresImage": "ghcr.io/openlup/library/postgres:16@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
+  "startedAt": "2026-11-15T08:31:16.212Z",
+  "results": [
+    {
+      "name": "install",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 1166
+    },
+    {
+      "name": "typecheck",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 2530
+    },
+    {
+      "name": "build",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 1714
+    },
+    {
+      "name": "application-tests",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 2096
+    },
+    {
+      "name": "postgres-mirror-pull",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 147,
+      "evidence": "local rehearsal, shimmed pull, not CI evidence"
+    },
+    {
+      "name": "browser-install",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 2694
+    },
+    {
+      "name": "sandbox-purchase-journey",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 13095
+    }
+  ],
+  "result": "PASS",
+  "endedAt": "2026-11-15T08:31:39.657Z",
+  "evidence": "local rehearsal, shimmed pull, not CI evidence",
+  "verifiedCommit": "64d39f5d42ba63bade494ca0b723e479cb78e902",
+  "verifiedTree": "3f1380a73be91ebea872525ee6929d786be117e2",
+  "durationMs": 23445,
+  "localPullRehearsal": {
+    "scope": "pull of the exact pinned reference only; all other Docker commands passed through",
+    "cachedImageId": "sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
+    "idEqualityVerified": true,
+    "retaggedToPinnedRepository": true,
+    "shimLocation": "external to this repository; uncommitted",
+    "registryAccessProven": false
+  },
+  "authenticatedPullAttempt": {
+    "startedAt": "2026-11-15T08:29:29.110Z",
+    "endedAt": "2026-11-15T08:29:37.067Z",
+    "result": "FAIL",
+    "results": [
+      {
+        "name": "install",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 903
+      },
+      {
+        "name": "typecheck",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 1854
+      },
+      {
+        "name": "build",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 1485
+      },
+      {
+        "name": "application-tests",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 1521
+      },
+      {
+        "name": "postgres-mirror-pull",
+        "result": "FAIL",
+        "exitCode": 1,
+        "durationMs": 2191
+      },
+      {
+        "name": "sandbox-purchase-journey",
+        "result": "BLOCKED",
+        "reason": "authenticated mirrored PostgreSQL pull failed; no fallback",
+        "durationMs": 0
+      }
+    ],
+    "reason": "GHCR permission_denied: local token lacks required package scope; no repository fallback added"
+  },
+  "priorRehearsal": {
+    "startedAt": "2026-11-15T08:30:09.977Z",
+    "endedAt": "2026-11-15T08:30:32.414Z",
+    "result": "FAIL",
+    "results": [
+      {
+        "name": "install",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 1192
+      },
+      {
+        "name": "typecheck",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 2446
+      },
+      {
+        "name": "build",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 3479
+      },
+      {
+        "name": "application-tests",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 1890
+      },
+      {
+        "name": "postgres-mirror-pull",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 122
+      },
+      {
+        "name": "browser-install",
+        "result": "PASS",
+        "exitCode": 0,
+        "durationMs": 2762
+      },
+      {
+        "name": "sandbox-purchase-journey",
+        "result": "FAIL",
+        "exitCode": 1,
+        "durationMs": 10542
+      }
+    ],
+    "evidence": "local rehearsal, shimmed pull, not CI evidence",
+    "failure": "Playwright leading title anchor selected zero tests because the full selection includes project and file; corrected in the verified CI commit"
+  },
+  "journey": {
+    "configurations": [
+      "supplements",
+      "coffee"
+    ],
+    "browserTestsPassed": 2,
+    "applicationTestsPassed": 299,
+    "settlementTallyAndEmptyReplay": "PASS",
+    "sandboxOnly": true,
+    "retries": 0
+  },
+  "qualificationReceiptComparison": {
+    "repository": "openlup/openlup",
+    "runId": 43694218636,
+    "url": "https://github.com/openlup/openlup/actions/runs/43694218636",
+    "result": "PASS",
+    "receiptSha256": "6e5c3ddc9735d97b99db7712e122168f7f8deea88db597733c19a330df72203c",
+    "extraction": {
+      "schemaVersion": 2,
+      "mode": "released",
+      "setVersion": "0.43.0",
+      "sourceRevision": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+      "sourceRevisionVerification": "supplied",
+      "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+      "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
+    },
+    "entireExtractionIdentityEqual": true,
+    "contentSha256Equal": true,
+    "lockfileSha256Equal": true,
+    "lockfileDifference": "none; resolution produced identical bytes"
+  },
+  "resourceGate": {
+    "beforeVerification": {
+      "load15": 3.05,
+      "memoryFreePercent": 85
+    },
+    "required": {
+      "load15Below": 20,
+      "memoryFreePercentAtLeast": 25
+    },
+    "runnerLoad15Limit": 12
+  },
+  "scope": "Local first-party demo store seed; no remote, push, deployment or adjacent-pair upgrade",
+  "retro": "The first database rehearsal exposed a previously unexecuted selector bug. Listing the exact browser selection proved both configurations before the corrected end-to-end run; no new fallback or retry mechanism was needed."
+}
