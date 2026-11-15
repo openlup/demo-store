@@ -1,0 +1,41 @@
+{
+  "description": "Released 0.43.0 seed for the OpenLup first-party demo store; application verification is separate from release qualification",
+  "sourceTag": "openlup-core-v0.43.0",
+  "sourceRevision": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+  "sourceRevisionVerification": "supplied",
+  "tagCommitVerified": true,
+  "sourceArchiveSha256": "75aaa0c6563d28f89dd319a9db8bdc40df1f8ae4fb9705bc1659d38118ea2a72",
+  "extractorRevision": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+  "extractor": "examples/neutral-store/extract.mjs from the release tag archive",
+  "manifest": {
+    "schemaVersion": 2,
+    "commit": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+    "packages": [
+      {
+        "name": "@openlup/core",
+        "version": "0.43.0",
+        "integrity": "sha512-Bqg5QGMpOIG81qBq4WIfPJNC00ulP7/bAYxb8qK5Lm/OjAuOKxBY//9qp3Rj6Jda4t0lnJLbG8N9DTLfdbanrA=="
+      },
+      {
+        "name": "@openlup/outbox",
+        "version": "0.43.0",
+        "integrity": "sha512-B5cFMeBC8R+JJQg0+4aVucrrFT5mRJohnQzoecXN8jZj+YNp+gQvykPZSBzX0hiF+kGOnYT73jq4mQ0s4ttbpA=="
+      },
+      {
+        "name": "@openlup/platform",
+        "version": "0.43.0",
+        "integrity": "sha512-RfGAo/w4u0mVDXiuR8u3YT9NXvp0QL3c88w29eHUSA97QPntnKmhxHQ7eaI9y+1N7ckcljDrhkWeDjF0/uu5mg=="
+      }
+    ]
+  },
+  "integrityCrossChecks": {
+    "npmRegistry": "https://registry.npmjs.org",
+    "allPackagesMatchRegistry": true,
+    "allPackagesMatchCutManifest": true,
+    "cutManifestCommit": "822bffcb38916d042466a389fb4cf2001a11f6ff"
+  },
+  "toolchain": {
+    "node": "24.21.0",
+    "npm": "11.19.0"
+  }
+}

@@ -26,7 +26,14 @@
     "owned/settlement-subscriber.ts",
     "owned/settlements.ts",
     "test/demo-settlement.test.ts",
-    "demo/EXTENSION.md"
+    "demo/EXTENSION.md",
+    ".github/workflows/ci.yml",
+    "demo/images.json",
+    "demo/purchase-journey.mjs",
+    "demo/verify.mjs",
+    "demo/README.md",
+    "demo/local-receipt.json",
+    "demo/preparation-inputs.json"
   ],
   "managed": [
     "host/account-renewal.ts",

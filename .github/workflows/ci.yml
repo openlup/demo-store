@@ -1,0 +1,48 @@
+name: Demo store CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 6 * * 1'
+permissions: {}
+concurrency:
+  group: demo-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    name: Demo store verification
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24.21.0
+          package-manager-cache: false
+      - name: Authenticate mirror reads
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_ACTOR: ${{ github.actor }}
+        run: echo "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin
+      - name: Install, typecheck, build, app tests and sandbox purchase
+        # Runs npm ci from the committed lock, then npm run typecheck/build,
+        # npm test and the native browser purchase on authenticated PG16 by digest.
+        run: node demo/verify.mjs
+      - name: Retain JSON receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: demo-store-receipt-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .context/ci-receipt.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90
+      - name: End mirror authentication
+        if: always()
+        run: docker logout ghcr.io
