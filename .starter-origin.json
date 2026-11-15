@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 2,
+  "mode": "released",
+  "setVersion": "0.43.0",
+  "sourceRevision": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+  "sourceRevisionVerification": "supplied",
+  "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+  "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
+}

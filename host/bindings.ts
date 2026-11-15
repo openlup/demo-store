@@ -1,0 +1,92 @@
+import type { IncomingMessage } from 'node:http';
+import type { StoreConfig } from '../shared/config.ts';
+import type { ActionInput, ActionResult, Operation } from '../shared/api.ts';
+import { operationLimits } from '../shared/limits.ts';
+import { evaluateOffer, validateCart } from '../shared/offer.ts';
+import type { PersonalDataContributorRegistry } from '@openlup/platform/identity';
+import type { PgQueryExecutor } from '@openlup/platform/data';
+
+export interface VerifiedActor {
+  customerRef: string | null;
+  operatorRef: string | null;
+  /** Server-derived values, never populated from action payloads. */
+  principalRef?: string;
+  sessionToken?: string;
+  /** Host-derived peer fingerprint for public intake quotas; never a payload value. */
+  requesterKey?: string;
+  /** Canonical origin derived from the admitted Host, never a payload or forwarding header. */
+  requestOrigin?: string;
+}
+
+export interface ActionContext {
+  commandKey: string;
+  /** Actual transport cookie; never supplied by an action body. */
+  requestCookie?: string;
+  actor: VerifiedActor;
+  config: StoreConfig;
+  setCookie?: (cookie: string) => void;
+  accept?: () => Promise<void>;
+}
+
+export type ActionBinding = (input: ActionInput, context: ActionContext) => Promise<ActionResult>;
+
+export interface ApplicationBindings {
+  /** Programmatic owner composition only; never serialized as an HTTP action. */
+  personalData?: PersonalDataContributorRegistry<PgQueryExecutor>;
+  actions: Partial<Record<Operation, ActionBinding>>;
+  authenticate(request: IncomingMessage): Promise<VerifiedActor>;
+  close(): Promise<void>;
+}
+
+/** Pending native dependencies remain visibly unbound. Never use browser fixtures as a store. */
+export function pendingBindings(): ApplicationBindings {
+  return {
+    actions: {},
+    authenticate: async () => ({ customerRef: null, operatorRef: null }),
+    close: async () => {},
+  };
+}
+
+export const customerOperations = new Set<Operation>([
+  'account.billing', 'account.defaults', 'account.addresses', 'account.paymentPreference', 'account.deliveryPreference', 'subscription.savedAddress',
+  'account.profile', 'account.invoiceCorrection', 'checkout.recoveryStart',
+  'account.read', 'account.orders', 'account.invoice', 'account.consent',
+  'subscription.command', 'subscription.preview', 'subscription.catalog', 'subscription.address', 'return.request',
+]);
+
+export async function dispatchAction(
+  bindings: ApplicationBindings,
+  operation: Operation,
+  input: ActionInput,
+  context: ActionContext,
+): Promise<ActionResult> {
+  if (operation.startsWith('operator.') || operation === 'ingest.submit') {
+    if (context.actor.operatorRef === null) return { ok: false, code: 'operator_required' };
+  }
+  if (customerOperations.has(operation) && context.actor.customerRef === null) {
+    return { ok: false, code: 'customer_session_required' };
+  }
+  const limit = operationLimits[operation];
+  if (limit) return { ok: false, code: limit.code };
+  if (operation === 'offer.validate' || operation === 'checkout.create') {
+    const selected = validateCart(context.config,input.cart);
+    if (!selected.ok) return { ok: false,code: selected.issues[0]!.code };
+    if (selected.cart.mode === 'subscription' && input.acquisitionCapability !== 'subscription-acquisition.v1') return { ok: false,code: 'acquisition_terms_capability_required' };
+    if (selected.cart.mode === 'subscription' && operation === 'offer.validate' && !bindings.actions[operation]) return { ok: false,code: 'host_binding_required' };
+  }
+  if (operation === 'offer.validate' && bindings.actions[operation]) return bindings.actions[operation]!(input, context);
+  if (operation === 'offer.validate') {
+    const result = evaluateOffer(context.config, input.cart);
+    return result.ok ? { ok: true, value: result.quote } : { ok: false, code: result.issues[0]!.code };
+  }
+  if (operation === 'checkout.create') {
+    const offer = evaluateOffer(context.config, input.cart);
+    if (!offer.ok) return { ok: false, code: offer.issues[0]!.code };
+    if (input.termsAccepted !== true || input.termsRevision !== context.config.legal.revision) {
+      return { ok: false, code: 'starter_terms_required' };
+    }
+  }
+  const action = bindings.actions[operation];
+  if (!action) return { ok: false, code: 'host_binding_required' };
+  return action(input, context);
+}

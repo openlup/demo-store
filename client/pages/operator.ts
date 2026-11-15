@@ -1,0 +1,343 @@
+import { act } from '../api.ts';
+import type { PageContext } from '../context.ts';
+import type { Operation } from '../../shared/api.ts';
+import type { CopyKey } from '../../owned/copy.ts';
+import { operationLimitDefinitions } from '../../shared/limits.ts';
+import { isRecord } from '../../shared/offer.ts';
+import { routes } from '../../shared/routes.ts';
+import { el, link, append, renderValue } from '../dom.ts';
+import { refusal, actionForm, nativeActions, otherRefusal, readPanel, refusedAction, type FieldSpec } from '../forms.ts';
+
+const orderRef: FieldSpec = { name: 'orderRef', label: 'orderRef' };
+const customerRef: FieldSpec = { name: 'customerRef', label: 'customerRef' };
+const shipmentRef: FieldSpec = { name: 'shipmentRef', label: 'shipmentRef' };
+
+export function operatorPage(context: PageContext): HTMLElement {
+  const navItems: Array<[string, CopyKey]> = [
+    ['orders', 'orders'], ['customers', 'customer360'], ['shipments', 'shipments'],
+    ['returns', 'returns'], ['catalogue', 'bundles'], ['reviews', 'review'],
+    ['partners', 'partners'], ['risk', 'risk'], ['market', 'market'], ['ingest', 'ingest'],
+  ];
+  return el('div', {}, el('h1', {}, context.t('admin')),
+    el('p', {}, context.t('operatorBody')),
+    el('section', { id: 'operator-sign-in', class: 'panel' },
+      actionForm(context, { operation: 'auth.operator', submit: 'operatorRequestSignIn',
+        fields: [{ name: 'email', label: 'email', type: 'email', autocomplete: 'email' }] }),
+      operatorTokenForm(context)),
+    el('nav', { 'aria-label': context.t('admin'), class: 'section-nav' },
+      ...navItems.map(([anchor, label]) => link(context.t(label), `${routes.admin[context.locale]}#${anchor}`))),
+    readPanel(context, 'bindingStatus', 'application.status'),
+    orderActions(context), customerActions(context), shipmentActions(context), returnActions(context),
+    bundleActions(context), reviewActions(context), partnerActions(context),
+    el('section', { id: 'risk', class: 'panel' }, el('h2', {}, context.t('risk')),
+      el('p', {}, context.t('riskBody')), refusedAction(context, 'riskAction', 'starter_risk_disabled')),
+    marketInputs(context), ingestActions(context),
+    nativeActions(context, ['N1', 'N2', 'N3', 'N9']));
+}
+
+function operatorTokenForm(context: PageContext): HTMLElement {
+  const form = actionForm(context, { operation: 'auth.operator', submit: 'operatorRedeemToken',
+    fields: [{ name: 'token', label: 'operatorToken', type: 'password', maxLength: 43,
+      pattern: '(?:[A-Za-z0-9_]|-){43}', autocomplete: 'one-time-code' }],
+    onSuccess: () => { (form as HTMLFormElement).reset(); },
+  });
+  return form;
+}
+
+function orderActions(context: PageContext): HTMLElement {
+  const make = (operation: Operation, title: CopyKey, fields: FieldSpec[]) => actionForm(context, {
+    operation, title, submit: title, fields: [orderRef, ...fields],
+  });
+  return el('section', { id: 'orders', class: 'panel' }, el('h2', {}, context.t('orders')),
+    readPanel(context, 'orders', 'operator.orders'),
+    el('div', { class: 'form-grid' },
+      operatorOrderPortal(context),
+      make('operator.hold', 'hold', [{ name: 'reason', label: 'reasonCode', type: 'select',
+        options: context.config.orderControls.holdReasons.map(choice => ({ value: choice.code, text: choice.label[context.locale] })) },
+        { name: 'note', label: 'note', type: 'textarea', required: false, maxLength: 1000 }]),
+      actionForm(context, { operation: 'operator.release', title: 'releaseHold', submit: 'releaseHold',
+        fields: [{ name: 'holdRef', label: 'holdRef' },
+          { name: 'note', label: 'note', type: 'textarea', required: false, maxLength: 1000 }] }),
+      make('operator.invoice', 'invoiceRequest', [])));
+}
+
+function customerActions(context: PageContext): HTMLElement {
+  return el('section', { id: 'customers', class: 'panel' }, el('h2', {}, context.t('customer360')),
+    el('p', {}, context.t('supportRosterBody')),
+    actionForm(context, {
+      operation: 'operator.customerSearch', submit: 'searchCustomer',
+      fields: [{ name: 'query', label: 'search' }],
+    }),
+    actionForm(context, {
+      operation: 'operator.customer', submit: 'read', fields: [customerRef],
+    }),
+    actionForm(context, {
+      operation: 'operator.recovery', submit: 'repairAction',
+      fields: [customerRef, { name: 'caseRef', label: 'caseRef' }],
+    }));
+}
+
+function shipmentActions(context: PageContext): HTMLElement {
+  return el('section', { id: 'shipments', class: 'panel' }, el('h2', {}, context.t('shipments')),
+    el('p', {}, context.t('shipmentEvidenceBody')),
+    readPanel(context, 'shipments', 'operator.shipments'), operatorShipmentPortal(context));
+}
+
+function operatorShipmentPortal(context: PageContext): HTMLElement {
+  const controls = el('div', { 'data-shipment-controls': '' });
+  const outcome = el('div', { 'data-shipment-result': '', role: 'status', 'aria-live': 'polite' });
+  let generation = 0;
+  const json = (value: unknown) => {
+    const parsed: unknown = JSON.parse(String(value));
+    if (!isRecord(parsed)) throw new Error('starter_input_invalid');
+    return parsed;
+  };
+  async function show(value: unknown) {
+    const current = ++generation; controls.replaceChildren();
+    if (!isRecord(value) || !isRecord(value.order) || typeof value.order.id !== 'string') return;
+    const parcel = value.order, target = Object.freeze({ shipmentRef: parcel.id });
+    const refresh = (result: unknown) => {
+      if (current !== generation) return;
+      outcome.replaceChildren(renderValue(result));
+      void (async () => {
+        const fresh = await act('operator.shipment', target, crypto.randomUUID());
+        if (current === generation) { if (fresh.ok) await show(fresh.value); else { ++generation; controls.replaceChildren(refusal(context, fresh.code)); } }
+      })();
+    };
+    append(controls, el('h3', {}, String(parcel.id)), renderValue(value));
+    const metadata: FieldSpec = { name: 'metadata', label: 'shipmentMetadata', type: 'textarea', value: '{}', maxLength: 20000 };
+    const confirm: FieldSpec = { name: 'confirmed', label: 'shipmentConfirm', type: 'checkbox' };
+    if (!['handed_over','in_transit','delivered','cancelled'].includes(String(parcel.status))) append(controls,
+      actionForm(context, { operation: 'operator.label', title: 'label', submit: 'label', input: () => target, onSuccess: refresh,
+        fields: [{ name: 'providerKind', label: 'shipmentProvider' }, { name: 'providerTrackingId', label: 'trackingNumber' },
+          { name: 'labelUrl', label: 'shipmentLabelUrl', required: false, maxLength: 2000 },
+          { name: 'deliveryEstimateDays', label: 'shipmentEstimate', type: 'number', min: 0, required: false },
+          { name: 'rawProviderPayload', label: 'shipmentRawPayload', type: 'textarea', value: '{}', maxLength: 20000 }, metadata, confirm],
+        transform: values => ({ providerKind: values.providerKind, providerTrackingId: values.providerTrackingId,
+          ...(values.labelUrl ? { labelUrl: values.labelUrl } : {}),
+          ...(Number.isSafeInteger(values.deliveryEstimateDays) ? { deliveryEstimateDays: values.deliveryEstimateDays } : {}),
+          rawProviderPayload: json(values.rawProviderPayload), metadata: json(values.metadata), confirmed: values.confirmed }) }));
+    if (['packed','label_created'].includes(String(parcel.status))) append(controls,
+      actionForm(context, { operation: 'operator.handoff', title: 'handoff', submit: 'handoff', fields: [metadata, confirm],
+        input: () => target, transform: values => ({ metadata: json(values.metadata), confirmed: values.confirmed }), onSuccess: refresh }));
+    if (['label_created','handed_over','in_transit','exception','delivered'].includes(String(parcel.status))) append(controls,
+      actionForm(context, { operation: 'operator.delivery', title: 'delivery', submit: 'delivery', input: () => target, onSuccess: refresh,
+        fields: [{ name: 'status', label: 'status', type: 'select', options: (parcel.status === 'delivered' ? ['delivered'] : ['in_transit','delivered','exception']).map(value =>
+          ({ value, text: context.t(value === 'delivered' ? 'shipmentDelivered' : value === 'exception' ? 'shipmentException' : 'shipmentInTransit') })) },
+          { name: 'providerTrackingId', label: 'trackingNumber', required: false, value: typeof parcel.providerTrackingId === 'string' ? parcel.providerTrackingId : '' },
+          { name: 'rawEvent', label: 'shipmentRawEvent', type: 'textarea', value: '{}', maxLength: 20000 }, metadata, confirm],
+        transform: values => ({ status: values.status, ...(values.providerTrackingId ? { providerTrackingId: values.providerTrackingId } : {}),
+          rawEvent: json(values.rawEvent), metadata: json(values.metadata), confirmed: values.confirmed }) }));
+  }
+  return el('div', {}, actionForm(context, { operation: 'operator.shipment', submit: 'read', fields: [shipmentRef],
+    prepare: async values => { ++generation; controls.replaceChildren(); return values; }, onSuccess: value => { void show(value); } }), outcome, controls);
+}
+
+function returnActions(context: PageContext): HTMLElement {
+  return el('section', { id: 'returns', class: 'panel' }, el('h2', {}, context.t('returns')),
+    el('p', {}, operationLimitDefinitions.returnsReader.explanation[context.locale]),
+    el('p', {}, context.t('returnIntentBody')),
+    ...(['operator.returnApprove', 'operator.returnReject'] as const).map(operation => actionForm(context, {
+      operation, submit: operation === 'operator.returnApprove' ? 'approveReturn' : 'rejectReturn',
+      fields: [{ name: 'returnRef', label: 'returnRef' }, { name: 'note', label: 'note', type: 'textarea', required: false },
+        ...(operation === 'operator.returnApprove' ? [
+          { name: 'refundMode', label: 'refundMode', type: 'select', options: [
+            { value: 'full', text: context.t('refundFull') }, { value: 'partial', text: context.t('refundPartial') },
+            { value: 'none', text: context.t('refundNone') }] },
+          { name: 'refundAmountCents', label: 'amountMinor', type: 'number', min: 0, required: false },
+        ] satisfies FieldSpec[] : []),
+      ],
+      transform: values => {
+        if (operation === 'operator.returnApprove' && values.refundMode === 'partial'
+          && (!Number.isSafeInteger(values.refundAmountCents) || Number(values.refundAmountCents) < 0)) {
+          throw new Error('starter_input_invalid');
+        }
+        return { returnRef: values.returnRef, adminNote: values.note,
+          ...(operation === 'operator.returnApprove' ? { refundMode: values.refundMode,
+            ...(Number.isSafeInteger(values.refundAmountCents) ? { refundAmountCents: values.refundAmountCents } : {}) } : {}) };
+      },
+    })),
+    ...(['receiveReturn', 'restockReturn', 'refundReturn'] as const).map(key => otherRefusal(context, key)));
+}
+
+function bundleActions(context: PageContext): HTMLElement {
+  const make = (label: CopyKey, action: string, fields: FieldSpec[] = []) => actionForm(context, {
+    operation: 'operator.bundleCommand', title: label, submit: label,
+    fields: [{ name: 'bundleCode', label: 'bundleCode' }, ...fields], input: () => ({ action }),
+  });
+  return el('section', { id: 'catalogue', class: 'panel' }, el('h2', {}, context.t('bundles')),
+    el('p', {}, context.t('catalogAuthoringBody')),
+    readPanel(context, 'bundles', 'operator.bundles'),
+    actionForm(context, {
+      operation: 'operator.bundle', submit: 'read', fields: [{ name: 'bundleCode', label: 'bundleCode' }],
+    }),
+    el('div', { class: 'form-grid' },
+      make('bundleDraft', 'create', [{ name: 'title', label: 'bundleTitle' }]),
+      actionForm(context, {
+        operation: 'operator.bundleCommand', title: 'bundleComposition', submit: 'bundleComposition',
+        fields: [{ name: 'bundleCode', label: 'bundleCode' },
+          { name: 'components', label: 'ingestJson', type: 'textarea', value: JSON.stringify([
+            { sku: context.config.offer.products[0]?.sku, quantity: 1, isAddon: false },
+          ], null, 2) }],
+        transform: values => {
+          const components: unknown = JSON.parse(String(values.components));
+          if (!Array.isArray(components)) throw new Error('starter_input_invalid');
+          return { action: 'set_composition', bundleCode: values.bundleCode, components };
+        },
+      }),
+      make('bundleTarget', 'set_target_price', [
+        { name: 'amountMinor', label: 'amountMinor', type: 'number', min: 1 },
+      ]),
+      make('bundleActivate', 'activate'), make('bundleDeactivate', 'deactivate'),
+      make('bundleArchive', 'archive'), make('bundleRestore', 'restore'),
+      make('bundleClone', 'clone', [{ name: 'newCode', label: 'actionRef' }])) ,
+    catalogDraftActions(context),
+    otherRefusal(context, 'publishCatalog'));
+}
+
+function catalogDraftActions(context: PageContext): HTMLElement {
+  const productId = crypto.randomUUID();
+  return el('section', { id: 'catalogue-drafts' },
+    readPanel(context, 'catalogDrafts', 'operator.catalogDrafts'),
+    actionForm(context, { operation: 'operator.catalogDrafts', submit: 'catalogDraftRead',
+      fields: [{ name: 'draftId', label: 'catalogDraftId' }], input: () => ({ action: 'get' }) }),
+    actionForm(context, { operation: 'operator.catalogDrafts', title: 'catalogDraftCommand', submit: 'save',
+      fields: [
+        { name: 'action', label: 'catalogDraftAction', type: 'select', options:
+          ([['create', 'catalogDraftCreate'], ['revise', 'catalogDraftRevise'], ['abandon', 'catalogDraftAbandon']] as const)
+            .map(([value, label]) => ({ value, text: context.t(label) })) },
+        { name: 'draftId', label: 'catalogDraftId', value: crypto.randomUUID() },
+        { name: 'expectedRevision', label: 'catalogDraftRevision', type: 'number', min: 0, value: '0' },
+        { name: 'payload', label: 'catalogDraftPayload', type: 'textarea', maxLength: 20000,
+          value: JSON.stringify({ schemaVersion: 1, product: { id: productId,
+            type: { key: 'starter:item', version: 1 }, dimensions: [], sharedContent: { title: 'Fictional item' } },
+          skus: [] }, null, 2) },
+      ], transform: values => ({ action: values.action, draftId: values.draftId,
+        expectedRevision: values.expectedRevision,
+        ...(values.action === 'abandon' ? {} : { payload: JSON.parse(String(values.payload)) as unknown }) }),
+    }));
+}
+
+function reviewActions(context: PageContext): HTMLElement {
+  return el('section', { id: 'reviews', class: 'panel' }, el('h2', {}, context.t('review')),
+    readPanel(context, 'review', 'operator.reviews'),
+    actionForm(context, {
+      operation: 'operator.reviewModerate', submit: 'save',
+      fields: [{ name: 'reviewRef', label: 'actionRef' },
+        { name: 'action', label: 'status', type: 'select', options: [
+          { value: 'publish', text: context.t('reviewPublish') }, { value: 'hide', text: context.t('reviewHide') },
+        ] }],
+    }));
+}
+
+function partnerActions(context: PageContext): HTMLElement {
+  return el('section', { id: 'partners', class: 'panel' }, el('h2', {}, context.t('partners')),
+    el('p', {}, context.t('partnersBody')),
+    readPanel(context, 'partners', 'operator.partners'),
+    actionForm(context, {
+      operation: 'operator.partnerTransition', submit: 'save',
+      fields: [{ name: 'id', label: 'caseRef' },
+        { name: 'expectedVersion', label: 'actionRef', type: 'number', min: 1, value: '1' },
+        { name: 'status', label: 'status', type: 'select', options: [
+          { value: 'contacted', text: context.t('partnerContacted') }, { value: 'qualified', text: context.t('partnerQualified') },
+          { value: 'disqualified', text: context.t('partnerDisqualified') },
+          { value: 'closed_won', text: context.t('partnerClosedWon') }, { value: 'closed_lost', text: context.t('partnerClosedLost') },
+        ] }],
+    }));
+}
+
+function marketInputs(context: PageContext): HTMLElement {
+  return el('section', { id: 'market', class: 'panel' }, el('h2', {}, context.t('market')),
+    el('p', {}, context.t('marketBody')),
+    el('dl', { class: 'response-fields' },
+      el('dt', {}, context.t('country')), el('dd', {}, context.config.market.country),
+      el('dt', {}, context.t('currency')), el('dd', {}, context.config.market.currency),
+      el('dt', {}, context.t('language')), el('dd', {}, context.locale)));
+}
+
+function ingestActions(context: PageContext): HTMLElement {
+  return el('section', { id: 'ingest', class: 'panel' }, el('h2', {}, context.t('ingest')),
+    el('p', {}, context.t('ingestBody')),
+    actionForm(context, {
+      operation: 'ingest.submit', submit: 'ingestAction',
+      fields: [{ name: 'order', label: 'ingestJson', type: 'textarea', maxLength: 20000 }],
+      transform: values => {
+        const order: unknown = JSON.parse(String(values.order));
+        if (!isRecord(order)) throw new Error('starter_input_invalid');
+        return { order };
+      },
+    }));
+}
+
+
+/** Fresh detail owns the target and consequences; native commands recheck admission. */
+function operatorOrderPortal(context: PageContext): HTMLElement {
+  const controls = el('div', { 'data-order-controls': '' });
+  const outcome = el('div', { 'data-parcel-result': '', role: 'status', 'aria-live': 'polite' });
+  let generation = 0;
+  async function show(value: unknown) {
+    const current = ++generation; controls.replaceChildren();
+    if (!isRecord(value) || !isRecord(value.order) || typeof value.order.orderId !== 'string') return;
+    const order = value.order, orderId = order.orderId as string;
+    const mutationCompleted = (result: unknown) => {
+      if (current !== generation) return;
+      outcome.replaceChildren(renderValue(result));
+      void (async () => {
+        const fresh = await act('operator.order', { orderRef: orderId }, crypto.randomUUID());
+        if (current === generation && fresh.ok) await show(fresh.value);
+      })();
+    };
+    append(controls, el('h3', {}, orderId), renderValue(value));
+    if (!order.activeHoldReasons || !Array.isArray(order.activeHoldReasons)) return;
+    const holds = order.activeHoldReasons;
+    if (['pending_payment', 'expired', 'cancelled'].includes(String(order.status))) {
+      const linkOutput = el('div', { 'aria-live': 'polite' });
+      append(controls, actionForm(context, { operation: 'operator.paymentLink', title: 'paymentLink', submit: 'paymentLink',
+        fields: [{ name: 'delivery', label: 'linkDelivery', type: 'select', options: [
+          { value: 'copy', text: context.t('linkCopy') }, { value: 'email', text: context.t('linkEmail') }] }],
+        input: () => ({ orderRef: orderId }), display: value => isRecord(value) ? { expiresAt: value.expiresAt, emailQueued: value.emailQueued } : value,
+        onSuccess(result) {
+          if (current !== generation || !isRecord(result) || typeof result.token !== 'string') return;
+          const path = routes.completion[context.locale] + '?' + new URLSearchParams({ token: result.token });
+          const url = new URL(path, location.origin).href;
+          const input = el('input', { value: url, readonly: true, 'aria-label': context.t('paymentLink') });
+          linkOutput.replaceChildren(input, link(context.t('completion'), path), el('p', {}, context.t('linkQueued')));
+        } }), linkOutput);
+    }
+    for (const [operation, title, status, confirmation, effect] of [
+      ['operator.cancelUnpaid', 'cancelUnpaid', 'pending_payment', 'cancelOrderConfirm', 'cancelOrderEffect'],
+      ['operator.externalRefund', 'externalRefund', 'paid', 'manualRefundConfirm', 'manualRefundEffect'],
+    ] as const) {
+      if (order.status !== status) continue;
+      append(controls, el('p', {}, context.t(effect)), actionForm(context, { operation, title, submit: title,
+        fields: [{ name: 'reason', label: 'reason', maxLength: 2000 },
+          { name: 'confirmed', label: confirmation, type: 'checkbox' }],
+        input: () => ({ orderRef: orderId }), onSuccess: mutationCompleted }));
+    }
+    const shipment = await act('operator.shipment', { orderRef: orderId }, crypto.randomUUID());
+    if (current !== generation) return;
+    if (!shipment.ok || !isRecord(shipment.value) || !isRecord(shipment.value.order)) return;
+    const parcel = shipment.value.order;
+    append(controls, renderValue(parcel));
+    const blocked = holds.some(reason => ['payment_not_succeeded', 'risk_review', 'address_review', 'inventory_review', 'manual_support'].includes(String(reason)));
+    if (['paid', 'fulfillment_pending', 'fulfilled'].includes(String(order.status))) {
+      const form = actionForm(context, { operation: 'operator.replacement', title: 'requestReplacement', submit: 'requestReplacement',
+        fields: [{ name: 'reason', label: 'reasonCode', type: 'select', options: [
+          ['damaged', 'replacementDamaged'], ['lost', 'replacementLost'], ['returned_undelivered', 'replacementReturned'], ['other', 'careOther'],
+        ].map(([value, key]) => ({ value: value!, text: context.t(key as CopyKey) })) },
+        { name: 'confirmed', label: 'replacementConfirm', type: 'checkbox' }], input: () => ({ orderRef: orderId }), onSuccess: mutationCompleted });
+      append(controls, el('p', {}, context.t('replacementEffect')), form);
+      if (blocked) { for (const control of form.querySelectorAll<HTMLButtonElement>('button')) control.disabled = true; append(form, refusal(context, 'starter_fulfillment_active_hold')); }
+    }
+    if (typeof parcel.id === 'string' && !['delivered', 'cancelled'].includes(String(parcel.status))) append(controls,
+      actionForm(context, { operation: 'operator.cancelFulfillment', title: 'cancelFulfillment', submit: 'cancelFulfillment',
+        fields: [{ name: 'reason', label: 'reason', maxLength: 240 }, { name: 'confirmed', label: 'fulfillmentCancelConfirm', type: 'checkbox' }],
+        input: () => ({ shipmentRef: parcel.id }), onSuccess: mutationCompleted }));
+  }
+  const reader = actionForm(context, { operation: 'operator.order', title: 'read', submit: 'read', fields: [orderRef], onSuccess: value => {
+    const target = reader.querySelector<HTMLInputElement>('[name=orderRef]')!.value.trim().toLowerCase();
+    if (isRecord(value) && isRecord(value.order) && String(value.order.orderId).toLowerCase() === target) void show(value);
+  } });
+  reader.addEventListener('input', () => { generation++; controls.replaceChildren(); outcome.replaceChildren(); });
+  return el('div', {}, reader, outcome, controls);
+}

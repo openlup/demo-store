@@ -1,0 +1,10 @@
+node_modules/
+dist/
+artifacts/*.tgz
+artifacts/identity.json
+.context/
+test-results/
+playwright-report/
+*.log
+.env
+.env.*
