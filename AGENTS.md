@@ -95,3 +95,13 @@ actually run against the selected installed artifacts before completion is claim
 The default `test:browser` setup does not prove a successful persisted purchase; see
 [proof guidance](docs/proof.md). `./lifecycle verify` and `./lifecycle upgrade` depend
 on the installed CLI and explicit inputs and may refuse.
+
+## First-party demo store
+
+Morrow is fictional. This is OpenLup's first-party demo store, seeded from the
+pristine released 0.43.0 extraction at openlup-core-v0.43.0.
+The extraction identity and exact registry lock are retained in Git.
+Use sandbox providers, XTS test units and synthetic .test contacts only.
+Preserve the subscription invariant: late delivery extends the next cycle;
+never stack deliveries or move a cycle earlier. Confirm replacement alignment
+only after the replacement reached the customer.

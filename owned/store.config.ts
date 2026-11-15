@@ -12,16 +12,16 @@ const inputs = {
     renewal: demoRenewalConfig('supplements'),
     recovery: structuredClone(demoRecoveryConfiguration),
     brand: {
-      name: 'Aster Goods',
-      strapline: { en: 'A fictional everyday collection', pl: 'Fikcyjna kolekcja na co dzień' },
+      name: 'Morrow Objects',
+      strapline: { en: 'First-party demo store · sandbox only', pl: 'Własny sklep demonstracyjny projektu · tylko testy' },
       description: {
         en: 'A demonstration supplement catalogue. No health claims or consumption advice.',
         pl: 'Demonstracyjny katalog suplementów. Bez oświadczeń zdrowotnych i porad dotyczących spożycia.',
       },
     },
-    theme: { ink: '#222b2a', paper: '#f7f7f2', accent: '#3d6657', accentInk: '#ffffff', border: '#ccd6cf' },
+    theme: { ink: '#20313d', paper: '#f5f1e8', accent: '#246b78', accentInk: '#ffffff', border: '#c3d1d4' },
     copy: {
-      heroTitle: { en: 'A small collection. Your own routine.', pl: 'Mała kolekcja. Twój własny rytm.' },
+      heroTitle: { en: 'A fictional shelf for a slower morning.', pl: 'Fikcyjna półka na spokojny poranek.' },
       heroBody: {
         en: 'Explore fictional products, choose a box and try a sandbox purchase. Nothing is charged or shipped.',
         pl: 'Poznaj fikcyjne produkty, skomponuj pakiet i wypróbuj zakup testowy. Bez obciążenia i wysyłki.',
@@ -84,7 +84,7 @@ const inputs = {
         orderLabel: { en: 'Order:', pl: 'Zamówienie:' },
       },
       inputLimits: { text: 200, postalCode: 32, email: 160, name: 64, phone: 32 }, reservationMinutes: 30,
-      contact: { acquisitionSource: 'local-demonstration', lifecycleStage: 'lead' }, responseFloorMs: 150,
+      contact: { acquisitionSource: 'morrow-first-party-demo', lifecycleStage: 'lead' }, responseFloorMs: 150,
       attemptLimits: { windowMs: 180000, maxPerRequester: 36, maxPerEmail: 12, retentionMs: 900000, maxEntries: 2000 },
       stock: { quantities: { 'ASTER-DAWN-60': 1000, 'ASTER-NOON-60': 1000, 'ASTER-DUSK-30': 1000 },
         collectedAt: '2000-01-01T00:00:00.000Z', staleAfter: '3000-01-01T00:00:00.000Z', providerRef: 'starter-sandbox', syncRunId: 'starter-demo-v1' },
@@ -102,7 +102,7 @@ const inputs = {
       { code: 'fulfillment_exception', label: { en: 'Fulfillment exception', pl: 'Wyjątek realizacji' } },
       { code: 'manual_support', label: { en: 'Manual support', pl: 'Obsługa ręczna' } },
     ] },
-    legal: { revision: 'demo-1', returnsDays: 14, demoOnly: true },
+    legal: { revision: 'morrow-demo-1', returnsDays: 14, demoOnly: true },
     features: { reviews: true, acquisition: true, research: true, partners: true, risk: false, normalizedIngest: true },
   },
   coffee: {
@@ -111,16 +111,16 @@ const inputs = {
     renewal: demoRenewalConfig('coffee'),
     recovery: structuredClone(demoRecoveryConfiguration),
     brand: {
-      name: 'Pebble Coffee',
-      strapline: { en: 'A fictional coffee shelf', pl: 'Fikcyjna półka z kawą' },
+      name: 'Morrow Coffee',
+      strapline: { en: 'OpenLup first-party demo store', pl: 'Własny sklep demonstracyjny OpenLup' },
       description: {
         en: 'A demonstration coffee catalogue using the same commerce and subscription engine.',
         pl: 'Demonstracyjny katalog kawy korzystający z tego samego silnika sprzedaży i subskrypcji.',
       },
     },
-    theme: { ink: '#352e2a', paper: '#fbf7ef', accent: '#805139', accentInk: '#ffffff', border: '#d9cdbf' },
+    theme: { ink: '#20313d', paper: '#f5f1e8', accent: '#246b78', accentInk: '#ffffff', border: '#c3d1d4' },
     copy: {
-      heroTitle: { en: 'Choose your next fictional coffee.', pl: 'Wybierz swoją kolejną fikcyjną kawę.' },
+      heroTitle: { en: 'Morrow Coffee: three imaginary roasts.', pl: 'Morrow Coffee: trzy wymyślone kawy.' },
       heroBody: {
         en: 'Three illustrative roasts, one shared engine. Try a single order or a recurring box in the sandbox.',
         pl: 'Trzy przykładowe palenia, jeden wspólny silnik. Wypróbuj zakup jednorazowy lub cykliczny pakiet w piaskownicy.',
@@ -136,9 +136,9 @@ const inputs = {
       cadenceDays: [14, 28, 56], defaultCadenceDays: 28,
       products: [
         {
-          sku: 'PEBBLE-LIGHT-250', slug: 'light-roast', title: 'Light roast',
+          sku: 'PEBBLE-LIGHT-250', slug: 'light-roast', title: 'Morning roast',
           physical: { netWeightG: 250, unitGtin: '0000000000048', issuer: 'demo' },
-          name: { en: 'Light roast', pl: 'Jasne palenie' },
+          name: { en: 'Morning roast', pl: 'Poranne palenie' },
           description: { en: 'A fictional light roast in a paper bag.', pl: 'Fikcyjna jasno palona kawa w papierowej torebce.' },
           details: { en: 'Illustrative whole-bean coffee. No actual origin, certification or stock is claimed.', pl: 'Przykładowa kawa ziarnista. Bez deklaracji rzeczywistego pochodzenia, certyfikacji lub zapasu.' },
           media: '/media/light.svg', mediaAlt: { en: 'Illustrated light roast bag', pl: 'Ilustracja torebki jasnego palenia' },
@@ -146,9 +146,9 @@ const inputs = {
           permittedPurchaseModes: ['one_time', 'subscription'],
         },
         {
-          sku: 'PEBBLE-MEDIUM-250', slug: 'medium-roast', title: 'Medium roast',
+          sku: 'PEBBLE-MEDIUM-250', slug: 'medium-roast', title: 'Daybreak roast',
           physical: { netWeightG: 250, unitGtin: '0000000000055', issuer: 'demo' },
-          name: { en: 'Medium roast', pl: 'Średnie palenie' },
+          name: { en: 'Daybreak roast', pl: 'Palenie Brzask' },
           description: { en: 'A fictional medium roast for your demonstration box.', pl: 'Fikcyjna średnio palona kawa do demonstracyjnego pakietu.' },
           details: { en: 'Use this product to test mixed boxes and recurring cadence. No real coffee is supplied.', pl: 'Ten produkt służy do testowania pakietów mieszanych i częstotliwości. Nie dostarczamy rzeczywistej kawy.' },
           media: '/media/medium.svg', mediaAlt: { en: 'Illustrated medium roast bag', pl: 'Ilustracja torebki średniego palenia' },
@@ -156,9 +156,9 @@ const inputs = {
           permittedPurchaseModes: ['one_time', 'subscription'],
         },
         {
-          sku: 'PEBBLE-DARK-250', slug: 'dark-roast', title: 'Dark roast',
+          sku: 'PEBBLE-DARK-250', slug: 'dark-roast', title: 'Evening roast',
           physical: { netWeightG: 250, unitGtin: '0000000000062', issuer: 'demo' },
-          name: { en: 'Dark roast', pl: 'Ciemne palenie' },
+          name: { en: 'Evening roast', pl: 'Wieczorne palenie' },
           description: { en: 'A fictional dark roast with an illustrated label.', pl: 'Fikcyjna ciemno palona kawa z ilustrowaną etykietą.' },
           details: { en: 'The product, media and prices are fictional demonstration data.', pl: 'Produkt, ilustracje i ceny są fikcyjnymi danymi demonstracyjnymi.' },
           media: '/media/dark.svg', mediaAlt: { en: 'Illustrated dark roast bag', pl: 'Ilustracja torebki ciemnego palenia' },
@@ -175,7 +175,7 @@ const inputs = {
         orderLabel: { en: 'Order:', pl: 'Zamówienie:' },
       },
       inputLimits: { text: 200, postalCode: 32, email: 160, name: 64, phone: 32 }, reservationMinutes: 30,
-      contact: { acquisitionSource: 'local-demonstration', lifecycleStage: 'lead' }, responseFloorMs: 150,
+      contact: { acquisitionSource: 'morrow-first-party-demo', lifecycleStage: 'lead' }, responseFloorMs: 150,
       attemptLimits: { windowMs: 180000, maxPerRequester: 36, maxPerEmail: 12, retentionMs: 900000, maxEntries: 2000 },
       stock: { quantities: { 'PEBBLE-LIGHT-250': 1000, 'PEBBLE-MEDIUM-250': 1000, 'PEBBLE-DARK-250': 1000 },
         collectedAt: '2000-01-01T00:00:00.000Z', staleAfter: '3000-01-01T00:00:00.000Z', providerRef: 'starter-sandbox', syncRunId: 'starter-demo-v1' },
@@ -193,7 +193,7 @@ const inputs = {
       { code: 'fulfillment_exception', label: { en: 'Fulfillment exception', pl: 'Wyjątek realizacji' } },
       { code: 'manual_support', label: { en: 'Manual support', pl: 'Obsługa ręczna' } },
     ] },
-    legal: { revision: 'demo-1', returnsDays: 14, demoOnly: true },
+    legal: { revision: 'morrow-demo-1', returnsDays: 14, demoOnly: true },
     features: { reviews: true, acquisition: true, research: true, partners: true, risk: false, normalizedIngest: true },
   },
 } satisfies Record<string, Omit<StoreConfig, 'subscriptionEditing'>>;
@@ -202,7 +202,7 @@ export const configurations: Record<string, StoreConfig> = Object.fromEntries(Ob
   .map(([id, config]) => [id, { ...config, subscriptionEditing: subscriptionEditing(config.offer.products) }]));
 
 /** The application owns its default identity and registry, including additional brands. */
-export const defaultConfigurationId = 'supplements';
+export const defaultConfigurationId = 'coffee';
 
 export function selectConfiguration(id: string = defaultConfigurationId): StoreConfig {
   const config = Object.hasOwn(configurations, id) ? configurations[id] : undefined;
