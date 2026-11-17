@@ -13,12 +13,13 @@
     "start": "node --experimental-strip-types host/server.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "catalogue:check": "openlup catalogue check --packs ./owned/catalogue.json --json"
   },
   "dependencies": {
-    "@openlup/core": "0.43.0",
-    "@openlup/outbox": "0.43.0",
-    "@openlup/platform": "0.43.0",
+    "@openlup/core": "1.0.0",
+    "@openlup/outbox": "1.0.0",
+    "@openlup/platform": "1.0.0",
     "pg": "8.22.0"
   },
   "devDependencies": {
