@@ -1,0 +1,618 @@
+{
+  "schemaVersion": 1,
+  "description": "Published OpenLup 0.43.0 to 1.0.0 first-party demo upgrade; sandbox application evidence only",
+  "baselineCommit": "11c20e3380a4e5725f9049428384d3075adf8a65",
+  "pristinePredecessorCommit": "7d94b4fab0d9f1dcad6a922658ac3a6e1dec620b",
+  "applicationCommit": "8eabaa7ea7273aaa8e15bc5d7ba27be27dddb083",
+  "sourceTag": "openlup-core-v1.0.0",
+  "sourceCommit": "c7968ec65445a96c5c48076ca667e57eb7924aba",
+  "packages": [
+    {
+      "name": "@openlup/core",
+      "version": "1.0.0",
+      "integrity": "sha512-PYE+YCvH8aOhqt3AqGqJqxp5mUo0CrYqEOW2jc9qvXSEYPV+PDi+8eGmgKJTCVDrWuUF8Esr2c5d3FGjQIoihw==",
+      "workflow": {
+        "ref": "refs/tags/openlup-core-v1.0.0",
+        "repository": "https://github.com/openlup/openlup",
+        "path": ".github/workflows/publish-packages.yml"
+      },
+      "sourceCommit": "c7968ec65445a96c5c48076ca667e57eb7924aba",
+      "invocationId": "https://github.com/openlup/openlup/actions/runs/44156384714/attempts/1",
+      "verification": "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-1.0.0>",
+      "peers": {},
+      "peerMeta": {}
+    },
+    {
+      "name": "@openlup/outbox",
+      "version": "1.0.0",
+      "integrity": "sha512-QHTAnirVSkNc9XYRQlvqCqYnc5spOT0aBhIRK0vQrMNM3fyW7RnMnugzK76u/LIs8htzBiQ+QPjQC6kcDSHfKw==",
+      "workflow": {
+        "ref": "refs/tags/openlup-outbox-v1.0.0",
+        "repository": "https://github.com/openlup/openlup",
+        "path": ".github/workflows/publish-packages.yml"
+      },
+      "sourceCommit": "c7968ec65445a96c5c48076ca667e57eb7924aba",
+      "invocationId": "https://github.com/openlup/openlup/actions/runs/44157284710/attempts/1",
+      "verification": "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-1.0.0>",
+      "peers": {
+        "@openlup/core": "1.0.0"
+      },
+      "peerMeta": {}
+    },
+    {
+      "name": "@openlup/platform",
+      "version": "1.0.0",
+      "integrity": "sha512-DXxZoQmKI/Hy7+jVDoVAGZk+0mqbY2062u0MR14q7G+k5Y5NsVwyfJA8Wpe+qXIQxiaYLaRI+naV9c1SVsWENg==",
+      "workflow": {
+        "ref": "refs/tags/openlup-platform-v1.0.0",
+        "repository": "https://github.com/openlup/openlup",
+        "path": ".github/workflows/publish-packages.yml"
+      },
+      "sourceCommit": "c7968ec65445a96c5c48076ca667e57eb7924aba",
+      "invocationId": "https://github.com/openlup/openlup/actions/runs/44156389470/attempts/1",
+      "verification": "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-1.0.0>",
+      "peers": {
+        "@aws-sdk/client-s3": "^3.1144.0",
+        "@openlup/core": "1.0.0",
+        "@types/pg": "^8.20.0",
+        "pg": "^8.22.0"
+      },
+      "peerMeta": {
+        "@aws-sdk/client-s3": {
+          "optional": true
+        },
+        "@types/pg": {
+          "optional": true
+        },
+        "pg": {
+          "optional": true
+        }
+      }
+    }
+  ],
+  "originalExtraction": {
+    "schemaVersion": 2,
+    "mode": "released",
+    "setVersion": "0.43.0",
+    "sourceRevision": "6facc3e72441ade5813397f65ac7edbe34fd1d0f",
+    "sourceRevisionVerification": "supplied",
+    "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+    "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
+  },
+  "targetPristineExtraction": {
+    "schemaVersion": 2,
+    "mode": "released",
+    "setVersion": "1.0.0",
+    "sourceRevision": "c7968ec65445a96c5c48076ca667e57eb7924aba",
+    "sourceRevisionVerification": "supplied",
+    "lockfileSha256": "8ce6f0a9cf14a1bfb4c0a80f035a42cf8c15b3b997366adfb3db58c88c93d8ab",
+    "contentSha256": "c6b142d8c890afc9376273e3a1c219646947351752f568ba566cd94258d65c53"
+  },
+  "applicationLockfileSha256": "dadb0be59c2734ee0c299dd60015348537247dfa402df99b7f00ee26604d8e30",
+  "lockDifference": "Application retains baseline optional @tybys/wasm-util 0.10.4; freshly resolved pristine 1.0.0 lock selects 0.10.5. OpenLup versions, URLs and integrities match exactly.",
+  "schema": {
+    "profile": "qualified-v2",
+    "roleMode": "installer-managed",
+    "migrationLogin": "postgres",
+    "runtimeLogin": "starter_runtime",
+    "restoreLogin": "starter_restore",
+    "postgresMajor": 16,
+    "guideSlots": [
+      142,
+      150
+    ],
+    "observedBeforeOrdinal": 146,
+    "observedAfterOrdinal": 155,
+    "beforeRows": 147,
+    "afterRows": 156,
+    "pendingAfter": [],
+    "replayApplied": [],
+    "appliedPaths": [
+      "db/platform/migrations/20261122100000_catalog_definition_binding.sql",
+      "db/platform/migrations/20261122110000_catalog_quantities.sql",
+      "db/platform/migrations/20261122120000_catalog_attributes.sql",
+      "db/platform/migrations/20261122130000_catalog_variant_axes.sql",
+      "db/platform/migrations/20261122140000_subscription_price_policy_close_digest.sql",
+      "db/platform/migrations/20261122150000_catalog_drafts_v2.sql",
+      "db/platform/migrations/20261122160000_catalog_drafts_v3.sql",
+      "db/platform/migrations/20261122170000_offer_policy_readiness_inputs.sql",
+      "db/platform/migrations/20261122180000_catalog_base_price_writer.sql"
+    ],
+    "configurations": [
+      "supplements",
+      "coffee"
+    ],
+    "preUpgradePurchaseAndTally": true
+  },
+  "files": {
+    "snapshots": "Immutable pristine released extractions; schema singleton 155 in both snapshots. No customized predecessor bytes.",
+    "initialConflict": [
+      "ownership.json"
+    ],
+    "resolution": "Candidate inventory for CLI admission, then explicit union of all application-owned additions. Two test fixtures moved to owned after required ports.",
+    "managedApplied": 38,
+    "replayApplied": 0,
+    "postApplyOwnedPorts": [
+      "owned/store.config.ts",
+      "owned/subscription-editing.ts",
+      "owned/catalogue.ts",
+      "owned/demo-seed.ts",
+      "owned/copy.ts",
+      "owned/quote-copy.ts"
+    ],
+    "newOwnedInputs": [
+      "owned/catalogue.json",
+      "owned/quote-shipping.ts",
+      "owned/renewal-policy.ts"
+    ],
+    "testOwnershipMoves": [
+      "test/offer.test.ts",
+      "test/interim-pricing.test.ts"
+    ],
+    "preservedSettings": "Morrow brand, themes, titles, prices, minimums, sandbox providers, XTS/ZZ, synthetic contacts, default coffee configuration; supplements checkout 28/56, editor 14/28/56; coffee 14/28/56.",
+    "extensionDisposition": {
+      "settlement-tally": "retained; source hashes unchanged; native producer, claim/ack fences, durable capture and empty replay remain distinct from paid-mail/care entries"
+    },
+    "ciBindings": "Workflow, image pin and purchase harness unchanged. Only verification receipt wording changed. No CI machinery added.",
+    "newWitness": "demo/readiness.mjs is the minimal trusted read-only observation module required by lifecycle verify --app; existing starter had no application observations."
+  },
+  "ownedHashes": {
+    "owned/renewal-copy.ts": {
+      "beforeSha256": "a4f02feffe95fb9a9b56034fe260756d36cc2b264d73993e17497a37f844a1e8",
+      "afterSha256": "a4f02feffe95fb9a9b56034fe260756d36cc2b264d73993e17497a37f844a1e8",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/renewal.config.ts": {
+      "beforeSha256": "d6cc44210ead43c663a988a3f96b3b508aa53e75f89294073289fead9c18cf7c",
+      "afterSha256": "d6cc44210ead43c663a988a3f96b3b508aa53e75f89294073289fead9c18cf7c",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "AGENTS.md": {
+      "beforeSha256": "68c9b175912348d8a1466c40c44f6f35487c508945f4a7574029337e5a7e26a8",
+      "afterSha256": "362e136d4fcb27deca72b7f3c1ceb797cb0f1e75bcc2090234e28d088ece7335",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "owned/catalogue.ts": {
+      "beforeSha256": "4da487a0c1a5df777a835d895ec97dd8f7f626661ec7610bf5fdcd47841e2acd",
+      "afterSha256": "cd57f913ea50537884cab0a994325dc449cbdf0349285fe925fd4bff8e0d1c99",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "owned/catalogue.json": {
+      "beforeSha256": null,
+      "afterSha256": "8b759f197626cf66adf896e1a9f9f699f35899ad7426afaad0347e8743b8207d",
+      "disposition": "retained",
+      "reason": "Explicit new owned input or test-fixture ownership move"
+    },
+    "owned/copy.ts": {
+      "beforeSha256": "2bb92cdb674151dc1dbef385a1844a471c75e13660b799b55b12948f4efbc29b",
+      "afterSha256": "e3d5cc37c04232d689f1211f3fb15bdcb7768e9893f997eb6fb8a7654a57e275",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "owned/acquisition-addresses.ts": {
+      "beforeSha256": "ab13ec57f81dd32ebc29374def38e20b1deb54059ee1994ecca163526f7ae6b9",
+      "afterSha256": "ab13ec57f81dd32ebc29374def38e20b1deb54059ee1994ecca163526f7ae6b9",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/demo-seed.ts": {
+      "beforeSha256": "53e93f749e9de4f2533be2e514e3f69e7a0234bc85b72707da7accc91e66cc70",
+      "afterSha256": "f491f8987e04bd50af9eaba913ecbbd3c30b9395db2f3627543f6e5e84099cf2",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "owned/fragments.ts": {
+      "beforeSha256": "c98e7d12b623602792750b3a1ebe44247dd91744cbec66ea3a76631198a73600",
+      "afterSha256": "c98e7d12b623602792750b3a1ebe44247dd91744cbec66ea3a76631198a73600",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/store.config.ts": {
+      "beforeSha256": "d949c152e929aa7fe9c59f454add046f46577d8a7b4e95d0ee35d2f99c3ac5af",
+      "afterSha256": "3fb9a0fcd92ca60d783f0cf92c1a08d7661c356f37e33ccbfa21ee253f053d6e",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "public/media/coffee.svg": {
+      "beforeSha256": "88168d993e470d08fc545c259d758a064902aab8e7224b4a4e96333ec37fa389",
+      "afterSha256": "88168d993e470d08fc545c259d758a064902aab8e7224b4a4e96333ec37fa389",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/collection.svg": {
+      "beforeSha256": "88f12892ee8dbe29bf0da234f1eb2bb6fe7a399c16f59d316b8bead227b02cc9",
+      "afterSha256": "88f12892ee8dbe29bf0da234f1eb2bb6fe7a399c16f59d316b8bead227b02cc9",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/dark.svg": {
+      "beforeSha256": "1a1bf45a972495f381e03f59a1bc33cabee47b66a60bf84bae910e5c4d79a602",
+      "afterSha256": "1a1bf45a972495f381e03f59a1bc33cabee47b66a60bf84bae910e5c4d79a602",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/dawn.svg": {
+      "beforeSha256": "ce2c2e1c0731eb656a8ad088278bd50359104cf1085775c3fcc659fef1bedfb4",
+      "afterSha256": "ce2c2e1c0731eb656a8ad088278bd50359104cf1085775c3fcc659fef1bedfb4",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/dusk.svg": {
+      "beforeSha256": "e53f2c333f8c0779b985c79d0efcea231f539cd01b84df781e7b50341368e137",
+      "afterSha256": "e53f2c333f8c0779b985c79d0efcea231f539cd01b84df781e7b50341368e137",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/light.svg": {
+      "beforeSha256": "f2f4afe4717120e25584f01e29a58386d4b271dcb724bf936fe0ba41732a0d96",
+      "afterSha256": "f2f4afe4717120e25584f01e29a58386d4b271dcb724bf936fe0ba41732a0d96",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/medium.svg": {
+      "beforeSha256": "7d2db312ae175e4713e15f3677ab60ee424d7ea046c5a7592c883342de146052",
+      "afterSha256": "7d2db312ae175e4713e15f3677ab60ee424d7ea046c5a7592c883342de146052",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "public/media/noon.svg": {
+      "beforeSha256": "dfd5e6ecaf442618eff91518a36133704cc6d29bc6c7df96869cd0abeffb7796",
+      "afterSha256": "dfd5e6ecaf442618eff91518a36133704cc6d29bc6c7df96869cd0abeffb7796",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/editor-copy.ts": {
+      "beforeSha256": "505a92ac5c0005c4aebb8fe831df68d640063c0e99fdb34c3f8da7a217fe4e53",
+      "afterSha256": "505a92ac5c0005c4aebb8fe831df68d640063c0e99fdb34c3f8da7a217fe4e53",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/subscription-editing.ts": {
+      "beforeSha256": "dd5cc5e0dc2fd9b9645038c1c1c4152922c415cdce7adccf3220000b8969a609",
+      "afterSha256": "86881ace3203ba70b508e59127fa23f3297dc6cf6ff5a480a28183d694c65e7f",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "owned/acquisition-policy.ts": {
+      "beforeSha256": "8a752f9b74b0b6c068c46d9fe0b076b6fd31c1f9e85544e21816fd580c7b5907",
+      "afterSha256": "8a752f9b74b0b6c068c46d9fe0b076b6fd31c1f9e85544e21816fd580c7b5907",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/quote.config.ts": {
+      "beforeSha256": "0e27426b77508009a4ef6b0b2bd83e6034af0bae295a7871474b5b67bff9d412",
+      "afterSha256": "0e27426b77508009a4ef6b0b2bd83e6034af0bae295a7871474b5b67bff9d412",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/quote-copy.ts": {
+      "beforeSha256": "5b3c75af3da5d99055b56b5c81532dc284f5b58c9bca98a8745aef3c56855ce2",
+      "afterSha256": "0e23c188c303740c0ec4b2dd6bc907cd6623c7240a3f24b493fbf1832f39724e",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "owned/quote-shipping.ts": {
+      "beforeSha256": null,
+      "afterSha256": "72cc19218a3a424bc09470c6b5f08dd07411cf42a27f086382cf7967b3e23535",
+      "disposition": "retained",
+      "reason": "Explicit new owned input or test-fixture ownership move"
+    },
+    "owned/renewal-policy.ts": {
+      "beforeSha256": null,
+      "afterSha256": "13f0eac976318ed210c39ac6e681838cf52e085878bd5199b608048097c768cf",
+      "disposition": "retained",
+      "reason": "Explicit new owned input or test-fixture ownership move"
+    },
+    "owned/settlement-subscriber.ts": {
+      "beforeSha256": "d93f59d0fc5c67852efc59c4ce885cfad76830cf4404d700dbc01c7c75b7d8d4",
+      "afterSha256": "d93f59d0fc5c67852efc59c4ce885cfad76830cf4404d700dbc01c7c75b7d8d4",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "owned/settlements.ts": {
+      "beforeSha256": "cd6d800ec18428b9a8538a40250254c1199e4bb72013f70874cea57e880f3c8e",
+      "afterSha256": "cd6d800ec18428b9a8538a40250254c1199e4bb72013f70874cea57e880f3c8e",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "test/demo-settlement.test.ts": {
+      "beforeSha256": "f588fa62b0111af338fa7f387c58bb4919d6a0aa92844eadb2af3acbe60da55d",
+      "afterSha256": "f588fa62b0111af338fa7f387c58bb4919d6a0aa92844eadb2af3acbe60da55d",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "demo/EXTENSION.md": {
+      "beforeSha256": "ad1cb19edf7dacab880f0c4ddd6e368d7fdba53138ea1d1301b57b44ebb0e853",
+      "afterSha256": "ad1cb19edf7dacab880f0c4ddd6e368d7fdba53138ea1d1301b57b44ebb0e853",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    ".github/workflows/ci.yml": {
+      "beforeSha256": "1d7888ff5863c5753a43f42091db85e4a37f15359d22386e47aeaa9db7369afd",
+      "afterSha256": "1d7888ff5863c5753a43f42091db85e4a37f15359d22386e47aeaa9db7369afd",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "demo/images.json": {
+      "beforeSha256": "05d2ba0b70d476d0dbf6759e87b40611ae4673553382a79a326234edbc12478a",
+      "afterSha256": "05d2ba0b70d476d0dbf6759e87b40611ae4673553382a79a326234edbc12478a",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "demo/purchase-journey.mjs": {
+      "beforeSha256": "d15691e3c8f33f662ef27763dee29314feb26c85273f3f921cc30ad78fb3922b",
+      "afterSha256": "d15691e3c8f33f662ef27763dee29314feb26c85273f3f921cc30ad78fb3922b",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "demo/verify.mjs": {
+      "beforeSha256": "8156941b84c07d8bdcb92bb26f2c30c32a9249fb7d58fa4c9d2f1afb98c64fd7",
+      "afterSha256": "2fe102284ec26768805e509ef5773e0cb758c5f54bc8e51c3f93e1aac187cb39",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "demo/README.md": {
+      "beforeSha256": "ac723f5662b49cadbecd08eaa37cff647a0b45aeefef700761f665a1ec347e93",
+      "afterSha256": "c0c737935e220c7483bc11d87a858cc08e738f35c6604faf2d9052421886bba2",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "demo/local-receipt.json": {
+      "beforeSha256": "f9a644768f2eb1081f20112013dab4cc9b2deeffc2f07b796db82716e0d201a4",
+      "afterSha256": "5d9abe2ce1e2af2fcb90f0112f8a8ebc3502f8ddb7d01d83f29314fe1b1acc1e",
+      "disposition": "partial",
+      "reason": "Required version port, verification evidence or current guide label; original seed history retained"
+    },
+    "demo/preparation-inputs.json": {
+      "beforeSha256": "d6de9b70f0613e8411e1403b2cecc5887d0e33418c3f7645550c3d7d02b09269",
+      "afterSha256": "d6de9b70f0613e8411e1403b2cecc5887d0e33418c3f7645550c3d7d02b09269",
+      "disposition": "retained",
+      "reason": "Existing app-owned source retained"
+    },
+    "demo/readiness.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "cf3af40202c4baa48b68261b487456839fe8c4be08a7cca7ea159890c088a4df",
+      "disposition": "retained",
+      "reason": "Explicit new owned input or test-fixture ownership move"
+    },
+    "test/offer.test.ts": {
+      "beforeSha256": null,
+      "afterSha256": "257a2bab31b19a1edd02cbcae5c208d58404f7de2a9595293c06e09f15bb0c22",
+      "disposition": "retained",
+      "reason": "Explicit new owned input or test-fixture ownership move"
+    },
+    "test/interim-pricing.test.ts": {
+      "beforeSha256": null,
+      "afterSha256": "ba3925a03135534b0912ab297ff1e1dd9358f660a0ebed165d16a57c9b71d4e3",
+      "disposition": "retained",
+      "reason": "Explicit new owned input or test-fixture ownership move"
+    }
+  },
+  "dataContinuity": {
+    "supplements": {
+      "subscriptions": {
+        "beforeRows": 1,
+        "afterRows": 1,
+        "oldColumnsByteEqual": true,
+        "beforeSha256": "62529c26e8a25712ad9c9a76a24d20777d5f2cc6b14ef76171589fa4bc3cfb19",
+        "afterSha256": "62529c26e8a25712ad9c9a76a24d20777d5f2cc6b14ef76171589fa4bc3cfb19"
+      },
+      "commerce_orders": {
+        "beforeRows": 1,
+        "afterRows": 1,
+        "oldColumnsByteEqual": true,
+        "beforeSha256": "3179beb1b89275a7380195594483bd43fcc8b89cafd97b0b1576a6d00cdfd1af",
+        "afterSha256": "3179beb1b89275a7380195594483bd43fcc8b89cafd97b0b1576a6d00cdfd1af"
+      },
+      "outbox_events": {
+        "beforeRows": 4,
+        "afterRows": 4,
+        "oldColumnsByteEqual": true,
+        "beforeSha256": "5a90c40a38e9d93f2d3fa8c5c944447095b7db501c9e6e10ea89eb05c723b6ae",
+        "afterSha256": "5a90c40a38e9d93f2d3fa8c5c944447095b7db501c9e6e10ea89eb05c723b6ae"
+      }
+    },
+    "coffee": {
+      "subscriptions": {
+        "beforeRows": 1,
+        "afterRows": 1,
+        "oldColumnsByteEqual": true,
+        "beforeSha256": "069fc5336f06b789cfb5a6bac85a8f8628e851f16383b4f3d40cd2f6d161f75b",
+        "afterSha256": "069fc5336f06b789cfb5a6bac85a8f8628e851f16383b4f3d40cd2f6d161f75b"
+      },
+      "commerce_orders": {
+        "beforeRows": 1,
+        "afterRows": 1,
+        "oldColumnsByteEqual": true,
+        "beforeSha256": "5745c6fb3b2d02454a22b47fa51a70d42469a05fd0ad69034be567a42008040d",
+        "afterSha256": "5745c6fb3b2d02454a22b47fa51a70d42469a05fd0ad69034be567a42008040d"
+      },
+      "outbox_events": {
+        "beforeRows": 4,
+        "afterRows": 4,
+        "oldColumnsByteEqual": true,
+        "beforeSha256": "96fe4cb499ae8895e7f7451e9bb845dcb95869c044e5c98952cf05c193a2e883",
+        "afterSha256": "96fe4cb499ae8895e7f7451e9bb845dcb95869c044e5c98952cf05c193a2e883"
+      }
+    }
+  },
+  "subscriptionInvariant": {
+    "supplements": {
+      "cases": 2,
+      "lateArrivalExtends": true,
+      "noEarlierCycle": true,
+      "oneOriginalCycle": true,
+      "zeroRenewalOperations": true,
+      "parcelsPerOrder": 2,
+      "oneOriginalAndOneReplacement": true,
+      "singleArrivalPerReplacement": true,
+      "privateObservationsSha256": "b307e81d0b9437045862eb3b4e3ba213443cb5ad3535776ec8945871cc09a45c"
+    },
+    "coffee": {
+      "cases": 2,
+      "lateArrivalExtends": true,
+      "noEarlierCycle": true,
+      "oneOriginalCycle": true,
+      "zeroRenewalOperations": true,
+      "parcelsPerOrder": 2,
+      "oneOriginalAndOneReplacement": true,
+      "singleArrivalPerReplacement": true,
+      "privateObservationsSha256": "6ecbd37cf48078d9fbbb04365356e34435f5bc1d4f6e667099550992187125ef"
+    }
+  },
+  "catalogueOptIns": {
+    "supplements": {
+      "definitions": 0,
+      "backfilledSkus": 0,
+      "mappedProducts": 0,
+      "variantIdentities": 0,
+      "definitionInstalls": 0,
+      "priceWriterReceipts": 0
+    },
+    "coffee": {
+      "definitions": 0,
+      "backfilledSkus": 0,
+      "mappedProducts": 0,
+      "variantIdentities": 0,
+      "definitionInstalls": 0,
+      "priceWriterReceipts": 0
+    }
+  },
+  "evidenceHashes": {
+    "from.json": "09da04afabcc629e2faf4a066b36d588c80be2cdbd836420a03c5fdbe785484d",
+    "to.json": "f0a6add878c1852db6425b76d0de84479298f549adda5bb1215d2f923e5d0ed7",
+    "plan-initial.json": "71d9b43b7ed44629762a69e267511d9a8135b6e6f4b49a63ece0abebed904143",
+    "plan.json": "1de9887ff8862f58b62295be3c12d84d06eebbe7da4813fb6a761db0c0032aaa",
+    "apply.json": "02998124c961537ab61dd2725d52fa454265a341b7394726710fbc90d44c3f27",
+    "apply-replay.json": "b18245798b6ecb52be178146875a1ea5fb69a59aa6fcc4e2d9a420c34224e654",
+    "ownership-resolution.json": "599ad2c48ab828a4f9990e9bb32c8bcb2d456a6809832c4ce01f43e56dd1de7c",
+    "data-continuity.json": "d256248ec0d9cbb00021000c3cc48c13d9f23734ef069544ce564b0af0a2a249",
+    "subscription-invariant.json": "d06803e9c3dc0de4934a2bd611de903a1a5f8fdb4922c14926a7cab72dd7d436",
+    "catalogue-opt-ins.json": "05b33d42be08e7dc20e0186fdce6c4e82764642116c33de31b9761da5c7d5074",
+    "npm-provenance.json": "bba27b4ff54f13b14a6a9c2d9e1e6983c2659bc50965b6aeca77ca0137619bc1",
+    "application-provenance.json": "e56d1625248e8927377ec4d293cebc7ac345f750d8779a758f90cee19cde57e2",
+    "owned-reconciliation.json": "d188cceaf06f2a27e33b7875a8d299f2a53c26fb471fcbb07da190042886e741",
+    "baseline-journey.mjs": "3b7b10364ea3d7f03a6bff956e5c722b53e74bcb3e9e8a2a784031552c36d638",
+    "upgraded-journey.mjs": "fbade60ef783b74a7e8143dd1e5327b4384beb1d0d5137f48fc9cb086ee4b330"
+  },
+  "pristineHashes": {
+    "pristine-0.43.0/package-lock.json": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+    "pristine-0.43.0/.starter-origin.json": "5f75f0bb8f47392accb6007cd6a592199f28aa5b633806df35065b1e0cff9e5a",
+    "pristine-1.0.0/package-lock.json": "8ce6f0a9cf14a1bfb4c0a80f035a42cf8c15b3b997366adfb3db58c88c93d8ab",
+    "pristine-1.0.0/.starter-origin.json": "d0525c480785a9042465fa4c4d2f302a4a60fcd85079c62561e97c4ce1c551a8"
+  },
+  "localReceiptSha256": "5d9abe2ce1e2af2fcb90f0112f8a8ebc3502f8ddb7d01d83f29314fe1b1acc1e",
+  "checks": [
+    {
+      "name": "npm-ci",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 1421,
+      "load15": 15.98486328125
+    },
+    {
+      "name": "typecheck",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 1861,
+      "load15": 15.98486328125,
+      "finalLog": "final-typecheck-corrected.log"
+    },
+    {
+      "name": "build",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 1095,
+      "load15": 15.96142578125,
+      "finalLog": "final-build-corrected.log"
+    },
+    {
+      "name": "tests",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 1719,
+      "load15": 15.96142578125,
+      "tests": 314,
+      "skipped": 0,
+      "finalLog": "final-tests-corrected.log"
+    },
+    {
+      "name": "editor-components",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 10577,
+      "load15": 15.96142578125
+    },
+    {
+      "name": "final-editor-components",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 10270,
+      "load15": 15.98291015625
+    },
+    {
+      "name": "final-fresh-target-purchase",
+      "result": "PASS",
+      "exitCode": 0,
+      "durationMs": 16384,
+      "load15": 15.98291015625
+    },
+    {
+      "name": "baseline-0.43.0-purchase-tally-replay",
+      "result": "PASS",
+      "configurations": [
+        "supplements",
+        "coffee"
+      ],
+      "purchases": 2
+    },
+    {
+      "name": "upgraded-baseline-destinations-navigation-purchase",
+      "result": "PASS",
+      "cases": 108,
+      "retries": 0
+    },
+    {
+      "name": "upgraded-subscription-recovery-alignment",
+      "result": "PASS",
+      "cases": 28,
+      "retries": 0
+    },
+    {
+      "name": "isolated-renewal-destination",
+      "result": "PASS",
+      "cases": 4,
+      "retries": 0
+    },
+    {
+      "name": "schema-upgrade-replay",
+      "result": "PASS",
+      "appliedPerDatabase": 9,
+      "replayApplied": 0
+    },
+    {
+      "name": "application-file-upgrade-replay",
+      "result": "PASS",
+      "applied": 38,
+      "replayApplied": 0
+    }
+  ],
+  "upstreamQualification": {
+    "url": "https://github.com/openlup/openlup/actions/runs/44156615468",
+    "result": "FAIL",
+    "limit": "Owned-port omissions in the qualification harness; no upstream repair or requalification performed here. This receipt makes no exact-set release/image qualification or general rollback claim."
+  },
+  "limits": [
+    "demo/verify.mjs retained its stricter load15 < 12 gate and refused local install while load was 15.52; manual checks started below the authorized load15 < 16 bound.",
+    "Readiness remains unsatisfied for the pre-existing unsubscribe.apply port; no deployment readiness is claimed.",
+    "Native editor Compose journeys and the full database browser matrix were not run; editor component, focused real subscription, destination and recovery witnesses were run.",
+    "Browser observations were collected during the owned-port sequence; the final committed source is separately covered by typecheck/build/314 tests and the later hosted PR check.",
+    "Authenticated mirror access must be established by the existing Demo store verification hosted check; its receipt is separate.",
+    "No experimental catalogue definitions, quantity backfill, draft-v2/v3 authoring or price-writer activation. No settings, credentials, production, publishing or merge action."
+  ],
+  "recordedAt": "2026-11-17T19:52:06.279509+00:00"
+}

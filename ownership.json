@@ -39,7 +39,8 @@
     "demo/preparation-inputs.json",
     "demo/readiness.mjs",
     "test/offer.test.ts",
-    "test/interim-pricing.test.ts"
+    "test/interim-pricing.test.ts",
+    "demo/upgrade-receipt.json"
   ],
   "managed": [
     "host/account-renewal.ts",

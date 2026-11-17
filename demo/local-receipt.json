@@ -1,9 +1,13 @@
 {
-  "schemaVersion": 1,
-  "description": "OpenLup first-party demo store",
-  "qualification": "released 0.43.0 seed; application verification only",
-  "setVersion": "0.43.0",
-  "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
+  "schemaVersion": 2,
+  "description": "Local OpenLup 1.0.0 demo upgrade observations",
+  "sourceCommit": "8eabaa7ea7273aaa8e15bc5d7ba27be27dddb083",
+  "result": "PARTIAL",
+  "qualification": "Local sandbox application proof using the cached pinned PostgreSQL digest; no authenticated mirror or hosted CI claim.",
+  "setVersion": "1.0.0",
+  "node": "v24.21.0",
+  "npm": "11.19.0",
+  "lockfileSha256": "dadb0be59c2734ee0c299dd60015348537247dfa402df99b7f00ee26604d8e30",
   "extraction": {
     "schemaVersion": 2,
     "mode": "released",
@@ -13,180 +17,108 @@
     "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
     "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
   },
-  "node": "v24.21.0",
   "postgresImage": "ghcr.io/openlup/library/postgres:16@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
-  "startedAt": "2026-11-15T08:31:16.212Z",
   "results": [
     {
-      "name": "install",
+      "name": "npm-ci",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 1166
+      "durationMs": 1421,
+      "load15": 15.98486328125
     },
     {
       "name": "typecheck",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 2530
+      "durationMs": 1861,
+      "load15": 15.98486328125,
+      "finalLog": "final-typecheck-corrected.log"
     },
     {
       "name": "build",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 1714
+      "durationMs": 1095,
+      "load15": 15.96142578125,
+      "finalLog": "final-build-corrected.log"
     },
     {
-      "name": "application-tests",
+      "name": "tests",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 2096
+      "durationMs": 1719,
+      "load15": 15.96142578125,
+      "tests": 314,
+      "skipped": 0,
+      "finalLog": "final-tests-corrected.log"
     },
     {
-      "name": "postgres-mirror-pull",
+      "name": "editor-components",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 147,
-      "evidence": "local rehearsal, shimmed pull, not CI evidence"
+      "durationMs": 10577,
+      "load15": 15.96142578125
     },
     {
-      "name": "browser-install",
+      "name": "final-editor-components",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 2694
+      "durationMs": 10270,
+      "load15": 15.98291015625
     },
     {
-      "name": "sandbox-purchase-journey",
+      "name": "final-fresh-target-purchase",
       "result": "PASS",
       "exitCode": 0,
-      "durationMs": 13095
+      "durationMs": 16384,
+      "load15": 15.98291015625
+    },
+    {
+      "name": "baseline-0.43.0-purchase-tally-replay",
+      "result": "PASS",
+      "configurations": [
+        "supplements",
+        "coffee"
+      ],
+      "purchases": 2
+    },
+    {
+      "name": "upgraded-baseline-destinations-navigation-purchase",
+      "result": "PASS",
+      "cases": 108,
+      "retries": 0
+    },
+    {
+      "name": "upgraded-subscription-recovery-alignment",
+      "result": "PASS",
+      "cases": 28,
+      "retries": 0
+    },
+    {
+      "name": "isolated-renewal-destination",
+      "result": "PASS",
+      "cases": 4,
+      "retries": 0
+    },
+    {
+      "name": "schema-upgrade-replay",
+      "result": "PASS",
+      "appliedPerDatabase": 9,
+      "replayApplied": 0
+    },
+    {
+      "name": "application-file-upgrade-replay",
+      "result": "PASS",
+      "applied": 38,
+      "replayApplied": 0
     }
   ],
-  "result": "PASS",
-  "endedAt": "2026-11-15T08:31:39.657Z",
-  "evidence": "local rehearsal, shimmed pull, not CI evidence",
-  "verifiedCommit": "64d39f5d42ba63bade494ca0b723e479cb78e902",
-  "verifiedTree": "3f1380a73be91ebea872525ee6929d786be117e2",
-  "durationMs": 23445,
-  "localPullRehearsal": {
-    "scope": "pull of the exact pinned reference only; all other Docker commands passed through",
-    "cachedImageId": "sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
-    "idEqualityVerified": true,
-    "retaggedToPinnedRepository": true,
-    "shimLocation": "external to this repository; uncommitted",
-    "registryAccessProven": false
-  },
-  "authenticatedPullAttempt": {
-    "startedAt": "2026-11-15T08:29:29.110Z",
-    "endedAt": "2026-11-15T08:29:37.067Z",
-    "result": "FAIL",
-    "results": [
-      {
-        "name": "install",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 903
-      },
-      {
-        "name": "typecheck",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 1854
-      },
-      {
-        "name": "build",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 1485
-      },
-      {
-        "name": "application-tests",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 1521
-      },
-      {
-        "name": "postgres-mirror-pull",
-        "result": "FAIL",
-        "exitCode": 1,
-        "durationMs": 2191
-      },
-      {
-        "name": "sandbox-purchase-journey",
-        "result": "BLOCKED",
-        "reason": "authenticated mirrored PostgreSQL pull failed; no fallback",
-        "durationMs": 0
-      }
-    ],
-    "reason": "GHCR permission_denied: local token lacks required package scope; no repository fallback added"
-  },
-  "priorRehearsal": {
-    "startedAt": "2026-11-15T08:30:09.977Z",
-    "endedAt": "2026-11-15T08:30:32.414Z",
-    "result": "FAIL",
-    "results": [
-      {
-        "name": "install",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 1192
-      },
-      {
-        "name": "typecheck",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 2446
-      },
-      {
-        "name": "build",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 3479
-      },
-      {
-        "name": "application-tests",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 1890
-      },
-      {
-        "name": "postgres-mirror-pull",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 122
-      },
-      {
-        "name": "browser-install",
-        "result": "PASS",
-        "exitCode": 0,
-        "durationMs": 2762
-      },
-      {
-        "name": "sandbox-purchase-journey",
-        "result": "FAIL",
-        "exitCode": 1,
-        "durationMs": 10542
-      }
-    ],
-    "evidence": "local rehearsal, shimmed pull, not CI evidence",
-    "failure": "Playwright leading title anchor selected zero tests because the full selection includes project and file; corrected in the verified CI commit"
-  },
-  "journey": {
-    "configurations": [
-      "supplements",
-      "coffee"
-    ],
-    "browserTestsPassed": 2,
-    "applicationTestsPassed": 299,
-    "settlementTallyAndEmptyReplay": "PASS",
-    "sandboxOnly": true,
-    "retries": 0
-  },
-  "qualificationReceiptComparison": {
-    "repository": "openlup/openlup",
-    "runId": 43694218636,
-    "url": "https://github.com/openlup/openlup/actions/runs/43694218636",
-    "result": "PASS",
-    "receiptSha256": "6e5c3ddc9735d97b99db7712e122168f7f8deea88db597733c19a330df72203c",
+  "verificationRunner": {
+    "schemaVersion": 1,
+    "description": "OpenLup first-party demo store",
+    "qualification": "published 1.0.0 set; application verification only; original extraction retained",
+    "setVersion": "1.0.0",
+    "lockfileSha256": "dadb0be59c2734ee0c299dd60015348537247dfa402df99b7f00ee26604d8e30",
     "extraction": {
       "schemaVersion": 2,
       "mode": "released",
@@ -196,22 +128,89 @@
       "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
       "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
     },
-    "entireExtractionIdentityEqual": true,
-    "contentSha256Equal": true,
-    "lockfileSha256Equal": true,
-    "lockfileDifference": "none; resolution produced identical bytes"
+    "node": "v24.21.0",
+    "postgresImage": "ghcr.io/openlup/library/postgres:16@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
+    "startedAt": "2026-11-17T19:46:28.556Z",
+    "results": [
+      {
+        "name": "install",
+        "result": "BLOCKED",
+        "exitCode": null,
+        "durationMs": 4
+      }
+    ],
+    "result": "FAIL",
+    "endedAt": "2026-11-17T19:46:28.561Z"
   },
-  "resourceGate": {
-    "beforeVerification": {
-      "load15": 3.05,
-      "memoryFreePercent": 85
-    },
-    "required": {
-      "load15Below": 20,
-      "memoryFreePercentAtLeast": 25
-    },
-    "runnerLoad15Limit": 12
+  "authenticatedMirrorPull": {
+    "result": "FAIL",
+    "reason": "Configured local token lacks the required registry scope; no credentials changed and no pull shim used."
   },
-  "scope": "Local first-party demo store seed; no remote, push, deployment or adjacent-pair upgrade",
-  "retro": "The first database rehearsal exposed a previously unexecuted selector bug. Listing the exact browser selection proved both configurations before the corrected end-to-end run; no new fallback or retry mechanism was needed."
+  "readiness": {
+    "supplements": {
+      "state": "unsatisfied",
+      "findings": [
+        {
+          "code": "OPENLUP_E_PORT_MISSING",
+          "package": "@openlup/platform",
+          "subject": "unsubscribe.apply",
+          "observed": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
+          "cause": "Application composition is missing or mismatches the required adapter port.",
+          "fix": "Bind the selected adapter port in composition. Supply the adapter through the application binder and expose its returned object or function at bindings.ports[\"@openlup/platform:unsubscribe.apply\"]. Do not use a declaration string.",
+          "recheck": "openlup verify --app './demo/readiness.mjs' --json",
+          "evidence": {
+            "declared": "Port unsubscribe.apply is required.",
+            "bound": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
+            "checked": "Readiness comparison of supplied observations only.",
+            "unknown": [
+              "Actual execution, permissions and external effects were not checked."
+            ]
+          }
+        }
+      ]
+    },
+    "coffee": {
+      "state": "unsatisfied",
+      "findings": [
+        {
+          "code": "OPENLUP_E_PORT_MISSING",
+          "package": "@openlup/platform",
+          "subject": "unsubscribe.apply",
+          "observed": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
+          "cause": "Application composition is missing or mismatches the required adapter port.",
+          "fix": "Bind the selected adapter port in composition. Supply the adapter through the application binder and expose its returned object or function at bindings.ports[\"@openlup/platform:unsubscribe.apply\"]. Do not use a declaration string.",
+          "recheck": "openlup verify --app './demo/readiness.mjs' --json",
+          "evidence": {
+            "declared": "Port unsubscribe.apply is required.",
+            "bound": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
+            "checked": "Readiness comparison of supplied observations only.",
+            "unknown": [
+              "Actual execution, permissions and external effects were not checked."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "phase": "combined local witness selection",
+      "initialResult": "28 passed, 4 failed",
+      "cause": "Shipment witness left global auto_align enabled before the separate renewal-destination group.",
+      "resolution": "Reset only the disposable fixture rollout through its public set_mode function; all four destination cases passed without assertion changes."
+    },
+    {
+      "phase": "preserving the distinct Morrow checkout/editor domains",
+      "initialResult": "310 passed, 4 failed",
+      "cause": "Commercial fixtures changed the main domain while retaining checkoutDays from the app.",
+      "resolution": "Fixture domain overrides now clear checkoutDays. All 314 tests pass; both existing assertions and Morrow domains retained."
+    }
+  ],
+  "limits": [
+    "demo/verify.mjs retained its stricter load15 < 12 gate and refused local install while load was 15.52; manual checks started below the authorized load15 < 16 bound.",
+    "Readiness remains unsatisfied for the pre-existing unsubscribe.apply port; no deployment readiness is claimed.",
+    "Native editor Compose journeys and the full database browser matrix were not run; editor component, focused real subscription, destination and recovery witnesses were run.",
+    "Browser observations were collected during the owned-port sequence; the final committed source is separately covered by typecheck/build/314 tests and the later hosted PR check."
+  ],
+  "recordedAt": "2026-11-17T19:52:06.279509+00:00"
 }
