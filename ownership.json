@@ -5,6 +5,7 @@
     "owned/renewal.config.ts",
     "AGENTS.md",
     "owned/catalogue.ts",
+    "owned/catalogue.json",
     "owned/copy.ts",
     "owned/acquisition-addresses.ts",
     "owned/demo-seed.ts",
@@ -23,6 +24,8 @@
     "owned/acquisition-policy.ts",
     "owned/quote.config.ts",
     "owned/quote-copy.ts",
+    "owned/quote-shipping.ts",
+    "owned/renewal-policy.ts",
     "owned/settlement-subscriber.ts",
     "owned/settlements.ts",
     "test/demo-settlement.test.ts",
@@ -33,7 +36,11 @@
     "demo/verify.mjs",
     "demo/README.md",
     "demo/local-receipt.json",
-    "demo/preparation-inputs.json"
+    "demo/preparation-inputs.json",
+    "demo/readiness.mjs",
+    "test/offer.test.ts",
+    "test/interim-pricing.test.ts",
+    "demo/upgrade-receipt.json"
   ],
   "managed": [
     "host/account-renewal.ts",
@@ -44,6 +51,7 @@
     "host/scheduled-renewal.ts",
     "shared/renewal-config.ts",
     "test/renewal.test.ts",
+    "test/renewal-policy.test.ts",
     "test/notice-artifact.test.ts",
     ".dockerignore",
     ".gitignore",
@@ -110,7 +118,6 @@
     "test/healthcheck.test.ts",
     "test/import-boundary.test.ts",
     "test/installation.test.ts",
-    "test/offer.test.ts",
     "test/origin-http.test.ts",
     "test/origin-policy.test.ts",
     "test/sessions.test.ts",
@@ -120,7 +127,6 @@
     "host/purchase-composition.ts",
     "client/purchase.ts",
     "playwright.database.config.ts",
-    "test/interim-pricing.test.ts",
     "host/checkout-attempts.ts",
     "test/checkout-attempts.test.ts",
     "test/address-outcomes.test.ts",
@@ -146,6 +152,7 @@
     "client/quote-acceptance.ts",
     "host/quote-secret.ts",
     "test/acquisition-quote.test.ts",
+    "test/quote-shipping.test.ts",
     "client/live-quote.ts",
     "host/paid-mail-artifact.ts",
     "host/paid-mail.ts",
@@ -167,7 +174,11 @@
     "playwright.editors.config.ts",
     "shared/subscription-edit.ts",
     "dev.mjs",
-    "browser/dev-loop.proof.ts"
+    "browser/dev-loop.proof.ts",
+    "shared/policy.ts",
+    "test/policy.test.ts",
+    "shared/subscription-offer.ts",
+    "test/subscription-offer.test.ts"
   ],
   "sourceMappings": {
     "AGENTS.md": "AGENTS.template.md",
@@ -215,6 +226,8 @@
     "test/editor-contracts.test.ts",
     "test/editor-mail.test.ts",
     "test/subscription-models.test.ts",
-    "test/subscription-routes.test.ts"
+    "test/subscription-routes.test.ts",
+    "release-inputs/openlup-core-v0.43.0/manifest.json",
+    "release-inputs/openlup-core-v0.43.0/package-lock.json"
   ]
 }

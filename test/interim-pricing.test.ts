@@ -1,3 +1,5 @@
+import { MAX_CADENCE_DAYS } from '@openlup/core/subscription';
+import { set } from '../shared/subscription-offer.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { configurations } from '../owned/store.config.ts';
@@ -94,16 +96,20 @@ test('shipping terms accept paid delivery and a configurable threshold in both o
 
 for (const original of Object.values(configurations)) test(`${original.id}: native configuration boundaries refuse before composition`, () => {
   const valid = structuredClone(original);
-  valid.offer.cadenceDays = [120]; valid.offer.defaultCadenceDays = 120;
-  valid.quote.acquisition.graduationCadenceDays = 120;
+  valid.offer.cadenceDays = [MAX_CADENCE_DAYS]; valid.offer.defaultCadenceDays = MAX_CADENCE_DAYS;
+  for (const plan of Object.values(valid.subscriptionOffers)) {
+    plan.days = set(MAX_CADENCE_DAYS); plan.defaultDays = MAX_CADENCE_DAYS;
+    delete plan.checkoutDays; // Replace the checkout subdomain along with the fixture domain.
+    plan.bySku = Object.fromEntries(Object.keys(plan.bySku).map(sku => [sku,[{ days: set(MAX_CADENCE_DAYS),quantities: set(1,99) }]]));
+  }
+  valid.quote.acquisition.graduationCadenceDays = MAX_CADENCE_DAYS;
   valid.purchase.tax.legalBasis = 'x'.repeat(200);
   valid.legal.revision = 'x'.repeat(64);
   valid.purchase.stock.quantities[valid.offer.products[0]!.sku] = 2147483647;
   assertConfig(valid);
   for (const mutate of [
-    (config: typeof valid) => { config.offer.cadenceDays = [121]; config.offer.defaultCadenceDays = 121; },
-    (config: typeof valid) => { config.offer.cadenceDays = [120, 121]; },
-    (config: typeof valid) => { config.offer.defaultCadenceDays = 121; },
+    (config: typeof valid) => { config.offer.cadenceDays = [MAX_CADENCE_DAYS, MAX_CADENCE_DAYS+1]; },
+    (config: typeof valid) => { config.offer.defaultCadenceDays = MAX_CADENCE_DAYS+1; },
     (config: typeof valid) => { config.purchase.stock.quantities[config.offer.products[0]!.sku] = 2147483648; },
     (config: typeof valid) => { config.offer.products[0]!.unitPrice.amountMinor = 2147483648; },
     (config: typeof valid) => { config.offer.subscriptionDiscountBps = 10000; },
@@ -112,6 +118,21 @@ for (const original of Object.values(configurations)) test(`${original.id}: nati
     (config: typeof valid) => { config.legal.revision = ' padded '; },
   ]) {
     const invalid = structuredClone(valid); mutate(invalid);
-    assert.throws(() => assertConfig(invalid), /starter_(offer|purchase_configuration|product|configuration|quote_configuration)_invalid/);
+    assert.throws(() => assertConfig(invalid), /starter_(?:offer|purchase_configuration|product|configuration|quote_configuration)_invalid/);
   }
+  for (const mode of ['classic', 'sized'] as const) {
+    const invalid = structuredClone(valid);
+    invalid.subscriptionOffers[mode].days = set(MAX_CADENCE_DAYS, MAX_CADENCE_DAYS+1);
+    assert.throws(() => assertConfig(invalid), /^Error: starter_subscription_offer_invalid$/);
+    invalid.subscriptionOffers[mode].days = set(MAX_CADENCE_DAYS);
+    invalid.subscriptionOffers[mode].defaultDays = MAX_CADENCE_DAYS+1;
+    assert.throws(() => assertConfig(invalid), /^Error: starter_subscription_offer_invalid$/);
+  }
+});
+
+for (const days of [0,1,90,91,MAX_CADENCE_DAYS,MAX_CADENCE_DAYS+1]) test(`projected cadence configuration boundary: ${days}`, () => {
+  const config = structuredClone(Object.values(configurations)[0]!);
+  config.offer.cadenceDays = [days]; config.offer.defaultCadenceDays = days;
+  if (days < 1 || days > MAX_CADENCE_DAYS) assert.throws(() => assertConfig(config), /starter_offer_invalid/);
+  else assertConfig(config);
 });

@@ -9,7 +9,7 @@ const json = path => JSON.parse(readFileSync(path, 'utf8'));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const origin = json('.starter-origin.json'), application = json('package.json');
 const receipt = { schemaVersion: 1, description: 'OpenLup first-party demo store',
-  qualification: 'released 0.43.0 seed; application verification only',
+  qualification: `published ${application.dependencies['@openlup/core']} set; application verification only; original extraction retained`,
   setVersion: application.dependencies['@openlup/core'], lockfileSha256: sha(readFileSync('package-lock.json')), extraction: origin,
   node: process.version, postgresImage: json('demo/images.json').postgres, startedAt: new Date().toISOString(), results: [], result: 'FAIL' };
 const save = () => writeFileSync(resolve(context, 'ci-receipt.json'), JSON.stringify(receipt, null, 2) + '\n');

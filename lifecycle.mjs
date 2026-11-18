@@ -39,7 +39,7 @@ if (command === 'candidate') {
       encoding: 'utf8', maxBuffer: 1024 * 1024,
     }));
     const name = packageNames[index];
-    if (manifest.name !== `@openlup/${name}` || !/^0\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(manifest.version)) {
+    if (manifest.name !== `@openlup/${name}` || !/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[a-zA-Z0-9.-]+)?$/.test(manifest.version)) {
       throw new Error('starter_candidate_identity_mismatch');
     }
     artifacts.push({ name: manifest.name, version: manifest.version,
@@ -52,6 +52,7 @@ if (command === 'candidate') {
     schemaVersion: 1, kind: 'local-candidate', artifacts: artifacts.map(({ source, ...artifact }) => artifact),
   }, null, 2) + '\n');
   run('npm', ['install', '--package-lock-only', '--ignore-scripts']);
+  process.stdout.write('next: npm ci\n');
 } else if (command === 'up') {
   const { selectConfiguration } = await import('./owned/store.config.ts');
   const { assertConfig } = await import('./shared/config.ts');
