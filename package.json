@@ -17,9 +17,9 @@
     "catalogue:check": "openlup catalogue check --packs ./owned/catalogue.json --json"
   },
   "dependencies": {
-    "@openlup/core": "1.0.0",
-    "@openlup/outbox": "1.0.0",
-    "@openlup/platform": "1.0.0",
+    "@openlup/core": "1.1.0",
+    "@openlup/outbox": "1.1.0",
+    "@openlup/platform": "1.1.0",
     "pg": "8.22.0"
   },
   "devDependencies": {

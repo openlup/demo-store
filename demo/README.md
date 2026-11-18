@@ -1,6 +1,6 @@
 # Morrow: OpenLup first-party demo store
 
-**Current package set: published 1.0.0**, upgraded from the **released 0.43.0 seed**, extracted from `openlup-core-v0.43.0` at
+**Current package set: published 1.1.0**, upgraded from the **released 0.43.0 seed**, extracted from `openlup-core-v0.43.0` at
 `6facc3e72441ade5813397f65ac7edbe34fd1d0f`. The first commit retains the
 pristine extraction; later commits replay application customization, extension
 and CI. This seed alone is not adjacent-pair upgrade evidence.
@@ -54,13 +54,17 @@ All package integrities were checked against npm and the release cut manifest.
 Customization remains in owned paths; extension and CI paths are added to the
 owned inventory while the released managed inventory is preserved.
 
-The 0.43.0 → 1.0.0 transition uses immutable pristine released extractions and
+The 0.43.0 → 1.1.0 transition via 1.0.0 uses immutable pristine released extractions and
 managed snapshots, the installed public upgrade plan/apply commands and all three
 exact npm pins together. The original `.starter-origin.json` remains unchanged;
-it identifies the seed, not the current package set. The original registry lock
+it identifies the seed, not the current package set. Published 1.0.0 was an
+intermediate set whose starter-upgrade qualification failed; 1.1.0 supersedes it. The original registry lock
 remains in Git history. `demo/upgrade-receipt.json` records the transition separately.
 The offer and interim-pricing test files are now owned: their fixture domain
-overrides explicitly clear the checkout subdomain while retaining every assertion.
+overrides explicitly clear the checkout subdomain while retaining boundary assertions.
+The interim-pricing boundary fixture follows the installed 1.1.0 maximum cadence.
+The required retention mapping was added to the owned renewal configuration;
+Morrow’s reasons, retry hours `[24,48,72]`, timing and offered cadences are retained.
 The managed documentation refresh moves frozen source proof records to their
 upstream history link; those dated results are not new demo evidence.
 
