@@ -1,8 +1,10 @@
+import { market } from '../owned/market.config.ts';
 import { test as base, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { copy } from '../owned/copy.ts';
 import { routes } from '../shared/routes.ts';
+import { operations as declaredOperations } from '../shared/api.ts';
 
 /** Fresh installed PostgreSQL only; owns identities and the documented owner roster step. */
 const test = base.extend<{ composeProject: string }>({ composeProject: ['', { option: true }] });
@@ -42,7 +44,7 @@ test('native support roster, catalogue administration, replay and operator admis
     });
     return response.json();
   };
-  const operatorLocale = (await (await page.request.get(`${baseURL}/api/config`)).json()).config.id === 'coffee' ? 'pl' : 'en';
+  const operatorLocale = market.defaultLocale;
   const signIn = async (kind: 'operator' | 'customer', email: string) => {
     if (kind === 'operator') {
       await page.goto(routes.admin[operatorLocale]);
@@ -70,7 +72,7 @@ test('native support roster, catalogue administration, replay and operator admis
       expect(await redemption.locator('[name=token]').evaluate(input => (input as HTMLInputElement).value.length === 0)).toBe(true);
     } else expect((await action('auth.verify', { token })).ok).toBe(true);
   };
-  for (const locale of ['en', 'pl'] as const) {
+  for (const locale of market.locales) {
     await page.goto(routes.admin[locale]);
     const forms = page.locator('#operator-sign-in form');
     await expect(forms.first().getByLabel(copy[locale].email, { exact: true })).toBeVisible();
@@ -100,8 +102,7 @@ test('native support roster, catalogue administration, replay and operator admis
   const operations = ['operator.customerSearch', 'operator.customer', 'operator.bundles', 'operator.bundle',
     'operator.bundleCommand', 'operator.catalogDrafts'];
   const status = (await action('application.status')).value.bindings;
-  expect(status).toHaveLength(52);
-  expect(status.filter((row: { bound: boolean }) => row.bound)).toHaveLength(25);
+  expect(status.map((row: { operation: string }) => row.operation)).toEqual(declaredOperations);
   for (const operation of operations) {
     expect(status.find((row: { operation: string }) => row.operation === operation).bound).toBe(true);
     expect((await action(operation, { operatorRef: fixture.operator })).code).toBe('operator_required');
@@ -130,12 +131,12 @@ test('native support roster, catalogue administration, replay and operator admis
   // Observe the exact native cause separately; the adapter intentionally erases it.
   expect(() => sql(`SELECT public.customer_support_search('${principal}', 'customer@example.test',0,10,'all')`, true))
     .toThrow(/communications_operator_inactive/);
-  await page.goto(routes.admin.en + '#customers');
+  await page.goto(routes.admin[market.defaultLocale] + '#customers');
   const customers = page.locator('#customers');
   await customers.locator('[name=query]').fill('customer@example.test');
-  await customers.getByRole('button', { name: copy.en.searchCustomer, exact: true }).click();
+  await customers.getByRole('button', { name: copy[market.defaultLocale].searchCustomer, exact: true }).click();
   await expect(customers).toContainText('customer_support_read_failed');
-  await expect(customers).toContainText(copy.en.supportRosterBody);
+  await expect(customers).toContainText(copy[market.defaultLocale].supportRosterBody);
   sql(`INSERT INTO public.platform_communication_operators (principal_id, active)
     VALUES ('${principal}'::uuid, true)
     ON CONFLICT (principal_id) DO UPDATE SET active = true, updated_at = now()`);
@@ -147,14 +148,14 @@ test('native support roster, catalogue administration, replay and operator admis
   });
   expect((await noSession.json()).code).toBe('operator_required');
   await anonymous.close();
-  await customers.getByRole('button', { name: copy.en.searchCustomer, exact: true }).click();
+  await customers.getByRole('button', { name: copy[market.defaultLocale].searchCustomer, exact: true }).click();
   await expect(customers).toContainText('customer@example.test');
   const search = await action('operator.customerSearch', { query: 'customer@example.test' });
   expect(search.ok).toBe(true);
   expect(search.value.candidates[0].subjectId).toBe(fixture.customer);
   const detailForm = customers.locator('form').nth(1);
   await detailForm.locator('[name=customerRef]').fill(fixture.customer);
-  await detailForm.getByRole('button', { name: copy.en.read, exact: true }).click();
+  await detailForm.getByRole('button', { name: copy[market.defaultLocale].read, exact: true }).click();
   await expect(detailForm.locator('.action-result')).toContainText('customer@example.test');
   const countConnections = () => Number(sql(`SELECT count(*) FROM pg_stat_activity WHERE usename='starter_runtime'`));
   const before = countConnections();
@@ -174,16 +175,16 @@ test('native support roster, catalogue administration, replay and operator admis
   const originalConfig = JSON.stringify(config);
   const code = `demo-${randomUUID()}`;
   const command = (data: Record<string, unknown>, key?: string) => action('operator.bundleCommand', { bundleCode: code, ...data }, key);
-  await page.goto(routes.admin.en + '#catalogue');
+  await page.goto(routes.admin[market.defaultLocale] + '#catalogue');
   const panel = page.locator('#catalogue');
-  await expect(panel).toContainText(copy.en.catalogAuthoringBody);
-  const create = panel.locator('form').filter({ has: page.getByRole('button', { name: copy.en.bundleDraft, exact: true }) });
+  await expect(panel).toContainText(copy[market.defaultLocale].catalogAuthoringBody);
+  const create = panel.locator('form').filter({ has: page.getByRole('button', { name: copy[market.defaultLocale].bundleDraft, exact: true }) });
   await create.locator('[name=bundleCode]').fill(code);
   await create.locator('[name=title]').fill('Fictional operator bundle');
-  await create.getByRole('button', { name: copy.en.bundleDraft, exact: true }).click();
+  await create.getByRole('button', { name: copy[market.defaultLocale].bundleDraft, exact: true }).click();
   await expect(create.locator('.action-result')).toContainText(code);
   const replay = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.bundleCommand'));
-  await create.getByRole('button', { name: copy.en.bundleDraft, exact: true }).click();
+  await create.getByRole('button', { name: copy[market.defaultLocale].bundleDraft, exact: true }).click();
   expect((await (await replay).json()).replayed).toBe(true);
   expect((await command({ action: 'set_composition', components: [] })).code).toBe('starter_input_invalid');
   expect((await command({ action: 'activate', actorRef: randomUUID() })).code).toBe('starter_input_invalid');
@@ -196,18 +197,18 @@ test('native support roster, catalogue administration, replay and operator admis
     await form.getByRole('button', { name: label, exact: true }).click();
     expect((await (await response).json()).ok).toBe(true);
   };
-  await submitBundleForm(copy.en.bundleComposition, { components: JSON.stringify([
+  await submitBundleForm(copy[market.defaultLocale].bundleComposition, { components: JSON.stringify([
     { sku: config.offer.products[0].sku, quantity: 1, isAddon: false },
   ]) });
   expect((await command({ action: 'set_target_price', amountMinor: -1 })).code).toBe('starter_input_invalid');
-  await submitBundleForm(copy.en.bundleTarget, { amountMinor: String(config.offer.products[0].unitPrice.amountMinor) });
-  await submitBundleForm(copy.en.bundleActivate);
+  await submitBundleForm(copy[market.defaultLocale].bundleTarget, { amountMinor: String(config.offer.products[0].unitPrice.amountMinor) });
+  await submitBundleForm(copy[market.defaultLocale].bundleActivate);
   const read = panel.locator('form').first();
   await read.locator('[name=bundleCode]').fill(code);
-  await read.getByRole('button', { name: copy.en.read, exact: true }).click();
+  await read.getByRole('button', { name: copy[market.defaultLocale].read, exact: true }).click();
   await expect(read.locator('.action-result')).toContainText('active');
   const list = panel.locator('section.panel').first();
-  await list.getByRole('button', { name: copy.en.readStatus, exact: true }).click();
+  await list.getByRole('button', { name: copy[market.defaultLocale].readStatus, exact: true }).click();
   await expect(list).toContainText(code);
   const detail = await action('operator.bundle', { bundleCode: code });
   expect(detail.ok).toBe(true);
@@ -227,20 +228,63 @@ test('native support roster, catalogue administration, replay and operator admis
   const draftForm = draftPanel.locator('form').nth(1);
   const draftId = await draftForm.locator('[name=draftId]').inputValue();
   const draftCreated = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.catalogDrafts'));
-  await draftForm.getByRole('button', { name: copy.en.save, exact: true }).click();
+  await draftForm.getByRole('button', { name: copy[market.defaultLocale].save, exact: true }).click();
   const created = await (await draftCreated).json();
   expect(created.ok).toBe(true);
   expect(created.value.outcome).toBe('committed');
   expect(created.value.record.actorId).toBe(principal);
   expect(sql(`SELECT count(*) FROM public.catalog_products WHERE id='${created.value.record.productId}'::uuid`)).toBe('0');
   const draftReplay = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.catalogDrafts'));
-  await draftForm.getByRole('button', { name: copy.en.save, exact: true }).click();
+  await draftForm.getByRole('button', { name: copy[market.defaultLocale].save, exact: true }).click();
   expect((await (await draftReplay).json()).replayed).toBe(true);
+  const typeVersion = Number(created.value.record.payload.product.type.version);
+  expect(Number.isSafeInteger(typeVersion) && typeVersion > 1).toBe(true);
+  expect(sql(`SELECT count(*) FROM public.catalog_type_versions WHERE type_key='starter:item' AND version=${typeVersion}`)).toBe('1');
+  const staleDraft = structuredClone(created.value.record.payload);
+  const uninstalledVersion = typeVersion === 2 ? 3 : 2;
+  staleDraft.product.type.version = uninstalledVersion;
+  await draftForm.locator('[name=draftId]').fill(randomUUID());
+  await draftForm.locator('[name=payload]').fill(JSON.stringify(staleDraft));
+  const staleReply = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.catalogDrafts'));
+  await draftForm.getByRole('button', { name: copy[market.defaultLocale].save, exact: true }).click();
+  const fix = `rules version ${uninstalledVersion} is not installed; run ./lifecycle up`;
+  expect(await (await staleReply).json()).toMatchObject({ ok: false,
+    issues: [{ path: 'product.type', code: 'type_not_installed', message: fix }] });
+  await expect(draftForm.locator('.action-result')).toContainText(fix);
+  const invalidDraft = structuredClone(created.value.record.payload);
+  invalidDraft.product.sharedContent.title = '';
+  await draftForm.locator('[name=draftId]').fill(randomUUID());
+  await draftForm.locator('[name=payload]').fill(JSON.stringify(invalidDraft));
+  const reply = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.catalogDrafts'));
+  await draftForm.getByRole('button', { name: copy[market.defaultLocale].save, exact: true }).click();
+  expect(await (await reply).json()).toMatchObject({ ok: false, code: 'catalog_draft_payload_invalid',
+    issues: [{ path: 'product.sharedContent.title', code: 'title_required' }] });
+  await expect(draftForm.locator('.action-result')).toContainText('product.sharedContent.title');
   const draftRead = await action('operator.catalogDrafts', { action: 'get', draftId });
   expect(draftRead.value.record.revision).toBe(1);
   expect((await action('operator.catalogDrafts')).value.page.items.some((row: { draftId: string }) => row.draftId === draftId)).toBe(true);
   expect((await action('operator.catalogDrafts', { action: 'revise', draftId, expectedRevision: 1, payload: created.value.record.payload })).ok).toBe(true);
   expect((await action('operator.catalogDrafts', { action: 'abandon', draftId, expectedRevision: 2 })).ok).toBe(true);
+  await draftPanel.getByRole('button', { name: /Load draft example|Wczytaj przykładowy szkic/u }).click();
+  const draftInput = draftForm.locator('[name=payload]');
+  await expect(draftInput).toHaveValue(/"schemaVersion": 3/u);
+  const example = JSON.parse(await draftInput.inputValue());
+  expect(example.product.type.version).toBe(typeVersion);
+  const exampleId = randomUUID();
+  await draftForm.locator('[name=draftId]').fill(exampleId);
+  await draftInput.fill(JSON.stringify({ ...example, product: { ...example.product,
+    sharedContent: { ...example.product.sharedContent, presentation: {} } } }));
+  await draftForm.getByRole('button', { name: copy[market.defaultLocale].save, exact: true }).click();
+  await expect(draftForm.locator('.action-result')).toContainText('product.sharedContent.presentation.title');
+  await draftInput.fill(JSON.stringify(example));
+  const savedExample = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.catalogDrafts'));
+  await draftForm.getByRole('button', { name: copy[market.defaultLocale].save, exact: true }).click();
+  expect(await (await savedExample).json()).toMatchObject({ ok: true, value: { record: { draftId: exampleId, revision: 1 } } });
+  const prepareDraft = draftPanel.locator('form').filter({ has: page.getByRole('button', { name: /Prepare saved draft|Przygotuj zapisany szkic/u }) });
+  await prepareDraft.locator('[name=draftId]').fill(exampleId);
+  const preparedExample = page.waitForResponse(response => response.url().endsWith('/api/actions/operator.catalogDrafts'));
+  await prepareDraft.locator('button[type=submit]').click();
+  expect(await (await preparedExample).json()).toMatchObject({ ok: true, value: { structural: { outcome: 'unknown' } } });
   expect((await action('operator.catalogDrafts', { action: 'create', draftId: randomUUID(), expectedRevision: 0, payload: {} })).code).toBe('catalog_draft_input_invalid');
   expect((await action('operator.catalogDrafts', { actorRef: principal })).code).toBe('starter_input_invalid');
   await action('auth.signOut');

@@ -11,7 +11,7 @@ Status: maintainer implementation notes. Reader guidance: [OpenLup guide](https:
 `shared/config.ts`. The host and lifecycle share that registry. The managed
 `assertConfig` validator admits lowercase alphanumeric IDs with single hyphens,
 at most 80 characters, and checks required document, return and hold settings.
-Domain inputs include `owned/renewal.config.ts` (cancellation offers and retry
+Domain inputs include `owned/renewal.config.ts` (account actions, pause presets, cancellation offers and retry
 timing) and `owned/quote.config.ts`. Follow the reader guide's
 [business-configuration convention](https://github.com/openlup/openlup/blob/main/packages/core/docs/guide/how-to/build/customize-the-starter.md#keep-business-configuration-owned).
 
@@ -31,7 +31,7 @@ remain separate restart/build operations.
 
 ## Subscription editor values
 
-For the current source candidate, `subscriptionOffers` in `owned/store.config.ts`
+In the 1.2.0 starter, `subscriptionOffers` in `owned/store.config.ts`
 is the commercial input for checkout and classic/sized servicing. The typed
 `shared/policy.ts` helper accepts `set(...)` and `range(min,max,step)`;
 ranges use `(value-min)%step === 0`. Global cadence and explicit per-SKU rules
@@ -120,9 +120,14 @@ marker and preserved only across restarts of the same container.
 
 ## Catalogue authoring and storefront
 
-`owned/catalogue.ts` supplies the `starter:item@1` registry to
-`host/operator-composition.ts`. The native draft writer owns the command; the
-host supplies the command key and session actor, outside the JSON payload.
+`owned/catalogue.ts` supplies the draft type. If `owned/catalogue-rules.cjs`
+is present, `./lifecycle up` installs its rules and the operator form uses
+them. Use **Load draft example**, save it, and select **Prepare saved draft**.
+Older drafts keep the rules they were saved with. Keep the local catalogue
+build volume with the demonstration database when restarting the store.
+Without a rules bundle, drafts use the existing validator in `owned/catalogue.ts`.
+The native draft writer owns the command. The host supplies the command key
+and session actor outside the JSON payload.
 
 Evidence (historical record, 2026-11-13):
 Catalogue drafts write only isolated authoring tables (packages/platform/sql/20260908100000_catalog_draft_foundation.sql:1-9); bundle activation sets the native bundle status to active (packages/platform/sql/20260812210000_bundle_operator_write_boundary.sql:493), while this application’s storefront and checkout still use typed configuration through evaluateOffer (examples/neutral-store/shared/offer.ts:40), so neither creates a new purchasable storefront offer.

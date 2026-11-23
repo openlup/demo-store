@@ -4,9 +4,34 @@ import type { Pool } from 'pg';
 import { composePortalCapabilities, composeE4Capabilities } from '../host/e4-composition.ts';
 import { configurations } from '../owned/store.config.ts';
 import { type ActionContext } from '../host/bindings.ts';
+import { createCustomerSavedAddressRequestSchemas } from '@openlup/platform/shipping';
+import { savedAddressValidation } from '../owned/acquisition-policy.ts';
 
 const context: ActionContext = { actor: { customerRef: null, operatorRef: 'verified-operator' },
   commandKey: 'hold-command-123456', config: Object.values(configurations)[0]! };
+
+for (const config of Object.values(configurations)) {
+  test(`${config.id}: saved-address policy preserves the original local formats`, async () => {
+    const schema = createCustomerSavedAddressRequestSchemas(savedAddressValidation(config.market.country)).customerAddressUpsertRequestSchema;
+    const input = { kind: 'shipping', line1: '1 Example Lane', city: 'Example', postalCode: '12345', contactPhone: '123456789' };
+    const normalized = { ...input, idempotencyKey: context.commandKey, country: config.market.country,
+      postalCode: '12-345', contactPhone: '+999123456789',
+      recipientName: null, companyName: null, taxId: null,
+    };
+    assert.deepEqual(schema.safeParse({ ...input, idempotencyKey: context.commandKey }), { success: true, data: normalized });
+    const ref = 'abcdefab-cdef-4abc-8def-abcdefabcdef';
+    assert.deepEqual(schema.safeParse({ ...normalized, addressId: ref }), { success: true, data: { ...normalized, addressId: ref } });
+    const customer = { ...context, config, actor: { principalRef: ref, customerRef: ref, operatorRef: null } };
+    let queries = 0;
+    const pool = { query() { queries++; throw new Error('invalid_address_store'); } } as unknown as Pool;
+    const action = composeE4Capabilities(pool, async () => false)['account.addresses']!;
+    for (const invalid of [{ postalCode: ' ab 1234 ' }, { contactPhone: '1234 5678' }, { contactPhone: '+99912345678' }]) {
+      assert.equal(schema.safeParse({ ...input, idempotencyKey: context.commandKey, ...invalid }).success, false);
+      assert.deepEqual(await action({ ...input, ...invalid, action: 'upsert' }, customer), { ok: false, code: 'starter_input_invalid' });
+    }
+    assert.equal(queries, 0);
+  });
+}
 
 test('hold and release recheck admission on every replay before storage', async () => {
   let checks = 0;

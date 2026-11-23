@@ -1,12 +1,12 @@
 {
   "schemaVersion": 3,
-  "description": "Local sandbox observations for demo-store 0.43.0\u21921.1.0 via 1.0.0",
-  "applicationCommit": "098832ae807187b3401d2e7a0a07d1646f19d70e",
-  "setVersion": "1.1.0",
-  "result": "PARTIAL",
-  "node": "v24.21.0",
-  "npm": "11.19.0",
-  "lockfileSha256": "509107415e4feaf6e96bff4a0f9e9f1bf5b33fdf925ac859df99906b1e0407bf",
+  "description": "Local sandbox observations for the published OpenLup 1.1.0 to 1.3.0 demo-store upgrade",
+  "recordedAt": "2026-11-23T08:10:49Z",
+  "result": "PASS with cached PostgreSQL rehearsal",
+  "setVersion": "1.3.0",
+  "baselineCommit": "5a4fc5a59c7f4c39c9f5dafcbf4306d62a5740c1",
+  "intermediateCommit": "e30c057ae2f84d0b9fd05cc80e54c5659272b0a9",
+  "lockfileSha256": "fa7ca1f682db70a36dbd5cd3f6ac182296a4493e23cd937d455fbc969c25b39d",
   "extraction": {
     "schemaVersion": 2,
     "mode": "released",
@@ -16,13 +16,28 @@
     "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
     "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
   },
+  "node": "v24.21.0",
+  "npm": "11.19.0",
   "postgresImage": "ghcr.io/openlup/library/postgres:16@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
+  "commands": [
+    "npm ci && npm run typecheck && npm run build && npm test (1.1.0 and 1.2.0 app copies)",
+    "node demo/verify.mjs (1.3.0 with pinned Node 24.21.0/npm 11.19.0)",
+    "npx --no -- playwright install chromium",
+    "node --experimental-strip-types demo/purchase-journey.mjs (exact digest already cached, no pull shim)",
+    "npm run catalogue:check",
+    "npm --silent run settings -- list --goal \"free shipping\" --configuration <id> --json",
+    "npm --silent run settings -- show offer.freeShippingFromMinor --configuration <id> --json",
+    "npm --silent run settings -- check --configuration <id> --json",
+    "node --experimental-strip-types .context/canary/continuity.mjs",
+    "./node_modules/.bin/openlup settings show checkout_recovery_reminders --app ./owned/settings-host.ts --configuration <id> --database-url <private loopback runtime URL> --json",
+    "DEMO_READINESS_INPUT=<private input> ./lifecycle verify --app ./demo/readiness.mjs --json"
+  ],
   "verifier": {
     "schemaVersion": 1,
     "description": "OpenLup first-party demo store",
-    "qualification": "published 1.1.0 set; application verification only; original extraction retained",
-    "setVersion": "1.1.0",
-    "lockfileSha256": "509107415e4feaf6e96bff4a0f9e9f1bf5b33fdf925ac859df99906b1e0407bf",
+    "qualification": "published 1.3.0 set; application verification only; original extraction retained",
+    "setVersion": "1.3.0",
+    "lockfileSha256": "fa7ca1f682db70a36dbd5cd3f6ac182296a4493e23cd937d455fbc969c25b39d",
     "extraction": {
       "schemaVersion": 2,
       "mode": "released",
@@ -34,37 +49,37 @@
     },
     "node": "v24.21.0",
     "postgresImage": "ghcr.io/openlup/library/postgres:16@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
-    "startedAt": "2026-11-18T07:13:07.673Z",
+    "startedAt": "2026-11-23T07:58:09.669Z",
     "results": [
       {
         "name": "install",
         "result": "PASS",
         "exitCode": 0,
-        "durationMs": 1546
+        "durationMs": 1359
       },
       {
         "name": "typecheck",
         "result": "PASS",
         "exitCode": 0,
-        "durationMs": 2025
+        "durationMs": 2035
       },
       {
         "name": "build",
         "result": "PASS",
         "exitCode": 0,
-        "durationMs": 1263
+        "durationMs": 1001
       },
       {
         "name": "application-tests",
         "result": "PASS",
         "exitCode": 0,
-        "durationMs": 1826
+        "durationMs": 4239
       },
       {
         "name": "postgres-mirror-pull",
         "result": "FAIL",
         "exitCode": 1,
-        "durationMs": 1307
+        "durationMs": 1329
       },
       {
         "name": "sandbox-purchase-journey",
@@ -74,319 +89,471 @@
       }
     ],
     "result": "FAIL",
-    "endedAt": "2026-11-18T07:13:15.643Z"
+    "endedAt": "2026-11-23T07:58:19.634Z"
   },
-  "witnesses": [
-    {
-      "name": "npm-ci",
-      "result": "PASS"
-    },
-    {
-      "name": "typecheck",
-      "result": "PASS"
-    },
-    {
-      "name": "build",
-      "result": "PASS"
-    },
-    {
-      "name": "application-tests",
-      "result": "PASS",
-      "cases": 329,
+  "applicationTests": {
+    "1.1.0": {
+      "tests": 329,
+      "pass": 329,
+      "fail": 0,
       "skipped": 0
     },
+    "1.2.0": {
+      "tests": 361,
+      "pass": 361,
+      "fail": 0,
+      "skipped": 0
+    },
+    "1.3.0": {
+      "tests": 365,
+      "pass": 362,
+      "fail": 0,
+      "skipped": 3
+    }
+  },
+  "cachedMirrorPurchase": {
+    "result": "PASS",
+    "configurations": [
+      "supplements",
+      "coffee"
+    ],
+    "purchases": 2,
+    "tallyPerConfig": 1,
+    "replayPerConfig": 0,
+    "use": "local cached digest after the verifier mirror pull failed"
+  },
+  "offlineSettings": [
     {
-      "name": "editor-components",
-      "result": "PASS",
-      "cases": 42
+      "configuration": "coffee",
+      "freeShippingFromMinor": 1000,
+      "validatedDeclarations": 22,
+      "requiredDeclarations": [
+        "offer.freeShippingFromMinor",
+        "offer.subscriptionDiscountBps",
+        "purchase.reservationMinutes",
+        "subscriptionCreation.editWindowHours",
+        "subscriptionOffers.deliveryCycles",
+        "subscriptions.lifecycleNoticeRetryBudget"
+      ],
+      "exitCode": 0
     },
     {
-      "name": "fresh-native-purchase-tally-replay",
-      "result": "PASS",
-      "cases": 2,
+      "configuration": "supplements",
+      "freeShippingFromMinor": 1000,
+      "validatedDeclarations": 22,
+      "requiredDeclarations": [
+        "offer.freeShippingFromMinor",
+        "offer.subscriptionDiscountBps",
+        "purchase.reservationMinutes",
+        "subscriptionCreation.editWindowHours",
+        "subscriptionOffers.deliveryCycles",
+        "subscriptions.lifecycleNoticeRetryBudget"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "databaseContinuity": {
+    "node": "v24.21.0",
+    "databases": [
+      {
+        "id": "supplements",
+        "postgres": "160015",
+        "migrations": [
+          {
+            "version": "1.1.0",
+            "before": null,
+            "after": 156,
+            "dryRun": 157,
+            "applied": 157,
+            "replay": 0
+          },
+          {
+            "version": "1.2.0",
+            "before": 156,
+            "after": 159,
+            "pending": [
+              "db/platform/migrations/20261123120000_subscription_edit_window_activation.sql",
+              "db/platform/migrations/20261123130000_inventory_renewal_protection_policy.sql",
+              "db/platform/migrations/20261123140000_checkout_recovery_reminder_schedule.sql"
+            ],
+            "dryRun": 3,
+            "applied": 3,
+            "replay": 0
+          },
+          {
+            "version": "1.3.0",
+            "before": 159,
+            "after": 168,
+            "pending": [
+              "db/platform/migrations/20261123141000_checkout_recovery_reminder_guard.sql",
+              "db/platform/migrations/20261123142000_inventory_renewal_protection_validation.sql",
+              "db/platform/migrations/20261123147000_inventory_atp_aggregate_renewal_credits.sql",
+              "db/platform/migrations/20261123148000_checkout_recovery_reminder_episode_pin.sql",
+              "db/platform/migrations/20261123149000_native_durable_capture_evidence.sql",
+              "db/platform/migrations/20261123150000_subscription_renewal_due_fairness.sql",
+              "db/platform/migrations/20261123152000_inventory_new_purchase_stock_preview.sql",
+              "db/platform/migrations/20261123190000_catalog_publication.sql",
+              "db/platform/migrations/20261123191000_catalog_publication_commands.sql"
+            ],
+            "dryRun": 9,
+            "applied": 9,
+            "replay": 0
+          }
+        ],
+        "continuity": [
+          {
+            "version": "1.2.0",
+            "predecessorColumnsEqual": true
+          },
+          {
+            "version": "1.3.0",
+            "predecessorColumnsEqual": true
+          }
+        ],
+        "baseline": {
+          "subscriptions": {
+            "rows": 3,
+            "sha256": "0d2784a02c4e518922e09c83e51a8924f9dc9d806d434d079a2d345d1f833569"
+          },
+          "commerce_orders": {
+            "rows": 3,
+            "sha256": "d745a47554d9afd6e129c3db06998f19fb58750d92017cbeb1797c6de915c8e8"
+          },
+          "outbox_events": {
+            "rows": 12,
+            "sha256": "384bf6bd3694794ec7ab5a75fae5f6598436be653ec996569053bb0985eaabe9"
+          },
+          "subscription_cycles": {
+            "rows": 3,
+            "sha256": "e5954206f520b0d617a02d106293b9b4adcff3f812e29c5b5906f24ccf5f2b85"
+          },
+          "subscription_renewal_operations": {
+            "rows": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "policies": [
+          {
+            "stock": {
+              "revision": "starter-1",
+              "renewalProtectionDays": 14
+            },
+            "reminders": {
+              "revision": "starter-1",
+              "abandonedCart": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "gentle",
+                  "afterHours": 24
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 72
+                }
+              ],
+              "checkoutRecovery": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 20
+                }
+              ]
+            },
+            "installed": true
+          },
+          {
+            "stock": {
+              "revision": "starter-1",
+              "renewalProtectionDays": 14
+            },
+            "reminders": {
+              "revision": "starter-1",
+              "abandonedCart": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "gentle",
+                  "afterHours": 24
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 72
+                }
+              ],
+              "checkoutRecovery": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 20
+                }
+              ]
+            },
+            "installed": false
+          }
+        ],
+        "subscriber": {
+          "eventType": "commerce.settlement.settled",
+          "processed": 12,
+          "replay": 0
+        }
+      },
+      {
+        "id": "coffee",
+        "postgres": "160015",
+        "migrations": [
+          {
+            "version": "1.1.0",
+            "before": null,
+            "after": 156,
+            "dryRun": 157,
+            "applied": 157,
+            "replay": 0
+          },
+          {
+            "version": "1.2.0",
+            "before": 156,
+            "after": 159,
+            "pending": [
+              "db/platform/migrations/20261123120000_subscription_edit_window_activation.sql",
+              "db/platform/migrations/20261123130000_inventory_renewal_protection_policy.sql",
+              "db/platform/migrations/20261123140000_checkout_recovery_reminder_schedule.sql"
+            ],
+            "dryRun": 3,
+            "applied": 3,
+            "replay": 0
+          },
+          {
+            "version": "1.3.0",
+            "before": 159,
+            "after": 168,
+            "pending": [
+              "db/platform/migrations/20261123141000_checkout_recovery_reminder_guard.sql",
+              "db/platform/migrations/20261123142000_inventory_renewal_protection_validation.sql",
+              "db/platform/migrations/20261123147000_inventory_atp_aggregate_renewal_credits.sql",
+              "db/platform/migrations/20261123148000_checkout_recovery_reminder_episode_pin.sql",
+              "db/platform/migrations/20261123149000_native_durable_capture_evidence.sql",
+              "db/platform/migrations/20261123150000_subscription_renewal_due_fairness.sql",
+              "db/platform/migrations/20261123152000_inventory_new_purchase_stock_preview.sql",
+              "db/platform/migrations/20261123190000_catalog_publication.sql",
+              "db/platform/migrations/20261123191000_catalog_publication_commands.sql"
+            ],
+            "dryRun": 9,
+            "applied": 9,
+            "replay": 0
+          }
+        ],
+        "continuity": [
+          {
+            "version": "1.2.0",
+            "predecessorColumnsEqual": true
+          },
+          {
+            "version": "1.3.0",
+            "predecessorColumnsEqual": true
+          }
+        ],
+        "baseline": {
+          "subscriptions": {
+            "rows": 3,
+            "sha256": "07e937034ca16862151f80358daca311bf801dca1cdceb74a5c8d8eb30454d59"
+          },
+          "commerce_orders": {
+            "rows": 3,
+            "sha256": "19f286297064cfaa6b7e096417e34be9c85cc8782dfac9026d0c98e113008e2a"
+          },
+          "outbox_events": {
+            "rows": 12,
+            "sha256": "856bf890a33ddd0a6e46963a8ae81d94d6f279b30985703cb04afc41a8ac1216"
+          },
+          "subscription_cycles": {
+            "rows": 3,
+            "sha256": "f8ae30d24dcf0cf1a86405705240fced3225a3fe808134115fecf4bda7e524fa"
+          },
+          "subscription_renewal_operations": {
+            "rows": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "policies": [
+          {
+            "stock": {
+              "revision": "starter-1",
+              "renewalProtectionDays": 14
+            },
+            "reminders": {
+              "revision": "starter-1",
+              "abandonedCart": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "gentle",
+                  "afterHours": 24
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 72
+                }
+              ],
+              "checkoutRecovery": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 20
+                }
+              ]
+            },
+            "installed": true
+          },
+          {
+            "stock": {
+              "revision": "starter-1",
+              "renewalProtectionDays": 14
+            },
+            "reminders": {
+              "revision": "starter-1",
+              "abandonedCart": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "gentle",
+                  "afterHours": 24
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 72
+                }
+              ],
+              "checkoutRecovery": [
+                {
+                  "stage": "first",
+                  "afterHours": 1
+                },
+                {
+                  "stage": "last",
+                  "afterHours": 20
+                }
+              ]
+            },
+            "installed": false
+          }
+        ],
+        "subscriber": {
+          "eventType": "commerce.settlement.settled",
+          "processed": 12,
+          "replay": 0
+        }
+      }
+    ],
+    "browser": [
+      {
+        "version": "1.1.0",
+        "grep": "a discounted first-subscription purchase settled through the sandbox$|skip advances one cadence",
+        "startTime": "2026-11-23T08:09:24.006Z",
+        "duration": 7344.956,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      {
+        "version": "1.3.0-destinations",
+        "grep": "retained renewal keeps its destination|: follows ",
+        "startTime": "2026-11-23T08:09:55.342Z",
+        "duration": 13389.092,
+        "expected": 64,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      {
+        "version": "1.3.0",
+        "grep": "a discounted first-subscription purchase settled through the sandbox$|skip advances one cadence|replacement requires confirmation|shipment operations actual replacement arrival",
+        "startTime": "2026-11-23T08:10:08.986Z",
+        "duration": 15646.206,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    ],
+    "readiness": [
+      {
+        "configuration": "supplements",
+        "exitCode": 1,
+        "state": "unsatisfied",
+        "findings": [
+          {
+            "code": "OPENLUP_E_PORT_MISSING",
+            "observed": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port."
+          }
+        ]
+      },
+      {
+        "configuration": "coffee",
+        "exitCode": 1,
+        "state": "unsatisfied",
+        "findings": [
+          {
+            "code": "OPENLUP_E_PORT_MISSING",
+            "observed": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port."
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "configuration": "supplements",
+        "command": "settings show checkout_recovery_reminders",
+        "exitCode": 0
+      },
+      {
+        "configuration": "coffee",
+        "command": "settings show checkout_recovery_reminders",
+        "exitCode": 0
+      }
+    ],
+    "intermediateStartup": {
       "configurations": [
         "supplements",
         "coffee"
-      ]
-    },
-    {
-      "name": "upgraded-baseline-destinations-navigation-purchase",
-      "result": "PASS",
-      "cases": 108
-    },
-    {
-      "name": "upgraded-baseline-subscription-recovery-alignment",
-      "result": "PASS",
-      "cases": 28
-    },
-    {
-      "name": "upgraded-baseline-isolated-renewal-destinations",
-      "result": "PASS",
-      "cases": 4
-    },
-    {
-      "name": "file-upgrade",
-      "result": "PASS",
-      "appliedFiles": 11,
-      "replayApplied": 0
-    },
-    {
-      "name": "schema-upgrade",
-      "result": "PASS",
-      "appliedPerDatabase": 1,
-      "pending": [],
-      "replayApplied": 0
-    }
-  ],
-  "browserPolicy": {
-    "workers": 1,
-    "retries": 0,
-    "traces": false,
-    "screenshots": false,
-    "video": false
-  },
-  "readiness": {
-    "coffee": {
-      "formatVersion": 1,
-      "command": "verify",
-      "exitCode": 1,
-      "state": "unsatisfied",
-      "boundary": "Read-only diagnosis of supplied composition observations. Only the supplied schema observer is called; handlers, routes, schedules, migrations and installs are never run. Host inventory, bindings and probe honesty remain application-owned. No SQL behavior, ACL, provider delivery or live scheduler execution is proven. Explicit --app imports trusted application code, which must not boot a host or execute effects; this is not a sandbox.",
-      "candidate": {
-        "artifact": "sha256:4f95f2e1b9159f628be49073636eaab733c363ba5b1fe3963691a17f05be0294",
-        "configuration": "coffee:811d12a43ae60da6828388d3e32b00e42142606a3b4598eef68568d1cc72f1ce",
-        "environment": "local-sandbox",
-        "database": "demo-c64eeb9079da3322f275f1df3be803e991ba3ff188f89ec3491d57a130e61c1d",
-        "schema": "db/platform/migrations/20261122190000_subscription_cadence_bound.sql"
-      },
-      "loadedPackages": [
-        {
-          "name": "@openlup/core",
-          "version": "1.1.0",
-          "kind": "kernel"
-        },
-        {
-          "name": "@openlup/outbox",
-          "version": "1.1.0",
-          "kind": "rail"
-        },
-        {
-          "name": "@openlup/platform",
-          "version": "1.1.0",
-          "kind": "rail"
-        }
       ],
-      "findings": [
-        {
-          "code": "OPENLUP_E_PORT_MISSING",
-          "package": "@openlup/platform",
-          "subject": "unsubscribe.apply",
-          "observed": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
-          "cause": "Application composition is missing or mismatches the required adapter port.",
-          "fix": "Bind the selected adapter port in composition. Supply the adapter through the application binder and expose its returned object or function at bindings.ports[\"@openlup/platform:unsubscribe.apply\"]. Do not use a declaration string.",
-          "recheck": "openlup verify --app './demo/readiness.mjs' --json",
-          "evidence": {
-            "declared": "Port unsubscribe.apply is required.",
-            "bound": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
-            "checked": "Readiness comparison of supplied observations only.",
-            "unknown": [
-              "Actual execution, permissions and external effects were not checked."
-            ]
-          }
-        }
-      ]
+      "result": "PASS"
     },
-    "supplements": {
-      "formatVersion": 1,
-      "command": "verify",
-      "exitCode": 1,
-      "state": "unsatisfied",
-      "boundary": "Read-only diagnosis of supplied composition observations. Only the supplied schema observer is called; handlers, routes, schedules, migrations and installs are never run. Host inventory, bindings and probe honesty remain application-owned. No SQL behavior, ACL, provider delivery or live scheduler execution is proven. Explicit --app imports trusted application code, which must not boot a host or execute effects; this is not a sandbox.",
-      "candidate": {
-        "artifact": "sha256:4f95f2e1b9159f628be49073636eaab733c363ba5b1fe3963691a17f05be0294",
-        "configuration": "supplements:42abdf2ea17909f1fbeb5665073971e5b7aca11dd85336b3ce6d5d43f8b80b93",
-        "environment": "local-sandbox",
-        "database": "demo-0067fee544526f97fa21f585c281b2b758b556560bb0024d5c37f418ce3b01e8",
-        "schema": "db/platform/migrations/20261122190000_subscription_cadence_bound.sql"
-      },
-      "loadedPackages": [
-        {
-          "name": "@openlup/core",
-          "version": "1.1.0",
-          "kind": "kernel"
-        },
-        {
-          "name": "@openlup/outbox",
-          "version": "1.1.0",
-          "kind": "rail"
-        },
-        {
-          "name": "@openlup/platform",
-          "version": "1.1.0",
-          "kind": "rail"
-        }
-      ],
-      "findings": [
-        {
-          "code": "OPENLUP_E_PORT_MISSING",
-          "package": "@openlup/platform",
-          "subject": "unsubscribe.apply",
-          "observed": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
-          "cause": "Application composition is missing or mismatches the required adapter port.",
-          "fix": "Bind the selected adapter port in composition. Supply the adapter through the application binder and expose its returned object or function at bindings.ports[\"@openlup/platform:unsubscribe.apply\"]. Do not use a declaration string.",
-          "recheck": "openlup verify --app './demo/readiness.mjs' --json",
-          "evidence": {
-            "declared": "Port unsubscribe.apply is required.",
-            "bound": "bindings.ports[\"@openlup/platform:unsubscribe.apply\"]: missing usable port.",
-            "checked": "Readiness comparison of supplied observations only.",
-            "unknown": [
-              "Actual execution, permissions and external effects were not checked."
-            ]
-          }
-        }
-      ]
+    "result": "PASS",
+    "namedCases": {
+      "pendingReplacementKeepsNextCycle": 4,
+      "actualArrivalExtendsWithoutEarlierReplayedCycleOrDuplicateArrival": 4,
+      "retainedRenewalDestinationSurvivesFutureAddressEdits": 4,
+      "subscriptionSkipAndReplay": 4
     }
   },
-  "restoredBaseline": {
-    "source": "The exact retained PG16 after-witness dumps from the 0.43.0\u21921.0.0 run, including purchase, tally and durable pending work.",
-    "initialRefusal": "After forward 151 committed on supplements, final inventory refused because pg_dump18/pg_restore omitted 453 owner-to-self grants; the unchanged coffee restore also refused the 1.0.0 inventory check.",
-    "diagnosis": "A separate clean published 1.0.0\u21921.1.0 control passed. Public canonical projection comparison found 453 missing owner self-grants, 66 related relation/schema attribute digests, no added ACLs, no changed runtime grant, role, ownership or definition.",
-    "repair": "Restored only the exact 453 predecessor owner self-grants. Both restored databases then matched clean canonical projections exactly (coffee at 155, supplements at 156). No engine/manifest/ledger/package SQL edits or projection bypass.",
-    "resume": "Installed runner status/dry-run/apply/status/replay then passed; supplements resumed with zero pending because its forward was already committed; coffee applied the one pending forward. Both final replays applied zero.",
-    "dumpCompatibility": "Removed only the pg_dump18 session preamble SET transaction_timeout = 0 unsupported by PG16; all object and data statements retained.",
-    "appliedSqlSha256": "56192a40f3677b4e77a16969dd0e40889f060a07f576569ea356f5ec6bb58163"
-  },
-  "dataContinuity": {
-    "supplements": {
-      "subscriptions": {
-        "rows": 16,
-        "byteEqual": true,
-        "sha256": "2981088c6b657676b039423a9024c8cb6700f31b86273873546a0065f079eb29"
-      },
-      "commerce_orders": {
-        "rows": 22,
-        "byteEqual": true,
-        "sha256": "779b26c0845811d1f1e1d47f471848fde82d79205dba7d7cb59750dc03d98ad0"
-      },
-      "outbox_events": {
-        "rows": 92,
-        "byteEqual": true,
-        "sha256": "bc45db924d0ae0cd8da361ec6be15186d4ab3e09f8e4862c43f4047f89dacb3c"
-      },
-      "subscription_cycles": {
-        "rows": 19,
-        "byteEqual": true,
-        "sha256": "fcf2ac3934b8fbbf9f33b89582bf8165d076960b08d57473ef353ca966e9239e"
-      },
-      "subscription_renewal_operations": {
-        "rows": 5,
-        "byteEqual": true,
-        "sha256": "ce5b40c74daa7e00759a861b6e5b158fbb89efcd669f9a557222b73103161ab5"
-      },
-      "ledger": {
-        "ordinal": 156,
-        "rows": 157
-      }
-    },
-    "coffee": {
-      "subscriptions": {
-        "rows": 16,
-        "byteEqual": true,
-        "sha256": "94f02f2d6bf031be1c898b4b26de354a8d060c5da14b38f6d3d93bf3ccb04321"
-      },
-      "commerce_orders": {
-        "rows": 22,
-        "byteEqual": true,
-        "sha256": "a4a64599c4afae2a24388b074f4afbeeefd9098a439205e2dcd95414d3dd8470"
-      },
-      "outbox_events": {
-        "rows": 92,
-        "byteEqual": true,
-        "sha256": "2590ac47f648231d8db5fb2a61badfce262c81cf096c98772b2edb33a9eda01f"
-      },
-      "subscription_cycles": {
-        "rows": 19,
-        "byteEqual": true,
-        "sha256": "53cd2e5e06b53f6c3fa2ec3704d05085df7cc841601e5733b8cca902c8519db0"
-      },
-      "subscription_renewal_operations": {
-        "rows": 5,
-        "byteEqual": true,
-        "sha256": "eb28cf48915aa8383bd5dc83767e88aa939d52a0c84c4a78018df38e928b2cbf"
-      },
-      "ledger": {
-        "ordinal": 156,
-        "rows": 157
-      }
-    }
-  },
-  "settlementPendingAndReplay": [
-    {
-      "configuration": "supplements",
-      "processed": 18,
-      "replayProcessed": 0
-    },
-    {
-      "configuration": "coffee",
-      "processed": 18,
-      "replayProcessed": 0
-    }
-  ],
-  "subscriptionInvariant": {
-    "supplements": {
-      "cases": 4,
-      "retainedFromPreviousWitness": 2,
-      "new11WitnessCases": 2,
-      "lateArrivalExtends": true,
-      "noEarlierCycle": true,
-      "oneOriginalCycle": true,
-      "zeroRenewalOperations": true,
-      "oneOriginalAndOneReplacementParcel": true,
-      "oneArrivalReceiptPerReplacement": true,
-      "observationsSha256": "9eca1a10a0b5172e159d15c5dbe45cb4879c934b241f5d2b95615656656d4b58"
-    },
-    "coffee": {
-      "cases": 4,
-      "retainedFromPreviousWitness": 2,
-      "new11WitnessCases": 2,
-      "lateArrivalExtends": true,
-      "noEarlierCycle": true,
-      "oneOriginalCycle": true,
-      "zeroRenewalOperations": true,
-      "oneOriginalAndOneReplacementParcel": true,
-      "oneArrivalReceiptPerReplacement": true,
-      "observationsSha256": "a937d1159bcbddb187f8a3539e4200ebac0bea485388c9bf125661e20c907db7"
-    }
-  },
-  "catalogueOptIns": {
-    "supplements": {
-      "definitions": 0,
-      "backfilledSkus": 0,
-      "mappedProducts": 0,
-      "variantIdentities": 0,
-      "definitionInstalls": 0,
-      "priceWriterReceipts": 0
-    },
-    "coffee": {
-      "definitions": 0,
-      "backfilledSkus": 0,
-      "mappedProducts": 0,
-      "variantIdentities": 0,
-      "definitionInstalls": 0,
-      "priceWriterReceipts": 0
-    }
+  "readinessBeforeObserverReconciliation": [],
+  "witnessHashes": {
+    "continuity.mjs": "47c876ca9ef8ee9c789c634d2c4f15ad973dc79fcb43c56b63fbfba4f5dc67d3",
+    "verify-receipt.json": "d297d92f6f897593f8264775c1c1efd6212eb03805909743589e6814590f506f"
   },
   "limits": [
-    "Local demo/verify.mjs passed install, typecheck, build and 329 tests, then failed the authenticated GHCR mirror pull because the configured token lacks scope. No credentials/settings changes or pull shim. Local browser/database proof used the already-cached verified pinned PG16 image. Hosted CI is separate.",
-    "Readiness remains unsatisfied for the pre-existing unsubscribe.apply port in both configurations; it was observed and not fixed.",
-    "Full native editor Compose journeys and the full database-browser matrix were not run; focused existing native and component witnesses were rerun.",
-    "No experimental catalogue definitions, quantity backfill, v2/v3 authoring, or base-price writer activation; database readback remains zero for definitions, mappings, backfill, variant identities and price-writer receipts.",
-    "No production, deployment, settings, secrets, credential changes, other-repository writes, merge, force-push or new PR."
+    "Original starter digest retained. The database evidence uses two new synthetic 1.1.0 installations populated through the predecessor app, then upgrades them in place.",
+    "The default PostgreSQL runtime role covers the new reminder grant. Optional catalogue rules remain disabled, causing three expected application-test skips.",
+    "The local rehearsal covers only the synthetic loopback store. Hosted CI has its own receipt."
   ],
-  "previousLocalReceipt": {
-    "commit": "6319e3c8c59162fefa5ff59d61fe361d4be47453",
-    "path": "demo/local-receipt.json",
-    "sha256": "5d9abe2ce1e2af2fcb90f0112f8a8ebc3502f8ddb7d01d83f29314fe1b1acc1e"
-  },
-  "recordedAt": "2026-11-18T07:21:42.132388+00:00"
+  "applicationCommit": "2e1c68e8382437fe32ad2ac8161c463a5eec888a"
 }

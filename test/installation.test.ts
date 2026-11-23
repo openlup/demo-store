@@ -2,12 +2,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { cp, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { spawn } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { execFileSync, spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { once } from 'node:events';
 import { fileURLToPath } from 'node:url';
 import { configurations } from '../owned/store.config.ts';
 import { buildDemoSeed } from '../owned/demo-seed.ts';
-import { editorProducts } from '../host/editor-catalogue.ts';
+import { editorProducts, readStarterCatalogueRules, starterCatalogue } from '../host/editor-catalogue.ts';
 import { acquisitionAddresses } from '../owned/acquisition-addresses.ts';
 import { applyDemoSeed, demonstrationMarker, installDemonstration,
   type DemonstrationInstallation } from '../installation/install.ts';
@@ -73,6 +75,17 @@ test('container demo startup privately creates a key once, reuses it, and refuse
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
+const upsertPolicySetting = `INSERT INTO public.commerce_settings(key,value_text) VALUES($1,$2)
+        ON CONFLICT(key) DO UPDATE SET value_text=EXCLUDED.value_text`;
+const installReminderSchedule = 'SELECT public.commerce_install_checkout_recovery_reminder_schedule($1::text, $2::jsonb)';
+
+// The platform's PostgreSQL tests prove replace-on-conflict for the upsert.
+// The second reminder statement belongs to the separately reviewed guard installer.
+// That change's PostgreSQL tests prove replace-on-conflict for the guard call.
+// A new installer statement needs a new entry in the corresponding list.
+const inventoryProtectionStatements = [upsertPolicySetting];
+const reminderScheduleStatements = [upsertPolicySetting, installReminderSchedule];
+
 const seedPriceCount = (config: typeof configurations[string]) => editorProducts(config).reduce((sum, product) => sum + product.permittedPurchaseModes.length, 0);
 
 function installation(identity = { login: 'demo_install', role: 'demo_install', marker: demonstrationMarker }) {
@@ -88,6 +101,10 @@ function installation(identity = { login: 'demo_install', role: 'demo_install', 
     stock: { async recordProviderStockCurrent(input) { stockCalls.push(input); return { replayed: false,readBack: true }; } },
     connection: { query: async (text, values) => {
       calls.push({ text, values });
+      if (text.startsWith('SELECT public.catalog_definition_install')) {
+        const { manifest } = JSON.parse(String(values?.[2]));
+        return { rows: [{ receipt: { manifestDigest: createHash('sha256').update(manifest).digest('hex'), types: JSON.parse(manifest).types } }] };
+      }
       if (text.startsWith('SELECT public.fulfillment_record_stock_current')) return { rows: [{ response: { status: 'recorded' } }] };
       if (text.startsWith('INSERT INTO public.subscription_price_policy_revisions') && values) { digests.set(String(values[0]), values[11]); policies.set(String(values[2]), { id: values[0],digest: values[11] }); }
       if (text.startsWith('SELECT id,digest')) return { rows: policies.has(String(values?.[0])) ? [policies.get(String(values?.[0]))!] : [] };
@@ -108,6 +125,110 @@ function installation(identity = { login: 'demo_install', role: 'demo_install', 
   return { binding, calls, stockCalls, closed: () => closed };
 }
 
+test('local rules run before installation and derive an immutable product type on demo startup', async context => {
+  const bytes = readStarterCatalogueRules();
+  if (!bytes) return context.skip('This starter has kept its existing draft validator.');
+  const root = fileURLToPath(new URL('../', import.meta.url));
+  // Start a standalone invocation, without inheriting the parent Node test runner context.
+  const output = execFileSync(process.execPath, ['--test', 'owned/catalogue-rules.test.cjs'],
+    { cwd: root, env: {}, encoding: 'utf8' });
+  assert.match(output, /pass 1\b/u);
+  async function installed(bytes: Buffer) {
+    const fixture = installation();
+    fixture.binding.catalogueRules = bytes;
+    const directory = await mkdtemp(resolve(tmpdir(), 'starter-catalogue-build-'));
+    try {
+      fixture.binding.catalogueBuildDirectory = directory;
+      await installDemonstration(Object.values(configurations)[0]!, async () => fixture.binding);
+      const install = fixture.calls.find(entry => entry.text.startsWith('SELECT public.catalog_definition_install'));
+      assert.ok(install);
+      const build = JSON.parse(await readFile(resolve(directory, `${install.values?.[1]}.json`), 'utf8'));
+      assert.equal(build.installed.version, install.values?.[1]);
+      assert.equal(build.asset, bytes.toString('base64'));
+    } finally { await rm(directory, { recursive: true, force: true }); }
+    const call = fixture.calls.find(entry => entry.text.startsWith('SELECT public.catalog_definition_install'));
+    assert.ok(call);
+    const { types } = JSON.parse(String(call.values?.[2]));
+    return JSON.parse(types[0].canonicalDefinition);
+  }
+  const first = await installed(bytes);
+  assert.deepEqual(await installed(bytes), first);
+  assert.equal(first.validatorRef, `sha256:${createHash('sha256').update(bytes).digest('hex')}`);
+  assert.ok(first.version > 1);
+  assert.notEqual((await installed(Buffer.concat([bytes, Buffer.from('// Changed rules asset')]))).version, first.version);
+});
+
+test('a retained build conflict rolls back definition installation before commit', async context => {
+  const bytes = readStarterCatalogueRules();
+  if (!bytes) return context.skip('This starter has kept its existing draft validator.');
+  const directory = await mkdtemp(resolve(tmpdir(), 'starter-catalogue-conflict-'));
+  try {
+    const config = Object.values(configurations)[0]!;
+    const first = installation();
+    first.binding.catalogueRules = bytes;
+    first.binding.catalogueBuildDirectory = directory;
+    await installDemonstration(config, async () => first.binding);
+    const change = first.calls.find(row => row.text.startsWith('SELECT public.catalog_definition_install'));
+    assert.ok(change);
+    const conflictingBuild = resolve(directory, `${change.values?.[1]}.json`);
+    await writeFile(conflictingBuild, 'conflicting build');
+    const retry = installation();
+    retry.binding.catalogueRules = bytes;
+    retry.binding.catalogueBuildDirectory = directory;
+    await assert.rejects(installDemonstration(config, async () => retry.binding), { code: 'EEXIST' });
+    assert.equal(retry.calls.at(-1)?.text, 'ROLLBACK');
+    assert.ok(!retry.calls.some(row => row.text === 'COMMIT'));
+    assert.equal(await readFile(conflictingBuild, 'utf8'), 'conflicting build');
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('a running reader exposes only committed rules builds across a failed commit', async context => {
+  const bytes = readStarterCatalogueRules();
+  if (!bytes) return context.skip('This starter has kept its existing draft validator.');
+  const directory = await mkdtemp(resolve(tmpdir(), 'starter-catalogue-rollback-'));
+  try {
+    const config = Object.values(configurations)[0]!;
+    const reader = starterCatalogue(directory);
+    assert.ok(reader.current);
+    const ref = reader.current;
+    assert.equal(reader.readInstalled(ref), undefined);
+    const fixture = installation();
+    fixture.binding.catalogueRules = bytes;
+    fixture.binding.catalogueBuildDirectory = directory;
+    const query = fixture.binding.connection.query;
+    const failure = new Error('synthetic commit failure');
+    let target: string | undefined, committed = false;
+    fixture.binding.connection.query = async (text, values) => {
+      const result = await query(text, values);
+      if (text.startsWith('SELECT public.catalog_definition_install')) target = resolve(directory, `${values?.[1]}.json`);
+      if (text === 'COMMIT') {
+        assert.ok(target);
+        if (committed) assert.ok(reader.readInstalled(ref));
+        else {
+          await assert.rejects(stat(target), { code: 'ENOENT' });
+          assert.equal(reader.readInstalled(ref), undefined);
+          assert.equal(reader.registry.resolve(ref), undefined);
+        }
+        throw failure;
+      }
+      return result;
+    };
+    await assert.rejects(installDemonstration(config, async () => fixture.binding), failure);
+    assert.equal(fixture.calls.at(-1)?.text, 'ROLLBACK');
+    assert.ok(target);
+    await assert.rejects(stat(target), { code: 'ENOENT' });
+    assert.equal(reader.readInstalled(ref), undefined);
+    const successful = installation();
+    await installDemonstration(config, async () => ({ ...successful.binding, catalogueRules: bytes, catalogueBuildDirectory: directory }));
+    const installed = await readFile(target);
+    committed = true;
+    assert.ok(reader.readInstalled(ref));
+    await assert.rejects(installDemonstration(config, async () => fixture.binding), failure);
+    assert.deepEqual(await readFile(target), installed);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+
 for (const config of Object.values(configurations)) {
   test(`${config.id}: fictional catalog and prices come from one configuration deterministically`, () => {
     const seed = buildDemoSeed(config);
@@ -117,8 +238,8 @@ for (const config of Object.values(configurations)) {
     const ids = [...seed.products, ...seed.skus, ...seed.priceLists, ...seed.prices].map(row => row.id);
     assert.equal(new Set(ids).size, ids.length);
     for (const [index, product] of config.offer.products.entries()) {
-      assert.equal(seed.products[index]!.name, product.name.en);
-      assert.equal(seed.products[index]!.description, product.description.en);
+      assert.equal(seed.products[index]!.name, product.name[config.market.defaultLocale]);
+      assert.equal(seed.products[index]!.description, product.description[config.market.defaultLocale]);
       const sku = seed.skus.find(row => row.sku === product.sku)!;
       assert.equal(sku.product_id, seed.products[index]!.id);
       const oneTime = seed.prices.find(row => row.variant_id === sku.id && row.mode === 'one_time')!;
@@ -141,12 +262,27 @@ for (const config of Object.values(configurations)) {
     assert.equal(first.closed(), 1);
     assert.equal(first.calls[0]!.text, 'BEGIN');
     assert.equal(first.calls.at(-1)!.text, 'COMMIT');
-    const inserts = first.calls.filter(call => call.text.startsWith('INSERT INTO public.'));
+    for (const { text } of first.calls.slice(1, -1)) {
+      assert.doesNotMatch(text, /\b(?:BEGIN|COMMIT|ROLLBACK|START\s+TRANSACTION|END|SAVEPOINT|RELEASE|ABORT|PREPARE\s+TRANSACTION)\b/i);
+    }
+    const protection = first.calls.filter(call => call.values?.[0] === 'inventory_renewal_protection');
+    const reminders = first.calls.filter(call => call.values?.[0] === 'checkout_recovery_reminders');
+    const inserts = first.calls.filter(call => !protection.includes(call) && !reminders.includes(call) && call.text.startsWith('INSERT INTO public.'));
     assert.equal(inserts.length, buildDemoSeed(config).products.length + buildDemoSeed(config).skus.length * 2 + buildDemoSeed(config).documents.length + buildDemoSeed(config).settings.length + seedPriceCount(config) + 3);
     for (const call of inserts) {
       assert.match(call.text, /ON CONFLICT/);
       assert.match(call.text, /INSERT INTO public\.(catalog_products|catalog_skus|price_lists|price_entries|catalog_product_document_revisions|catalog_sku_identifiers|commerce_settings|subscription_price_policy_revisions|commerce_promotion_definitions)\b/);
       assert.ok(call.values?.length);
+    }
+    for (const [calls, statements, value] of [
+      [protection, inventoryProtectionStatements, config.inventory.renewalProtection],
+      [reminders, reminderScheduleStatements, config.checkoutRecoveryReminders],
+    ] as const) {
+      assert.equal(calls.length, 1);
+      const { text, values } = calls[0]!;
+      assert.ok(statements.includes(text), 'policy installation must issue an allowed write');
+      assert.equal(values?.length, 2);
+      assert.deepEqual(JSON.parse(String(values?.[1])), value);
     }
     const registry = first.calls.filter(call => call.text.startsWith('INSERT INTO acquisition_private.'));
     assert.equal(registry.length, acquisitionAddresses.length);
@@ -269,4 +405,100 @@ test('an existing seed caller without a stock port uses the native writer and ro
   };
   await assert.rejects(applyDemoSeed(config,failed.binding),{ message: 'native_stock_refused' });
   assert.equal(failed.calls.at(-1)!.text,'ROLLBACK');
+});
+
+test('owned renewal priority validates before installation writes, independent of configuration ID', async () => {
+  for (const protection of [{ revision: '', renewalProtectionDays: 14 },
+    { revision: 'owned-1', renewalProtectionDays: 0 }, { revision: 'owned-1', renewalProtectionDays: 3661 },
+    { revision: 'owned-1', renewalProtectionDays: 1.5 }, { revision: 'owned-1', renewalProtectionDays: 14, extra: true }]) {
+    const config = structuredClone(Object.values(configurations)[0]!);
+    config.id = 'arbitrary-policy-fixture';
+    config.inventory.renewalProtection = protection;
+    const fixture = installation();
+    await assert.rejects(applyDemoSeed(config, fixture.binding), { message: 'inventory_renewal_protection_policy_invalid' });
+    assert.deepEqual(fixture.calls, []);
+  }
+});
+
+test('owned reminder schedule validates and installs independently of configuration identity', async () => {
+  for (const original of Object.values(configurations)) {
+    const config = structuredClone(original); config.id = 'arbitrary-reminder-owner';
+    config.checkoutRecoveryReminders = { revision: 'owned-48',
+      abandonedCart: [{ stage: 'first', afterHours: 1 }, { stage: 'gentle', afterHours: 24 }, { stage: 'last', afterHours: 48 }],
+      checkoutRecovery: [{ stage: 'last', afterHours: 48 }] };
+    const fixture = installation(); await applyDemoSeed(config, fixture.binding);
+    assert.deepEqual(JSON.parse(String(fixture.calls.find(call => call.values?.[0] === 'checkout_recovery_reminders')!.values?.[1])), config.checkoutRecoveryReminders);
+    for (const invalid of [{ ...config.checkoutRecoveryReminders, revision: '' },
+      { ...config.checkoutRecoveryReminders, checkoutRecovery: [] },
+      { ...config.checkoutRecoveryReminders, abandonedCart: [{ stage: 'last', afterHours: 0 }] },
+      { ...config.checkoutRecoveryReminders, abandonedCart: [{ stage: 'first', afterHours: 2 }, { stage: 'last', afterHours: 1 }] }]) {
+      config.checkoutRecoveryReminders = invalid as typeof config.checkoutRecoveryReminders;
+      const refused = installation();
+      await assert.rejects(applyDemoSeed(config, refused.binding), { message: 'checkout_recovery_reminder_schedule_invalid' });
+      assert.deepEqual(refused.calls, []);
+    }
+  }
+});
+
+test('lifecycle up, serve-demo, checkout-recovery and CLI delegation preserve named refusals and exit codes', async () => {
+  const root = fileURLToPath(new URL('../', import.meta.url));
+  await mkdir(resolve(root, '.context'), { recursive: true });
+  const directory = await mkdtemp(resolve(root, '.context/lifecycle-diagnostics-'));
+  try {
+    for (const path of ['lifecycle.mjs', 'browser-groups.mjs', 'host', 'shared', 'owned', 'installation']) {
+      await cp(resolve(root, path), resolve(directory, path), { recursive: true });
+    }
+    await writeFile(resolve(directory, 'package.json'), '{"type":"module"}');
+    await mkdir(resolve(directory, 'node_modules/pg'), { recursive: true });
+    await writeFile(resolve(directory, 'node_modules/pg/package.json'), '{"type":"module","exports":"./index.js"}');
+    await writeFile(resolve(directory, 'node_modules/pg/index.js'), `export default { Client: class {
+      async connect() {} async end() {}
+      async query() { return { rows: [{ marker: ${JSON.stringify(demonstrationMarker)} }] }; }
+    }, Pool: class { async end() {} } };`);
+    async function invoke(argv: string[]) {
+      const child = spawn(process.execPath, ['--experimental-strip-types', 'lifecycle.mjs', ...argv], { cwd: directory, stdio: 'pipe' });
+      let stdout = '', stderr = '';
+      child.stdout.on('data', bytes => { stdout += String(bytes); });
+      child.stderr.on('data', bytes => { stderr += String(bytes); });
+      return { code: (await once(child, 'exit'))[0], stdout, stderr };
+    }
+    const usage = await invoke(['unknown-command']);
+    assert.equal(usage.code, 2);
+    assert.ok(usage.stderr.includes('checkout-recovery --configuration <id> --database-url <runtime-url>'));
+
+    for (const code of [
+      'starter_locale_copy_missing: copy.heroTitle (pl)',
+      'starter_locale_unsupported: de',
+      'inventory_renewal_protection_policy_invalid',
+      'checkout_recovery_reminder_schedule_invalid',
+      'saved_address_policy_invalid',
+    ]) {
+      await writeFile(resolve(directory, 'shared/config.ts'), `
+        export function assertConfig() { throw new Error(${JSON.stringify(code)}); }
+        export function parseHostArguments() { return { configuration: undefined, port: 4319, listen: '127.0.0.1', databaseUrl: 'postgresql://starter_runtime@database:5432/neutral_store' }; }
+      `);
+      await writeFile(resolve(directory, 'host/server.ts'), `import { assertConfig } from '../shared/config.ts'; assertConfig();`);
+      const up = await invoke(['up']);
+      assert.equal(up.code, 2);
+      assert.equal(up.stderr.trim(), code);
+      const serve = await invoke(['serve-demo', '--database-url', 'postgresql://starter_runtime@database:5432/neutral_store']);
+      assert.equal(serve.code, 2);
+      assert.equal(serve.stderr.trim(), code);
+    }
+
+    const recovery = await invoke(['checkout-recovery', '--database-url', 'postgresql://starter_runtime@database:5432/neutral_store']);
+    assert.notEqual(recovery.code, 0);
+    assert.ok(recovery.stderr.includes('saved_address_policy_invalid'));
+
+    await mkdir(resolve(directory, 'node_modules/.bin'), { recursive: true });
+    await writeFile(resolve(directory, 'node_modules/.bin/openlup'),
+      '#!/bin/sh\nprintf \'{"formatVersion":1,"command":"%s","exitCode":%s}\\n\' "$1" "$2"\nexit "$2"\n',
+      { mode: 0o755 });
+    for (const [subcommand, expectedCode] of [['verify', 2], ['verify', 74], ['upgrade', 1], ['upgrade', 64]] as const) {
+      const delegated = await invoke([subcommand, String(expectedCode)]);
+      assert.equal(delegated.code, expectedCode);
+      assert.equal(delegated.stderr, '');
+      assert.deepEqual(JSON.parse(delegated.stdout), { formatVersion: 1, command: subcommand, exitCode: expectedCode });
+    }
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });

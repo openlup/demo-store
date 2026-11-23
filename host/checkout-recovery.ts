@@ -1,3 +1,4 @@
+import type { Locale } from '../shared/locales.ts';
 import { createPrivateCapture } from './private-capture.ts';
 import type { PostgresCheckoutRecoveryTokenPort } from '@openlup/platform/commerce/server';
 import type { ActionContext } from './bindings.ts';
@@ -14,7 +15,7 @@ export interface CheckoutRecoveryMessage {
 }
 export interface PurchaseRecovery {
   tokens: PostgresCheckoutRecoveryTokenPort;
-  deliver(input: { email: string; rawToken: string; orderRef: string; expiresAt: string; context: ActionContext; locale: 'en' | 'pl' }): Promise<void>;
+  deliver(input: { email: string; rawToken: string; orderRef: string; expiresAt: string; context: ActionContext; locale: Locale }): Promise<void>;
 }
 
 /** Private delivery artifact, separate from authentication challenges and logs. */
@@ -60,6 +61,8 @@ import { readAuthorizedPaymentRecovery, createPostgresPaymentRecoveryGuidancePor
   createPostgresExpiredCheckoutCompensation, checkoutRecoveryExecutionFingerprint, ExpiredCheckoutRecoveryError,
   classifyCheckoutRecoveryTokenState, type NativeCheckoutRecoveryOrder, type CheckoutRecoveryInspectionResult } from '@openlup/platform/commerce/server';
 import { normalizeSandboxPaymentRecoveryEvidence, createPostgresSandboxExpiredCheckoutSafety, createPostgresSandboxPaymentSimulator } from '@openlup/platform/payments';
+import { createPostgresNativeCheckoutHostPort } from '@openlup/platform/commerce/server/native-checkout';
+import { createPostgresNativeCheckoutSubscriptionPort } from '@openlup/platform/subscriptions';
 import { createPostgresPurchaseReservationPort } from '@openlup/platform/inventory';
 import { createNativeQuoteService } from './quote-composition.ts';
 import { installedAcquisitionPredecessors, createInitialPurchaseActivation } from './acquisition-predecessors.ts';
@@ -127,10 +130,10 @@ export function composeExpiredRecovery(pool: Pool, lane: Pick<PostgresRoleFreeTr
           requestFingerprint: checkoutRecoveryExecutionFingerprint(input), at: new Date().toISOString() }),
       }), compensationPort: createPostgresExpiredCheckoutCompensation(lane),
     });
+    const subscriptionHost = createPostgresNativeCheckoutSubscriptionPort(pool);
     const inspection = createCheckoutRecoveryInspection({ tokenPort: tokens, orderPort: reader, validation: service,
       recoveryWindowMs: checkoutLinkPolicy.recoveryWindowMs,
-      async clientHasLiveOrPendingSubscription({ clientId }) { return (await pool.query(
-        "SELECT 1 FROM public.subscriptions WHERE client_id=$1 AND status IN ('active','paused','pending_activation') LIMIT 1", [clientId])).rows.length > 0; } });
+      clientHasLiveOrPendingSubscription: ({ clientId }) => subscriptionHost.clientHasLiveOrPendingSubscription(clientId) });
     const bearer = await tokens.inspect(payload.token);
     if (!bearer || classifyCheckoutRecoveryTokenState(bearer.tokenState) === 'refused') return refuse('unavailable');
     const original = await reader.getRecoveryOrder({ orderId: bearer.orderId });
@@ -183,7 +186,7 @@ export function composeExpiredRecovery(pool: Pool, lane: Pick<PostgresRoleFreeTr
         settlementIntentId: latest.paymentIntentId, attemptId: attempt.id, observationId: observation.id })), headers: {}, receivedAt: attempt.dispatchedAt });
       if (accepted.status !== 200) return refuse('unavailable');
       if (outcome === 'captured' && latest.mode === 'subscription_cycle') {
-        await activation.activate({ orderId: latest.orderId, acceptedQuote, currency: latest.currency,
+        await activation.activate({ editWindowHours: context.config.subscriptionCreation.editWindowHours, orderId: latest.orderId, acceptedQuote, currency: latest.currency,
           capturedReference: latest.paymentIntentId, methodFacts: attempt.methodFacts,
           stockSourceKey: `starter-demo:${context.config.id}`, templateId: `starter:${context.config.id}` });
       }
@@ -200,7 +203,7 @@ export function composeExpiredRecovery(pool: Pool, lane: Pick<PostgresRoleFreeTr
 export async function readCheckoutGuidance(pool: Pool, tokens: PurchaseRecovery['tokens'], rawToken: string,
   order: { id: string; client_id: string }) {
   try {
-    const intent = (await pool.query("SELECT id FROM public.commerce_settlement_intents WHERE order_id=$1 AND channel_key='sandbox'", [order.id])).rows[0];
+    const intent = await createPostgresNativeCheckoutHostPort(pool).readSettlementIntent({ orderId: order.id, channelKey: 'sandbox' });
     if (!intent) return undefined;
     const result = await readAuthorizedPaymentRecovery({ request: { orderId: order.id, clientId: order.client_id, paymentIntentId: intent.id },
       claims: null, authorization: `Bearer ${rawToken}`, deps: { tokenPort: tokens,
@@ -331,7 +334,7 @@ export function composeSandboxRecoveryPayments(pool: Pool, lane: Pick<PostgresRo
           attemptId: attempt.id, observationId: observation.id })), headers: {}, receivedAt: attempt.dispatchedAt });
         if (accepted.status !== 200) return refused();
         if (outcome === 'captured' && order.mode === 'subscription_cycle') {
-          await activation.activate({ orderId: order.orderId, acceptedQuote, currency: order.currency,
+          await activation.activate({ editWindowHours: context.config.subscriptionCreation.editWindowHours, orderId: order.orderId, acceptedQuote, currency: order.currency,
             capturedReference: order.paymentIntentId, methodFacts: attempt.methodFacts,
             stockSourceKey: `starter-demo:${context.config.id}`, templateId: `starter:${context.config.id}` });
         }

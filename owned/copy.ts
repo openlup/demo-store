@@ -1,6 +1,9 @@
-/** Application copy; both locales have exactly the same keys. */
-export const copy = {
-  en: {
+import type { LocaleCopy } from '../shared/locales.ts';
+import type { CopyKey } from '../shared/copy-keys.ts';
+export type { CopyKey } from '../shared/copy-keys.ts';
+
+/** Application copy; every configured locale supplies the same keys. */
+const en = {
     sandboxChoice: 'Sandbox payment choice', sandboxPrimary: 'Demo choice A', sandboxSecondary: 'Demo choice B', inlineRetry: 'Retry this payment',
     buyerLinkPrompt: 'Continue in your browser: send a payment link to the saved checkout email.', buyerLinkSend: 'Send a payment link', buyerLinkResend: 'Send the link again',
     buyerLinkSent: 'Check your checkout email and open the link in your browser.', buyerLinkFailed: 'The link could not be sent. Try again.',
@@ -408,7 +411,7 @@ export const copy = {
     catalogDraftAbandon: "Abandon draft",
     catalogDraftId: "Draft ID",
     catalogDraftRevision: "Expected revision (0 to create)",
-    catalogDraftPayload: "Draft payload JSON (starter:item version 1; ignored only for abandonment)",
+    catalogDraftPayload: "Draft payload JSON (leave empty when abandoning a draft)",
     publishCatalog: "Publish catalogue",
     bundleCode: "Bundle code",
     bundleTitle: "Bundle title",
@@ -447,7 +450,10 @@ export const copy = {
     purchase_mode_unavailable: "A selected product does not allow this purchase mode.",
     cadence_unavailable: "Choose an available subscription frequency.",
     amount_overflow: "The amount cannot be represented safely.",
-  },
+} satisfies Record<CopyKey, string>;
+
+export const copy = {
+  en,
   pl: {
     sandboxChoice: 'Wybór płatności testowej', sandboxPrimary: 'Wariant testowy A', sandboxSecondary: 'Wariant testowy B', inlineRetry: 'Ponów tę płatność',
     buyerLinkPrompt: 'Dokończ w przeglądarce: wyślij link płatności na zapisany adres e-mail zakupu.', buyerLinkSend: 'Wyślij link płatności', buyerLinkResend: 'Wyślij link ponownie',
@@ -856,7 +862,7 @@ export const copy = {
     catalogDraftAbandon: "Porzuć wersję roboczą",
     catalogDraftId: "ID wersji roboczej",
     catalogDraftRevision: "Oczekiwana rewizja (0 przy tworzeniu)",
-    catalogDraftPayload: "JSON wersji roboczej (starter:item, wersja 1; pomijany tylko przy porzuceniu)",
+    catalogDraftPayload: "JSON wersji roboczej (pozostaw puste przy porzucaniu wersji)",
     publishCatalog: "Opublikuj katalog",
     bundleCode: "Kod pakietu",
     bundleTitle: "Nazwa pakietu",
@@ -896,6 +902,4 @@ export const copy = {
     cadence_unavailable: "Wybierz dostępną częstotliwość subskrypcji.",
     amount_overflow: "Nie można bezpiecznie przedstawić kwoty.",
   },
-} as const;
-
-export type CopyKey = keyof typeof copy.en;
+} satisfies LocaleCopy<Record<CopyKey, string>>;

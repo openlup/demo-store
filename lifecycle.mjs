@@ -2,18 +2,26 @@ import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { applicationHealthcheck } from './host/healthcheck.ts';
 import { browserJourneyGroups } from './browser-groups.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const [command, ...args] = process.argv.slice(2);
 const packageNames = ['core', 'outbox', 'platform'];
+const installationHintLimit = 240;
+const knownStarterRefusal = /^(?:starter_[a-z_]+|inventory_renewal_protection_policy_invalid|checkout_recovery_reminder_schedule_invalid|saved_address_policy_invalid|starter_locale_unsupported: [A-Za-z0-9_-]{1,32}|starter_locale_copy_missing: [A-Za-z0-9_.\[\]-]{1,120} \([a-z]{2}\))$/;
 
 function run(executable, argv, input) {
   execFileSync(executable, argv, { cwd: root,
     stdio: input === undefined ? 'inherit' : ['pipe', 'inherit', 'inherit'],
     ...(input === undefined ? {} : { input }) });
+}
+
+function delegate(executable, argv) {
+  const result = spawnSync(executable, argv, { cwd: root, stdio: 'inherit' });
+  if (result.error) throw result.error;
+  process.exitCode = result.status ?? 1;
 }
 
 function configurationArgument(argv) {
@@ -73,7 +81,7 @@ if (command === 'candidate') {
     if (healthcheck) override.services.application.healthcheck = healthcheck;
     run('docker', ['compose', '-f', 'compose.yaml', '-f', '-', 'up', '--wait', 'application'], JSON.stringify(override));
   } catch (error) {
-    const code = error instanceof Error && /^starter_[a-z_]+$/.test(error.message)
+    const code = error instanceof Error && knownStarterRefusal.test(error.message)
       ? error.message : 'starter_installation_failed';
     process.stderr.write(`${code}\n`);
     process.exitCode = 2;
@@ -96,7 +104,7 @@ if (command === 'candidate') {
       '--quote-acceptance-key-file', keyFile];
     await import('./host/server.ts');
   } catch (error) {
-    const code = error instanceof Error && /^starter_[a-z_]+$/.test(error.message)
+    const code = error instanceof Error && knownStarterRefusal.test(error.message)
       ? error.message : 'starter_demo_start_failed';
     process.stderr.write(`${code}\n`);
     process.exitCode = 2;
@@ -110,6 +118,8 @@ if (command === 'candidate') {
   } catch (error) {
     const code = error instanceof Error ? error.message : 'starter_installation_failed';
     process.stderr.write(`${code}\n`);
+    const hint = [error?.hint, error?.cause?.hint].find(value => typeof value === 'string' && value.trim());
+    if (hint) process.stderr.write(`${hint.trim().replace(/\s+/gu, ' ').slice(0, installationHintLimit)}\n`);
     if (code === 'starter_seed_demonstration_database_required') {
       process.stderr.write('See node_modules/@openlup/core/docs/guide/how-to/build/customize-the-starter.md#reset-an-interrupted-first-install for the local demonstration reset recipe.\n');
     }
@@ -121,10 +131,11 @@ if (command === 'candidate') {
   await databaseBrowserRecipe(args);
 } else if (command === 'checkout-recovery') {
   const { selectConfiguration } = await import('./owned/store.config.ts');
-  const { parseHostArguments } = await import('./shared/config.ts');
+  const { parseHostArguments, assertConfig } = await import('./shared/config.ts');
   const { runCheckoutRecovery } = await import('./host/paid-mail.ts');
   const { default: pg } = await import('pg');
   const options = parseHostArguments(args), config = selectConfiguration(options.configuration);
+  assertConfig(config);
   if (!options.databaseUrl) throw new Error('starter_runtime_connection_required');
   const pool = new pg.Pool({ connectionString: options.databaseUrl });
   try { process.stdout.write(JSON.stringify(await runCheckoutRecovery({ executor: pool, config,
@@ -155,16 +166,16 @@ if (command === 'candidate') {
   const binary = resolve(root, 'node_modules/.bin/openlup');
   try { await access(binary); }
   catch { throw new Error('starter_installed_verify_unavailable'); }
-  run(binary, ['verify', ...args]);
+  delegate(binary, ['verify', ...args]);
 } else if (command === 'upgrade') {
   const binary = resolve(root, 'node_modules/.bin/openlup');
   try { await access(binary); }
   catch { throw new Error('starter_installed_upgrade_unavailable'); }
-  run(binary, ['upgrade', ...args]);
+  delegate(binary, ['upgrade', ...args]);
 } else if (command === 'ownership') {
   process.stdout.write(await readFile(resolve(root, 'ownership.json'), 'utf8'));
 } else {
-  process.stderr.write('Usage: ./lifecycle candidate <core.tgz> <outbox.tgz> <platform.tgz> | up [--configuration <id>] | browser [Playwright selection flags] | care --configuration <id> --database-url <runtime-url> | renewal --configuration <id> --database-url <runtime-url> | down | verify | upgrade <args> | ownership\n');
+  process.stderr.write('Usage: ./lifecycle candidate <core.tgz> <outbox.tgz> <platform.tgz> | up [--configuration <id>] | browser [Playwright selection flags] | checkout-recovery --configuration <id> --database-url <runtime-url> | care --configuration <id> --database-url <runtime-url> | renewal --configuration <id> --database-url <runtime-url> | down | verify | upgrade <args> | ownership\n');
   process.exitCode = 2;
 }
 
@@ -183,6 +194,7 @@ async function databaseBrowserRecipe(argv) {
   const { createPlatformPostgresMigrationRunner, qualifiedPostgresStartupOptions } = await import('@openlup/platform/migrations');
   const { configurations } = await import('./owned/store.config.ts');
   const { applyDemoSeed, demonstrationMarker } = await import('./installation/install.ts');
+  const { readStarterCatalogueRules } = await import('./host/editor-catalogue.ts');
   const application = root;
   const directory = resolve(application, '.context/care-browser');
   const containers = [], hosts = [], pools = [];
@@ -232,7 +244,8 @@ async function databaseBrowserRecipe(argv) {
       if ((await runner.status()).pending.length)
         throw new Error('starter_database_browser_installation_incomplete');
       await owner.query(`COMMENT ON DATABASE neutral_store IS '${demonstrationMarker}'`);
-      await applyDemoSeed(config, { connection: owner, installRole: 'postgres', runtimeRole: 'starter_runtime', close: async () => { } });
+      await applyDemoSeed(config, { connection: owner, installRole: 'postgres', runtimeRole: 'starter_runtime',
+        catalogueRules: readStarterCatalogueRules(), close: async () => { } });
       const runtimeUrl = ownerUrl.replace('postgres@', 'starter_runtime@');
       const state = resolve(directory, config.id);
       await mkdir(state, { recursive: true, mode: 0o700 });

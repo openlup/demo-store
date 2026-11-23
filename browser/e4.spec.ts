@@ -1,3 +1,4 @@
+import { market } from '../owned/market.config.ts';
 import { test as base, expect, type Locator } from '@playwright/test';
 import { readFileSync, existsSync } from 'node:fs';
 import { copy } from '../owned/copy.ts';
@@ -18,7 +19,7 @@ const test = base.extend<{ fixturePath: string }>({ fixturePath: ['', { option: 
 
 test('localized order controls and owned PDF in both languages', async ({ page, context, baseURL, fixturePath }) => {
   // Real installed host, mailbox and PostgreSQL are supplied by the proof runner.
-  test.setTimeout(120000);
+  test.setTimeout(60000);
   if (!baseURL || !fixturePath) throw new Error('starter_document_browser_fixture_required');
   const fixture: DocumentFixture = JSON.parse(readFileSync(fixturePath, 'utf8'));
   const action = async (operation: string, data: Record<string, unknown>) => {
@@ -39,15 +40,12 @@ test('localized order controls and owned PDF in both languages', async ({ page, 
     }).toMatch(/^[A-Za-z0-9_-]{43}$/);
     expect((await action(operator ? 'auth.operator' : 'auth.verify', { token })).ok).toBe(true);
   };
-  // Customer and operator challenges each allow one issue per minute. Keep
-  // that real boundary after the HTTP fixture and between configurations.
-  await new Promise(resolve => setTimeout(resolve, 61000));
   await signIn(false);
   const customerCookies = await context.cookies();
   await context.clearCookies();
   await signIn(true);
   const operatorCookies = await context.cookies();
-  for (const locale of ['en', 'pl'] as const) {
+  for (const locale of market.locales) {
     const submitRefused = async (form: Locator, operation: Operation, fields: Readonly<Record<string, string | boolean>>) => {
       for (const [name, value] of Object.entries(fields)) {
         if (typeof value === 'boolean') await form.locator(`[name=${name}]`).setChecked(value);

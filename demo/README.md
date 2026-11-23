@@ -1,6 +1,6 @@
 # Morrow: OpenLup first-party demo store
 
-**Current package set: published 1.1.0**, upgraded from the **released 0.43.0 seed**, extracted from `openlup-core-v0.43.0` at
+**Current package set: published 1.3.0**, upgraded from the **released 0.43.0 seed**, extracted from `openlup-core-v0.43.0` at
 `6facc3e72441ade5813397f65ac7edbe34fd1d0f`. The first commit retains the
 pristine extraction; later commits replay application customization, extension
 and CI. This seed alone is not adjacent-pair upgrade evidence.
@@ -35,10 +35,12 @@ may require removal of its labelled `morrow-demo-*` containers.
 unchanged extraction identity, image digest, result and duration per check.
 A changed set may have a new lock; the original extraction identity remains
 historical. Missing GHCR access fails verification and blocks the purchase;
-it never counts as a passing journey. Private logs, keys and browser fixtures
+it stops the verifier before the purchase check. Private logs, keys and browser fixtures
 stay in ignored `.context/`; no tracing, screenshots or video is collected.
 CI uploads only the JSON receipt for 90 days. `demo/local-receipt.json` records
-local verification separately from CI. A local rehearsal using a PATH shim for
+local verification separately from CI. The 1.3.0 canary ran the purchase witness
+separately against the exact cached digest after the local pull failed. A prior
+rehearsal using a PATH shim for
 the exact already-cached PostgreSQL image is labelled "local rehearsal, shimmed
 pull, not CI evidence"; it proves neither GHCR access nor a hosted CI pass.
 Build warnings from the starter's browser-externalized Node modules remain in
@@ -67,6 +69,19 @@ The required retention mapping was added to the owned renewal configuration;
 Morrow’s reasons, retry hours `[24,48,72]`, timing and offered cadences are retained.
 The managed documentation refresh moves frozen source proof records to their
 upstream history link; those dated results are not new demo evidence.
+
+The 1.3.0 canary applied the published 1.2.0 and 1.3.0 file upgrades in
+order. The app retains its fictional store, owned tests and settlement
+subscriber. The managed changes use the tagged starter bytes, and the exact
+npm artifacts are pinned together. The 1.2.0 step adds the owned locale
+registry, initial subscription edit window, account actions, and explicit
+inventory and reminder policies with the starter's historical values. The
+1.3.0 step adds the shipped settings binding and imports the existing
+catalogue pack's unit factor into the owned registry.
+
+[Upgrade evidence](upgrade-receipt.json) records both file transitions,
+release provenance, and what the canary had to reconcile by hand. [Local
+verification](local-receipt.json) records the demo and database checks.
 
 For read-only readiness against an explicitly selected local marked demonstration
 database, supply a private JSON file containing `configuration`, `ownerUrl`,
@@ -100,4 +115,4 @@ After the first successful run creates the check, protect `main` (ruleset or
 branch protection): require PRs, the **Demo store verification** status check,
 resolved conversations and one approving review; block force pushes and deletion.
 Keep secrets empty. H0 runs only in Actions; no hosting, DNS or deployment is
-required. No remote, push, PR or GitHub settings change was made locally.
+required. These settings describe the original repository setup.

@@ -1,77 +1,11 @@
 {
   "schemaVersion": 2,
-  "description": "Published OpenLup 0.43.0\u21921.1.0 via 1.0.0; first-party demo application upgrade evidence",
-  "baselineCommit": "11c20e3380a4e5725f9049428384d3075adf8a65",
-  "intermediateCommit": "6319e3c8c59162fefa5ff59d61fe361d4be47453",
-  "applicationCommit": "098832ae807187b3401d2e7a0a07d1646f19d70e",
-  "fromVersion": "1.0.0",
-  "toVersion": "1.1.0",
-  "sourceTag": "openlup-core-v1.1.0",
-  "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
-  "packages": [
-    {
-      "name": "@openlup/core",
-      "version": "1.1.0",
-      "integrity": "sha512-81cJ2kKitWHd4cbBiCoLYfTTVjlygXqKbZEC3PO7fzfuSpFi60YR/+Koy9UZq6t0cDcN4D3IKvYC7k89hs9vHQ==",
-      "workflow": {
-        "ref": "refs/tags/openlup-core-v1.1.0",
-        "repository": "https://github.com/openlup/openlup",
-        "path": ".github/workflows/publish-packages.yml"
-      },
-      "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
-      "invocationId": "https://github.com/openlup/openlup/actions/runs/44255375279/attempts/1",
-      "verification": "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-1.1.0>",
-      "peers": {},
-      "optionalPeers": {}
-    },
-    {
-      "name": "@openlup/outbox",
-      "version": "1.1.0",
-      "integrity": "sha512-cxC8sM51jxmuF8GK3jBO1p+KJjhObvLi5TGnGsY7nUPbd533S7iN02toaQwnhyCJBRdGmwW2mXBQixHEZsY0oQ==",
-      "workflow": {
-        "ref": "refs/tags/openlup-outbox-v1.1.0",
-        "repository": "https://github.com/openlup/openlup",
-        "path": ".github/workflows/publish-packages.yml"
-      },
-      "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
-      "invocationId": "https://github.com/openlup/openlup/actions/runs/44255386748/attempts/1",
-      "verification": "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-1.1.0>",
-      "peers": {
-        "@openlup/core": "1.1.0"
-      },
-      "optionalPeers": {}
-    },
-    {
-      "name": "@openlup/platform",
-      "version": "1.1.0",
-      "integrity": "sha512-QzOlcZN8MufwXg1mxp5Bd+fhYWPL2C22NXV2GWZ0B0012NEsaWp+X/PJjqpfMvdmkiZBIUnGlWMHX8Fo6+YGfw==",
-      "workflow": {
-        "ref": "refs/tags/openlup-platform-v1.1.0",
-        "repository": "https://github.com/openlup/openlup",
-        "path": ".github/workflows/publish-packages.yml"
-      },
-      "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
-      "invocationId": "https://github.com/openlup/openlup/actions/runs/44255380763/attempts/1",
-      "verification": "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-1.1.0>",
-      "peers": {
-        "@aws-sdk/client-s3": "^3.1144.0",
-        "@openlup/core": "1.1.0",
-        "@types/pg": "^8.20.0",
-        "pg": "^8.22.0"
-      },
-      "optionalPeers": {
-        "@aws-sdk/client-s3": {
-          "optional": true
-        },
-        "@types/pg": {
-          "optional": true
-        },
-        "pg": {
-          "optional": true
-        }
-      }
-    }
-  ],
+  "description": "Published OpenLup 1.1.0 to 1.3.0 via 1.2.0 demo-store canary",
+  "recordedAt": "2026-11-23T08:10:49Z",
+  "baselineCommit": "5a4fc5a59c7f4c39c9f5dafcbf4306d62a5740c1",
+  "intermediateCommit": "e30c057ae2f84d0b9fd05cc80e54c5659272b0a9",
+  "fromVersion": "1.1.0",
+  "toVersion": "1.3.0",
   "originalExtraction": {
     "schemaVersion": 2,
     "mode": "released",
@@ -81,533 +15,530 @@
     "lockfileSha256": "cbe7a2f64fccf11644eb06509fc5b16a4e98b0adb9500470ce109b2068e0f122",
     "contentSha256": "37c7cd8cd220f493e5eb8f8e9a43c43f61d774bbd7b8ed1ce50ae03765333777"
   },
-  "previousPristineExtraction": {
-    "schemaVersion": 2,
-    "mode": "released",
-    "setVersion": "1.0.0",
-    "sourceRevision": "c7968ec65445a96c5c48076ca667e57eb7924aba",
-    "sourceRevisionVerification": "supplied",
-    "lockfileSha256": "8ce6f0a9cf14a1bfb4c0a80f035a42cf8c15b3b997366adfb3db58c88c93d8ab",
-    "contentSha256": "c6b142d8c890afc9376273e3a1c219646947351752f568ba566cd94258d65c53"
-  },
-  "targetPristineExtraction": {
-    "schemaVersion": 2,
-    "mode": "released",
-    "setVersion": "1.1.0",
-    "sourceRevision": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
-    "sourceRevisionVerification": "supplied",
-    "lockfileSha256": "a5b60f451c86f278e7284ffefa7bd51d56040ddd6f479838900188eca44d0eb7",
-    "contentSha256": "74989dbe0b4d136273381ba760fc72094c699839c9a801d929c9a80c09cc1ea9"
-  },
   "previousReceipts": {
-    "commit": "6319e3c8c59162fefa5ff59d61fe361d4be47453",
-    "upgradeReceiptSha256": "594cf503672de4249eb6bd324c6dafbcdb03d56931ba5a680634d26a12471de8",
-    "localReceiptSha256": "5d9abe2ce1e2af2fcb90f0112f8a8ebc3502f8ddb7d01d83f29314fe1b1acc1e",
-    "historicalHostedReceiptSha256": "cbb626a23c7c84ee1bf26b764d3a05386c80feacc781f381d2da6082e0449871",
-    "note": "1.0.0 was published but superseded after its original starter-upgrade qualification failed. Historical app evidence remains at that commit."
+    "continuationCommit": "83022ae70d763ebfea94aeb1288b35a4b06d1207",
+    "baselineCommit": "5a4fc5a59c7f4c39c9f5dafcbf4306d62a5740c1",
+    "demo/upgrade-receipt.json": "https://github.com/openlup/demo-store/blob/83022ae70d763ebfea94aeb1288b35a4b06d1207/demo/upgrade-receipt.json",
+    "demo/local-receipt.json": "https://github.com/openlup/demo-store/blob/83022ae70d763ebfea94aeb1288b35a4b06d1207/demo/local-receipt.json"
   },
-  "applicationLockSha256": "509107415e4feaf6e96bff4a0f9e9f1bf5b33fdf925ac859df99906b1e0407bf",
-  "lockDifference": "Only the baseline optional @tybys/wasm-util remains 0.10.4 while freshly resolved pristine selects 0.10.5; complete OpenLup set, URLs and integrities match.",
+  "toolchain": {
+    "node": "v24.21.0",
+    "npm": "11.19.0"
+  },
+  "sets": [
+    {
+      "setVersion": "1.1.0",
+      "packages": [
+        {
+          "name": "@openlup/core",
+          "version": "1.1.0",
+          "integrity": "sha512-81cJ2kKitWHd4cbBiCoLYfTTVjlygXqKbZEC3PO7fzfuSpFi60YR/+Koy9UZq6t0cDcN4D3IKvYC7k89hs9vHQ==",
+          "resolved": "https://registry.npmjs.org/@openlup/core/-/core-1.1.0.tgz",
+          "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
+          "workflow": {
+            "ref": "refs/tags/openlup-core-v1.1.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44255375279/attempts/1",
+          "peerDependencies": {}
+        },
+        {
+          "name": "@openlup/outbox",
+          "version": "1.1.0",
+          "integrity": "sha512-cxC8sM51jxmuF8GK3jBO1p+KJjhObvLi5TGnGsY7nUPbd533S7iN02toaQwnhyCJBRdGmwW2mXBQixHEZsY0oQ==",
+          "resolved": "https://registry.npmjs.org/@openlup/outbox/-/outbox-1.1.0.tgz",
+          "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
+          "workflow": {
+            "ref": "refs/tags/openlup-outbox-v1.1.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44255386748/attempts/1",
+          "peerDependencies": {
+            "@openlup/core": "1.1.0"
+          }
+        },
+        {
+          "name": "@openlup/platform",
+          "version": "1.1.0",
+          "integrity": "sha512-QzOlcZN8MufwXg1mxp5Bd+fhYWPL2C22NXV2GWZ0B0012NEsaWp+X/PJjqpfMvdmkiZBIUnGlWMHX8Fo6+YGfw==",
+          "resolved": "https://registry.npmjs.org/@openlup/platform/-/platform-1.1.0.tgz",
+          "sourceCommit": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
+          "workflow": {
+            "ref": "refs/tags/openlup-platform-v1.1.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44255380763/attempts/1",
+          "peerDependencies": {
+            "@aws-sdk/client-s3": "^3.1144.0",
+            "@openlup/core": "1.1.0",
+            "@types/pg": "^8.20.0",
+            "pg": "^8.22.0"
+          }
+        }
+      ],
+      "applicationLockSha256": "509107415e4feaf6e96bff4a0f9e9f1bf5b33fdf925ac859df99906b1e0407bf",
+      "pristineExtraction": {
+        "schemaVersion": 2,
+        "mode": "released",
+        "setVersion": "1.1.0",
+        "sourceRevision": "ec24f180fa90683cc47dd6ed7defb2ea3041e158",
+        "sourceRevisionVerification": "supplied",
+        "lockfileSha256": "1c0052ad7d4a472934745e35bc33f85676f4089b2ab6d4ace39381c233527c78",
+        "contentSha256": "74989dbe0b4d136273381ba760fc72094c699839c9a801d929c9a80c09cc1ea9"
+      },
+      "upstreamQualification": {
+        "run": "https://github.com/openlup/openlup/actions/runs/44263843134",
+        "exactSet": "PASS",
+        "fileUpgrade": "PASS",
+        "schemaUpgrade": "PASS",
+        "canary": "PASS",
+        "receiptSha256": "dd62e7686a89d29fccd69d734181b968ec6b0e634d1b7b7de76a941b10533894",
+        "pristineLockSha256": "a5b60f451c86f278e7284ffefa7bd51d56040ddd6f479838900188eca44d0eb7"
+      },
+      "lockDifferencesFromLocalPristine": {
+        "node_modules/@tybys/wasm-util": {
+          "application": "0.10.4",
+          "pristine": "0.10.5"
+        },
+        "node_modules/source-map-js": {
+          "application": "1.2.2",
+          "pristine": "1.2.4"
+        }
+      }
+    },
+    {
+      "setVersion": "1.2.0",
+      "packages": [
+        {
+          "name": "@openlup/core",
+          "version": "1.2.0",
+          "integrity": "sha512-UngTetE+K3Z7XSmmS7smc0qAwCqAHZP2Yir7iKh4PZAHvCP7qsDrCMw5CRrQR7CK5LhgVe2dp0ZrK6XAmX+m2A==",
+          "resolved": "https://registry.npmjs.org/@openlup/core/-/core-1.2.0.tgz",
+          "sourceCommit": "c6419ad8870b2568fa1766cb4c78d1bde3aab1da",
+          "workflow": {
+            "ref": "refs/tags/openlup-core-v1.2.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44324925030/attempts/1",
+          "peerDependencies": {}
+        },
+        {
+          "name": "@openlup/outbox",
+          "version": "1.2.0",
+          "integrity": "sha512-MjIi4Yc/Tc16AGhXMKyX7UG7ikSjIZ3zeiGhm16hxhjvLHbtR0z2AiO4PvaTV4fTO9+t8TOQ1l5tjgjK+r+Cuw==",
+          "resolved": "https://registry.npmjs.org/@openlup/outbox/-/outbox-1.2.0.tgz",
+          "sourceCommit": "c6419ad8870b2568fa1766cb4c78d1bde3aab1da",
+          "workflow": {
+            "ref": "refs/tags/openlup-outbox-v1.2.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44324909064/attempts/1",
+          "peerDependencies": {
+            "@openlup/core": "1.2.0"
+          }
+        },
+        {
+          "name": "@openlup/platform",
+          "version": "1.2.0",
+          "integrity": "sha512-kpOcNQm6dCSsR8IJ0A+YEgnImsc5xaG1PSzWqG94ELqt74Kx70FsCDqLGXGaGI7QYz/pALn20XgvdufiamWNxQ==",
+          "resolved": "https://registry.npmjs.org/@openlup/platform/-/platform-1.2.0.tgz",
+          "sourceCommit": "c6419ad8870b2568fa1766cb4c78d1bde3aab1da",
+          "workflow": {
+            "ref": "refs/tags/openlup-platform-v1.2.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44324892710/attempts/1",
+          "peerDependencies": {
+            "@aws-sdk/client-s3": "^3.1144.0",
+            "@openlup/core": "1.2.0",
+            "@types/pg": "^8.20.0",
+            "pg": "^8.22.0"
+          }
+        }
+      ],
+      "applicationLockSha256": "4e32af05ca9bc5193dcf264a99995d509a344ad7e1380bb780ade43638658347",
+      "pristineExtraction": {
+        "schemaVersion": 2,
+        "mode": "released",
+        "setVersion": "1.2.0",
+        "sourceRevision": "c6419ad8870b2568fa1766cb4c78d1bde3aab1da",
+        "sourceRevisionVerification": "supplied",
+        "lockfileSha256": "4cd83972514c19d46c228a4d2e90fe040de337b3634e7200b82b69263a62eeee",
+        "contentSha256": "c5d4b8dc3bbe31386892c2624de2cb5f0261b210ab5f549c11b2f8ea70fd9ddc"
+      },
+      "upstreamQualification": {
+        "run": "https://github.com/openlup/openlup/actions/runs/44325169458",
+        "exactSet": "PASS",
+        "fileUpgrade": "PASS",
+        "schemaUpgrade": "PASS",
+        "canary": "PASS",
+        "receiptSha256": "a890a90cc21d9f3ac1e4e276f4176f81d92a8eb33e3481c537723643b6f72605",
+        "pristineLockSha256": "c256b8f3ae9ebe2529a0dfd4a3bd3884550b4989d3ff64994984e423e6fb3c31"
+      },
+      "lockDifferencesFromLocalPristine": {
+        "node_modules/@tybys/wasm-util": {
+          "application": "0.10.4",
+          "pristine": "0.10.5"
+        },
+        "node_modules/source-map-js": {
+          "application": "1.2.2",
+          "pristine": "1.2.4"
+        }
+      }
+    },
+    {
+      "setVersion": "1.3.0",
+      "packages": [
+        {
+          "name": "@openlup/core",
+          "version": "1.3.0",
+          "integrity": "sha512-10jl69U5GUvfEjsUFTPqv5CX3fQGpyj9o7iT1rYWeUyc5Zs7XXSMl/3WKkaghXNpfwgJ08sRTRuRf9ufbY9Peg==",
+          "resolved": "https://registry.npmjs.org/@openlup/core/-/core-1.3.0.tgz",
+          "sourceCommit": "d25a5c7389c9dda63dada7ca880f18ccbf68dbe3",
+          "workflow": {
+            "ref": "refs/tags/openlup-core-v1.3.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44879294767/attempts/1",
+          "peerDependencies": {}
+        },
+        {
+          "name": "@openlup/outbox",
+          "version": "1.3.0",
+          "integrity": "sha512-XVVWaAUENRjLy0GtZnml/DwseYeWvrEZ83h7pwm+TTQ9XaVXJrr9ElxrVS63XtQK5/s8uA0qUS88V8oLXOCRlw==",
+          "resolved": "https://registry.npmjs.org/@openlup/outbox/-/outbox-1.3.0.tgz",
+          "sourceCommit": "d25a5c7389c9dda63dada7ca880f18ccbf68dbe3",
+          "workflow": {
+            "ref": "refs/tags/openlup-outbox-v1.3.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44879284593/attempts/1",
+          "peerDependencies": {
+            "@openlup/core": "1.3.0"
+          }
+        },
+        {
+          "name": "@openlup/platform",
+          "version": "1.3.0",
+          "integrity": "sha512-RCllamtbik+tZABzXt3pgf2wdA/RM8DZLLzG2nf6SjqUcIYDYEqMyyE2O7i+5XnAiV+0XvNWe5d7sejWolPOZQ==",
+          "resolved": "https://registry.npmjs.org/@openlup/platform/-/platform-1.3.0.tgz",
+          "sourceCommit": "d25a5c7389c9dda63dada7ca880f18ccbf68dbe3",
+          "workflow": {
+            "ref": "refs/tags/openlup-platform-v1.3.0",
+            "repository": "https://github.com/openlup/openlup",
+            "path": ".github/workflows/publish-packages.yml"
+          },
+          "invocationId": "https://github.com/openlup/openlup/actions/runs/44879285180/attempts/1",
+          "peerDependencies": {
+            "@aws-sdk/client-s3": "^3.1144.0",
+            "@openlup/core": "1.3.0",
+            "@types/pg": "^8.20.0",
+            "pg": "^8.22.0"
+          }
+        }
+      ],
+      "applicationLockSha256": "fa7ca1f682db70a36dbd5cd3f6ac182296a4493e23cd937d455fbc969c25b39d",
+      "pristineExtraction": {
+        "schemaVersion": 2,
+        "mode": "released",
+        "setVersion": "1.3.0",
+        "sourceRevision": "d25a5c7389c9dda63dada7ca880f18ccbf68dbe3",
+        "sourceRevisionVerification": "supplied",
+        "lockfileSha256": "8942b75dd28a6a529df1ecdcb3bb9aa8d35b63b4473b0b4323d418cec879a1f9",
+        "contentSha256": "05c1f9d7821d3abdd4019e0c4abd9a17aed4aae622e5bf1637b62dec0c5b5801"
+      },
+      "upstreamQualification": {
+        "run": "https://github.com/openlup/openlup/actions/runs/44879398174",
+        "exactSet": "PASS",
+        "fileUpgrade": "PASS",
+        "schemaUpgrade": "PASS",
+        "canary": "PASS",
+        "receiptSha256": "e4d264c04ce7f25262bbcf5f19fe273d470bb4ba699eefbcd0d4dea0eb7b790e",
+        "pristineLockSha256": "8942b75dd28a6a529df1ecdcb3bb9aa8d35b63b4473b0b4323d418cec879a1f9"
+      },
+      "lockDifferencesFromLocalPristine": {
+        "node_modules/@tybys/wasm-util": {
+          "application": "0.10.4",
+          "pristine": "0.10.5"
+        },
+        "node_modules/source-map-js": {
+          "application": "1.2.2",
+          "pristine": "1.2.4"
+        }
+      }
+    }
+  ],
+  "commands": [
+    "git archive openlup-core-v<version> | tar -xf - -C <source> (starter, published package manifests, published inventory and extractor support sources)",
+    "npm install --package-lock-only --ignore-scripts --no-audit --fund=false (from the exact version-pinned starter manifest)",
+    "npm view @openlup/<package>@<version> dist --json",
+    "node <tagged-source>/examples/neutral-store/extract.mjs <pristine-app> --mode released --set-version <version> --source-revision <tag-commit> --manifest <publish-cut-manifest> --lockfile <registry-lock>",
+    "npm ci (in each pristine application)",
+    "npm audit signatures --json --include-attestations --workspaces=null --prefix <pristine-app>",
+    "<pristine-target>/node_modules/.bin/openlup upgrade <plan|apply> --root <demo-store> --from <immutable-from.json> --to <immutable-to.json> --schema-version <predecessor-ordinal> --json",
+    "Interrupt the same installed CLI at its first successful rename, then replan and apply twice with the same snapshots.",
+    "npm install --package-lock-only --ignore-scripts --no-audit --fund=false && npm ci (after each managed change to the demo manifest)",
+    "Public qualified-v2 migration runner: status(), apply({dryRun:true}), apply(), status(), apply() replay.",
+    "1.2.0 only: installRenewalStockProtectionPolicy and installCheckoutRecoveryReminderSchedule through the installation role; read both back through public APIs."
+  ],
+  "fileUpgrade": [
+    {
+      "previous": "1.1.0",
+      "target": "1.2.0",
+      "schemaOrdinal": 156,
+      "conflict": [
+        {
+          "path": "ownership.json",
+          "reason": "current bytes match neither predecessor nor candidate"
+        }
+      ],
+      "interruptedAfter": "README.md",
+      "changed": [
+        "README.md",
+        "browser/acquisition.spec.ts",
+        "browser/e4.spec.ts",
+        "browser/editor-component-fixtures.ts",
+        "browser/journey.spec.ts",
+        "browser/native-acquisition.proof.ts",
+        "browser/native-intake.proof.ts",
+        "browser/native-operator.proof.ts",
+        "browser/recovery.proof.ts",
+        "browser/renewal.proof.ts",
+        "browser/subscription-journeys.spec.ts",
+        "browser/subscription-native-fixture.ts",
+        "client/main.ts",
+        "client/pages/account.ts",
+        "client/pages/destinations.ts",
+        "docs/customization.md",
+        "docs/ownership.md",
+        "host/acquisition-predecessors.ts",
+        "host/checkout-recovery.ts",
+        "host/e-composition.ts",
+        "host/editor-ports.ts",
+        "host/lifecycle-notices.ts",
+        "host/native-composition.ts",
+        "host/operator-composition.ts",
+        "host/operator-recovery.ts",
+        "host/paid-mail.ts",
+        "host/purchase-composition.ts",
+        "host/scheduled-renewal.ts",
+        "host/server.ts",
+        "installation/install.ts",
+        "owned/market.config.ts",
+        "ownership.json",
+        "package.json",
+        "shared/config.ts",
+        "shared/copy-keys.ts",
+        "shared/locale-copy.ts",
+        "shared/locales.ts",
+        "shared/recovery-config.ts",
+        "shared/renewal-config.ts",
+        "shared/routes.ts",
+        "shared/subscription-offer.ts",
+        "test/acquisition-quote.test.ts",
+        "test/address-outcomes.test.ts",
+        "test/checkout-recovery-stage.test.ts",
+        "test/checkout-recovery.test.ts",
+        "test/e4-oms.test.ts",
+        "test/installation.test.ts",
+        "test/locales.test.ts",
+        "test/notice-artifact.test.ts",
+        "test/recovery-entry.test.ts",
+        "test/renewal.test.ts",
+        "test/routes.test.ts",
+        "test/subscription-creation.test.ts"
+      ],
+      "resumed": 52,
+      "replayed": 0,
+      "ownedCreation": "owned/market.config.ts",
+      "preservedOwnedCopies": [
+        "test/interim-pricing.test.ts",
+        "test/offer.test.ts"
+      ],
+      "cliSet": "1.2.0",
+      "planConflictExit": 1,
+      "applyConflictExit": 1,
+      "cleanPlanExit": 0,
+      "interruptedBy": "SIGKILL after first successful file rename",
+      "resumePlanExit": 0,
+      "resumeExit": 0,
+      "replayExit": 0,
+      "inventoryResolution": "Restore exact predecessor inventory, apply and replay with the same immutable snapshots, then reattach app-owned paths and exclude earlier app-owned test copies from the managed inventory.",
+      "evidenceHashes": {
+        "conflict-refusal.json": "b1df24716844da64c05cbb83907bdf8907bf787cb28a9e0b0d6b5186404e5c7d",
+        "from.json": "306e6df24c2ee50ae7eccc063f9f8a4de55352bc1a56f2b7264fd501a793364a",
+        "initial-plan.json": "de4de6abfd44a7a09682ed75ef4d3af472a2fef1a6256175a9acc5985d889919",
+        "ownership.after.json": "c841224a62349bc5890dc60d1705e1a81c2b8c43e6287ffefa13df613b252ed8",
+        "ownership.before.json": "bd3750493838014ab1e49375518b3f5728ddb05595a44aef0c1a2baf8733b4c5",
+        "plan.json": "3fa8f1f9a339644d2678e6d027b71efc0e66bdf00846b4653cb060d23d74381e",
+        "replay.json": "604dacd37dc299e7282d63c2368514515350838b559faae1edadba31de7e7600",
+        "result.json": "b311d2cb50ce37c795f49ed56f61513957588a6e09e8c81433616107b1c115e7",
+        "resume-plan.json": "994caaf65c9612c01713f27827e225186cff7759d1daa4e05c6acc6fec3d8d61",
+        "resume.json": "be324ffaac1579cf091926247513df45463181e3032386b9c42ac70164319d95",
+        "to.json": "4fc9f73bd1d21fd54b0c999bdafa52fbc7481f8103ca9ba000d22b1623176356"
+      }
+    },
+    {
+      "previous": "1.2.0",
+      "target": "1.3.0",
+      "schemaOrdinal": 159,
+      "conflict": [
+        {
+          "path": "ownership.json",
+          "reason": "current bytes match neither predecessor nor candidate"
+        }
+      ],
+      "interruptedAfter": "Dockerfile",
+      "changed": [
+        "Dockerfile",
+        "README.md",
+        "browser/acquisition.spec.ts",
+        "browser/e4.spec.ts",
+        "browser/native-operator.proof.ts",
+        "client/api.ts",
+        "client/forms.ts",
+        "client/pages/account.ts",
+        "client/pages/operator.ts",
+        "compose.yaml",
+        "docs/customization.md",
+        "host/acquisition-predecessors.ts",
+        "host/checkout-recovery.ts",
+        "host/editor-catalogue.ts",
+        "host/editor-ports.ts",
+        "host/operator-composition.ts",
+        "host/paid-mail.ts",
+        "host/purchase-composition.ts",
+        "host/recurring-fence.ts",
+        "installation/install.ts",
+        "lifecycle.mjs",
+        "owned/settings-host.ts",
+        "ownership.json",
+        "package.json",
+        "shared/api.ts",
+        "test/installation.test.ts"
+      ],
+      "resumed": 25,
+      "replayed": 0,
+      "ownedCreation": "owned/settings-host.ts",
+      "preservedOwnedCopies": [
+        "test/interim-pricing.test.ts",
+        "test/offer.test.ts"
+      ],
+      "cliSet": "1.3.0",
+      "planConflictExit": 1,
+      "applyConflictExit": 1,
+      "cleanPlanExit": 0,
+      "interruptedBy": "SIGKILL after first successful file rename",
+      "resumePlanExit": 0,
+      "resumeExit": 0,
+      "replayExit": 0,
+      "inventoryResolution": "Restore exact predecessor inventory, apply and replay with the same immutable snapshots, then reattach app-owned paths and exclude earlier app-owned test copies from the managed inventory.",
+      "evidenceHashes": {
+        "conflict-refusal.json": "b1df24716844da64c05cbb83907bdf8907bf787cb28a9e0b0d6b5186404e5c7d",
+        "from.json": "ebc457624089c173647952d88d8db1698c458897c823fe2242afd37a5262735d",
+        "initial-plan.json": "24c571057d43c4c5771a6bed8463f141e0de9b63ac208bf7bf2a8e1bc1b6dc35",
+        "ownership.after.json": "a6a0e7ab21334e9ea2919c7ee2999cf6de79c34d88790d93e237f4b86c9b4009",
+        "ownership.before.json": "c841224a62349bc5890dc60d1705e1a81c2b8c43e6287ffefa13df613b252ed8",
+        "plan.json": "b19b482fbca0c120bdf72eb12b509bed074f917c840133e59d7e0cebe577d47b",
+        "replay.json": "71d44e5a10186589559b6ad33e62cf8cdce9d2db2a4d074e419173def1b5a594",
+        "result.json": "9f1ac53c3c1fb2dd4401387482c4844921d55ebee6a76b441d022ebb38e53fcf",
+        "resume-plan.json": "f6c0cab640edfebc8a811ef504a3925bc3f0a091706f1bc956e1c25bbcc172b2",
+        "resume.json": "af6dd0dce9a8ae030be582aaa81dfac253502e9f0f7355bc1dd2cff7312631c2",
+        "to.json": "8b691165b3103df54be6e3686d4504bd85fd1011e3aae13ee8cb001c95727e8b"
+      }
+    }
+  ],
   "schema": {
     "profile": "qualified-v2",
     "roleMode": "installer-managed",
-    "bootstrapLogin": "postgres",
-    "migrationLogin": "postgres",
-    "runtimeLogin": "starter_runtime",
-    "restoreLogin": "starter_restore",
-    "postgresMajor": 16,
-    "originalOrdinal": 146,
-    "intermediateOrdinal": 155,
-    "targetOrdinal": 156,
-    "intermediateLedgerRows": 156,
-    "targetLedgerRows": 157,
-    "forwardGuideSlot": 151,
-    "forwardActualOrdinal": 156,
-    "forwardPath": "db/platform/migrations/20261122190000_subscription_cadence_bound.sql",
-    "pending": [],
-    "replayApplied": [],
-    "configurations": [
-      "supplements",
-      "coffee"
+    "ordinals": [
+      156,
+      159,
+      168
     ],
-    "restore": {
-      "source": "The exact retained PG16 after-witness dumps from the 0.43.0\u21921.0.0 run, including purchase, tally and durable pending work.",
-      "initialRefusal": "After forward 151 committed on supplements, final inventory refused because pg_dump18/pg_restore omitted 453 owner-to-self grants; the unchanged coffee restore also refused the 1.0.0 inventory check.",
-      "diagnosis": "A separate clean published 1.0.0\u21921.1.0 control passed. Public canonical projection comparison found 453 missing owner self-grants, 66 related relation/schema attribute digests, no added ACLs, no changed runtime grant, role, ownership or definition.",
-      "repair": "Restored only the exact 453 predecessor owner self-grants. Both restored databases then matched clean canonical projections exactly (coffee at 155, supplements at 156). No engine/manifest/ledger/package SQL edits or projection bypass.",
-      "resume": "Installed runner status/dry-run/apply/status/replay then passed; supplements resumed with zero pending because its forward was already committed; coffee applied the one pending forward. Both final replays applied zero.",
-      "dumpCompatibility": "Removed only the pg_dump18 session preamble SET transaction_timeout = 0 unsupported by PG16; all object and data statements retained.",
-      "appliedSqlSha256": "56192a40f3677b4e77a16969dd0e40889f060a07f576569ea356f5ec6bb58163"
-    }
-  },
-  "fileUpgrade": {
-    "immutableSnapshots": "Pristine released 1.0.0 and 1.1.0 managed bytes with conservative schema singleton 155, observed before application. Existing owned offer/interim test copies are explicitly excluded from both snapshots.",
-    "initialConflicts": [
-      "ownership.json"
+    "forwardCounts": [
+      3,
+      9
     ],
-    "conflictResolution": "Exact candidate inventory admitted plan/apply/replay; restored union of all app-owned additions and the two existing test ownership moves afterward.",
-    "managedFilesApplied": 11,
-    "replayFilesApplied": 0,
-    "ownedContractChange": "owned/renewal.config.ts adds the required retention mapping; reasons, timing, disabled renewal scheduling and [24,48,72] retry hours preserved.",
-    "ownedFixturePort": "test/interim-pricing.test.ts follows 1.1.0 MAX_CADENCE_DAYS boundary; retains application-specific checkoutDays clearing.",
-    "starter043Audit": "All required offer/editor/quote-copy/catalogue contracts from the installed 1.0 guide Starter applications from 0.43.0 are already present. The three target-only files introduced in that transition exist with exact 1.1.0 bytes; no missing ports.",
-    "preservedSettings": "Morrow store.config.ts remains byte-identical: brand, prices, minima, default coffee, sandbox providers, XTS/.test boundary, supplements checkout28/56 and editor14/28/56, coffee14/28/56.",
-    "extension": "retained; subscriber, invocation, worker fences and durable capture unchanged; 18 pending settlement facts per configuration processed through native worker and replay zero, without rewriting other pending work.",
-    "ci": "Existing workflow, image digest, verifier and purchase harness unchanged. No new CI or witness machinery."
+    "pendingAfter": 0,
+    "replayApplied": 0,
+    "witness": "demo/local-receipt.json"
   },
-  "ownedHashes": {
-    "owned/renewal-copy.ts": {
-      "beforeSha256": "a4f02feffe95fb9a9b56034fe260756d36cc2b264d73993e17497a37f844a1e8",
-      "afterSha256": "a4f02feffe95fb9a9b56034fe260756d36cc2b264d73993e17497a37f844a1e8",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/renewal.config.ts": {
-      "beforeSha256": "d6cc44210ead43c663a988a3f96b3b508aa53e75f89294073289fead9c18cf7c",
-      "afterSha256": "900b31b110c44d9a752fcfc90b7a4fe2e46460c1c90e0e20b73ef687b5ec0331",
-      "disposition": "partial",
-      "reason": "Required retention contract"
-    },
-    "AGENTS.md": {
-      "beforeSha256": "362e136d4fcb27deca72b7f3c1ceb797cb0f1e75bcc2090234e28d088ece7335",
-      "afterSha256": "d04a4a0db3c2a0a0e05f40cfeb2488e956906feecdb6593fd5ba7d07cc01657e",
-      "disposition": "partial",
-      "reason": "Current labels or refreshed evidence; historical seed preserved"
-    },
-    "owned/catalogue.ts": {
-      "beforeSha256": "cd57f913ea50537884cab0a994325dc449cbdf0349285fe925fd4bff8e0d1c99",
-      "afterSha256": "cd57f913ea50537884cab0a994325dc449cbdf0349285fe925fd4bff8e0d1c99",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/catalogue.json": {
-      "beforeSha256": "8b759f197626cf66adf896e1a9f9f699f35899ad7426afaad0347e8743b8207d",
-      "afterSha256": "8b759f197626cf66adf896e1a9f9f699f35899ad7426afaad0347e8743b8207d",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/copy.ts": {
-      "beforeSha256": "e3d5cc37c04232d689f1211f3fb15bdcb7768e9893f997eb6fb8a7654a57e275",
-      "afterSha256": "e3d5cc37c04232d689f1211f3fb15bdcb7768e9893f997eb6fb8a7654a57e275",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/acquisition-addresses.ts": {
-      "beforeSha256": "ab13ec57f81dd32ebc29374def38e20b1deb54059ee1994ecca163526f7ae6b9",
-      "afterSha256": "ab13ec57f81dd32ebc29374def38e20b1deb54059ee1994ecca163526f7ae6b9",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/demo-seed.ts": {
-      "beforeSha256": "f491f8987e04bd50af9eaba913ecbbd3c30b9395db2f3627543f6e5e84099cf2",
-      "afterSha256": "f491f8987e04bd50af9eaba913ecbbd3c30b9395db2f3627543f6e5e84099cf2",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/fragments.ts": {
-      "beforeSha256": "c98e7d12b623602792750b3a1ebe44247dd91744cbec66ea3a76631198a73600",
-      "afterSha256": "c98e7d12b623602792750b3a1ebe44247dd91744cbec66ea3a76631198a73600",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/store.config.ts": {
-      "beforeSha256": "3fb9a0fcd92ca60d783f0cf92c1a08d7661c356f37e33ccbfa21ee253f053d6e",
-      "afterSha256": "3fb9a0fcd92ca60d783f0cf92c1a08d7661c356f37e33ccbfa21ee253f053d6e",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/coffee.svg": {
-      "beforeSha256": "88168d993e470d08fc545c259d758a064902aab8e7224b4a4e96333ec37fa389",
-      "afterSha256": "88168d993e470d08fc545c259d758a064902aab8e7224b4a4e96333ec37fa389",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/collection.svg": {
-      "beforeSha256": "88f12892ee8dbe29bf0da234f1eb2bb6fe7a399c16f59d316b8bead227b02cc9",
-      "afterSha256": "88f12892ee8dbe29bf0da234f1eb2bb6fe7a399c16f59d316b8bead227b02cc9",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/dark.svg": {
-      "beforeSha256": "1a1bf45a972495f381e03f59a1bc33cabee47b66a60bf84bae910e5c4d79a602",
-      "afterSha256": "1a1bf45a972495f381e03f59a1bc33cabee47b66a60bf84bae910e5c4d79a602",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/dawn.svg": {
-      "beforeSha256": "ce2c2e1c0731eb656a8ad088278bd50359104cf1085775c3fcc659fef1bedfb4",
-      "afterSha256": "ce2c2e1c0731eb656a8ad088278bd50359104cf1085775c3fcc659fef1bedfb4",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/dusk.svg": {
-      "beforeSha256": "e53f2c333f8c0779b985c79d0efcea231f539cd01b84df781e7b50341368e137",
-      "afterSha256": "e53f2c333f8c0779b985c79d0efcea231f539cd01b84df781e7b50341368e137",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/light.svg": {
-      "beforeSha256": "f2f4afe4717120e25584f01e29a58386d4b271dcb724bf936fe0ba41732a0d96",
-      "afterSha256": "f2f4afe4717120e25584f01e29a58386d4b271dcb724bf936fe0ba41732a0d96",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/medium.svg": {
-      "beforeSha256": "7d2db312ae175e4713e15f3677ab60ee424d7ea046c5a7592c883342de146052",
-      "afterSha256": "7d2db312ae175e4713e15f3677ab60ee424d7ea046c5a7592c883342de146052",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "public/media/noon.svg": {
-      "beforeSha256": "dfd5e6ecaf442618eff91518a36133704cc6d29bc6c7df96869cd0abeffb7796",
-      "afterSha256": "dfd5e6ecaf442618eff91518a36133704cc6d29bc6c7df96869cd0abeffb7796",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/editor-copy.ts": {
-      "beforeSha256": "505a92ac5c0005c4aebb8fe831df68d640063c0e99fdb34c3f8da7a217fe4e53",
-      "afterSha256": "505a92ac5c0005c4aebb8fe831df68d640063c0e99fdb34c3f8da7a217fe4e53",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/subscription-editing.ts": {
-      "beforeSha256": "86881ace3203ba70b508e59127fa23f3297dc6cf6ff5a480a28183d694c65e7f",
-      "afterSha256": "86881ace3203ba70b508e59127fa23f3297dc6cf6ff5a480a28183d694c65e7f",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/acquisition-policy.ts": {
-      "beforeSha256": "8a752f9b74b0b6c068c46d9fe0b076b6fd31c1f9e85544e21816fd580c7b5907",
-      "afterSha256": "8a752f9b74b0b6c068c46d9fe0b076b6fd31c1f9e85544e21816fd580c7b5907",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/quote.config.ts": {
-      "beforeSha256": "0e27426b77508009a4ef6b0b2bd83e6034af0bae295a7871474b5b67bff9d412",
-      "afterSha256": "0e27426b77508009a4ef6b0b2bd83e6034af0bae295a7871474b5b67bff9d412",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/quote-copy.ts": {
-      "beforeSha256": "0e23c188c303740c0ec4b2dd6bc907cd6623c7240a3f24b493fbf1832f39724e",
-      "afterSha256": "0e23c188c303740c0ec4b2dd6bc907cd6623c7240a3f24b493fbf1832f39724e",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/quote-shipping.ts": {
-      "beforeSha256": "72cc19218a3a424bc09470c6b5f08dd07411cf42a27f086382cf7967b3e23535",
-      "afterSha256": "72cc19218a3a424bc09470c6b5f08dd07411cf42a27f086382cf7967b3e23535",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/renewal-policy.ts": {
-      "beforeSha256": "13f0eac976318ed210c39ac6e681838cf52e085878bd5199b608048097c768cf",
-      "afterSha256": "13f0eac976318ed210c39ac6e681838cf52e085878bd5199b608048097c768cf",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/settlement-subscriber.ts": {
-      "beforeSha256": "d93f59d0fc5c67852efc59c4ce885cfad76830cf4404d700dbc01c7c75b7d8d4",
-      "afterSha256": "d93f59d0fc5c67852efc59c4ce885cfad76830cf4404d700dbc01c7c75b7d8d4",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "owned/settlements.ts": {
-      "beforeSha256": "cd6d800ec18428b9a8538a40250254c1199e4bb72013f70874cea57e880f3c8e",
-      "afterSha256": "cd6d800ec18428b9a8538a40250254c1199e4bb72013f70874cea57e880f3c8e",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "test/demo-settlement.test.ts": {
-      "beforeSha256": "f588fa62b0111af338fa7f387c58bb4919d6a0aa92844eadb2af3acbe60da55d",
-      "afterSha256": "f588fa62b0111af338fa7f387c58bb4919d6a0aa92844eadb2af3acbe60da55d",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "demo/EXTENSION.md": {
-      "beforeSha256": "ad1cb19edf7dacab880f0c4ddd6e368d7fdba53138ea1d1301b57b44ebb0e853",
-      "afterSha256": "ad1cb19edf7dacab880f0c4ddd6e368d7fdba53138ea1d1301b57b44ebb0e853",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    ".github/workflows/ci.yml": {
-      "beforeSha256": "1d7888ff5863c5753a43f42091db85e4a37f15359d22386e47aeaa9db7369afd",
-      "afterSha256": "1d7888ff5863c5753a43f42091db85e4a37f15359d22386e47aeaa9db7369afd",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "demo/images.json": {
-      "beforeSha256": "05d2ba0b70d476d0dbf6759e87b40611ae4673553382a79a326234edbc12478a",
-      "afterSha256": "05d2ba0b70d476d0dbf6759e87b40611ae4673553382a79a326234edbc12478a",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "demo/purchase-journey.mjs": {
-      "beforeSha256": "d15691e3c8f33f662ef27763dee29314feb26c85273f3f921cc30ad78fb3922b",
-      "afterSha256": "d15691e3c8f33f662ef27763dee29314feb26c85273f3f921cc30ad78fb3922b",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "demo/verify.mjs": {
-      "beforeSha256": "2fe102284ec26768805e509ef5773e0cb758c5f54bc8e51c3f93e1aac187cb39",
-      "afterSha256": "2fe102284ec26768805e509ef5773e0cb758c5f54bc8e51c3f93e1aac187cb39",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "demo/README.md": {
-      "beforeSha256": "c0c737935e220c7483bc11d87a858cc08e738f35c6604faf2d9052421886bba2",
-      "afterSha256": "4ddd240396cd5296f138617e9b5721053d5e6b2137a6fb6973e2c6d523036693",
-      "disposition": "partial",
-      "reason": "Current labels or refreshed evidence; historical seed preserved"
-    },
-    "demo/local-receipt.json": {
-      "beforeSha256": "5d9abe2ce1e2af2fcb90f0112f8a8ebc3502f8ddb7d01d83f29314fe1b1acc1e",
-      "afterSha256": "bd7cb02f9de5a25ee6e2ab5584e241edbcbba7ee4fec454955e21261f25667e4",
-      "disposition": "partial",
-      "reason": "Current labels or refreshed evidence; historical seed preserved"
-    },
-    "demo/preparation-inputs.json": {
-      "beforeSha256": "d6de9b70f0613e8411e1403b2cecc5887d0e33418c3f7645550c3d7d02b09269",
-      "afterSha256": "d6de9b70f0613e8411e1403b2cecc5887d0e33418c3f7645550c3d7d02b09269",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "demo/readiness.mjs": {
-      "beforeSha256": "cf3af40202c4baa48b68261b487456839fe8c4be08a7cca7ea159890c088a4df",
-      "afterSha256": "cf3af40202c4baa48b68261b487456839fe8c4be08a7cca7ea159890c088a4df",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "test/offer.test.ts": {
-      "beforeSha256": "257a2bab31b19a1edd02cbcae5c208d58404f7de2a9595293c06e09f15bb0c22",
-      "afterSha256": "257a2bab31b19a1edd02cbcae5c208d58404f7de2a9595293c06e09f15bb0c22",
-      "disposition": "retained",
-      "reason": "Existing binding/capability/behavior retained unchanged"
-    },
-    "test/interim-pricing.test.ts": {
-      "beforeSha256": "ba3925a03135534b0912ab297ff1e1dd9358f660a0ebed165d16a57c9b71d4e3",
-      "afterSha256": "93dbd87d36b3ebae1eb5c20f24d3ece555ef183cc05db4a98412df4d4a889728",
-      "disposition": "partial",
-      "reason": "Manual port of owned maximum-cadence fixture, preserving checkout subdomain override"
-    }
+  "ownedReconciliation": {
+    "1.2.0": "Exact target bytes for uncustomized owned copy, renewal config, demo seed and address policy files. Merge required fields into customized store config and contributor guide. Carry the offer boundaries into the existing owned test.",
+    "1.3.0": "Create the exact target settings binding, append the task route to AGENTS.md, port the existing catalogue unit factor and the two unchanged-from-predecessor helper strings. Retain the app catalogue validator.",
+    "preserved": "Fictional products, brand, currency, prices, offer cadence, sandbox providers, settlement extension and CI gate. The existing catalogue validator remains selected."
   },
-  "witnesses": [
+  "localReceiptSha256": "14bcb218d9544e516fbbdba0ca5bad15e85711d749987d041dd7a47e98a9e3aa",
+  "dx": [
     {
-      "name": "npm-ci",
-      "result": "PASS"
+      "title": "Adjacent release ordering",
+      "reference": "upgrade/README.md:16-41, upgrade/v1-2-0.md:266-269, upgrade/v1-3-0.md:115-125",
+      "detail": "The overview lists the dependency update before file reconciliation. The starter notes require owned reconciliation and file apply before refreshing the application's install. Used a separately installed target CLI for each adjacent hop and kept each application stopped during the file/dependency transition."
     },
     {
-      "name": "typecheck",
-      "result": "PASS"
+      "title": "Released extraction inputs",
+      "reference": "examples/neutral-store/README.md:146-184",
+      "detail": "The guide points adopters to committed manifest/lock pairs. The relevant tags and the source repository's main branch carry only 0.43.0 inputs. Assembled v2 manifests from the actual tagged publish artifacts and resolved public-registry locks with the qualification producer's npm command. Used the tagged extractor and verified all OpenLup provenance. All three content digests match upstream. The 1.1.0 and 1.2.0 transitive lock digests differ, while 1.3.0 reproduces the upstream lock digest."
     },
     {
-      "name": "build",
-      "result": "PASS"
+      "title": "Snapshot inputs and schema ordinal",
+      "reference": "upgrade/application-files.md:11-23,96-112, reference/cli.md:11-18, upgrade/database-migrations.md:88-104",
+      "detail": "Hand-built exact UTF-8 snapshots from extracted ownership lists, excluded two locally owned tests, omitted generated locks and used the predecessor's qualified ledger ordinal rather than its package or manifest schema version. The CLI trusts the caller-supplied ordinal. The database witness separately verified 156 and 159."
     },
     {
-      "name": "application-tests",
-      "result": "PASS",
-      "cases": 329,
-      "skipped": 0
+      "title": "Customized ownership inventory",
+      "reference": "upgrade/application-files.md:25-44, upgrade/v1-3-0.md:115-123, both CLI conflict receipts, ownership.json",
+      "detail": "Both plan and apply refused the customized inventory with current bytes match neither predecessor nor candidate. Both exit 1, but JSON puts the plan conflicts under plan.conflicts and the refused apply conflicts at the top level. Saved the app inventory, restored exact predecessor bytes, applied/resumed/replayed, then reattached app-owned paths and exclusions. A subsequent hop needs its own reconciliation."
     },
     {
-      "name": "editor-components",
-      "result": "PASS",
-      "cases": 42
+      "title": "1.2.0 owned locale and copy migration",
+      "reference": "upgrade/v1-2-0.md:15-43,172-217",
+      "detail": "Added the locale registry as a target-only snapshot creation, ported pristine owned copy and seed files, and composed the registry into both customized markets. Preserved English as default, Polish support, fictional market identity and local contributor authority. The CLI only created the registry."
     },
     {
-      "name": "fresh-native-purchase-tally-replay",
-      "result": "PASS",
-      "cases": 2,
-      "configurations": [
-        "supplements",
-        "coffee"
-      ]
+      "title": "1.2.0 owned policy migration",
+      "reference": "upgrade/v1-2-0.md:45-107,127-154",
+      "detail": "Ported account-action and pause defaults and added the edit window, inventory policy and reminder schedule to both customized configurations. Merged the task routes and representation limits into AGENTS.md, keeping the existing store values and retry ladder."
     },
     {
-      "name": "upgraded-baseline-destinations-navigation-purchase",
-      "result": "PASS",
-      "cases": 108
+      "title": "1.2.0 existing database settings",
+      "reference": "upgrade/v1-2-0.md:108-125,155-170,271-292",
+      "detail": "After the packaged forwards, explicitly installed and read back both policies on the existing local databases through public package APIs. Revision default and starter-1 differ even when days and waves match. The released Platform section still says Unreleased; next minor."
     },
     {
-      "name": "upgraded-baseline-subscription-recovery-alignment",
-      "result": "PASS",
-      "cases": 28
+      "title": "1.2.0 earlier owned test copies",
+      "reference": "upgrade/v1-2-0.md:90-97,240-269",
+      "detail": "The earlier demo upgrade already took ownership of test/offer.test.ts and test/interim-pricing.test.ts. The guide's test list omits the new offer representation cases and required defaultLocale fixture member. Merged the pristine offer test delta into the owned copy and preserved both checkout-domain overrides."
     },
     {
-      "name": "upgraded-baseline-isolated-renewal-destinations",
-      "result": "PASS",
-      "cases": 4
+      "title": "1.3.0 settings binding and app guide",
+      "reference": "upgrade/v1-3-0.md:63-107,109-132,211-226",
+      "detail": "The guide alternates between creating a whole binding and editing an existing binding. Morrow had no binding, so used the exact target file, direct Zod pin and settings script, and merged the AGENTS.md task instructions. Checked list, show, validation and a connected reminder read for both configs."
     },
     {
-      "name": "file-upgrade",
-      "result": "PASS",
-      "appliedFiles": 11,
-      "replayApplied": 0
+      "title": "1.3.0 catalogue and paid-receipt owned files",
+      "reference": "upgrade/v1-3-0.md:151-159,176-195",
+      "detail": "Copied the existing pack's count-unit factor into the owned registry and retained its validator. The target inventory lists the optional rules bundle and test, so its app inventory had to omit those absent files. The target also changes two pristine owned operator helper strings alongside the managed changes, which required a separate owned-file refresh."
     },
     {
-      "name": "schema-upgrade",
-      "result": "PASS",
-      "appliedPerDatabase": 1,
-      "pending": [],
-      "replayApplied": 0
+      "title": "Browser witness selection",
+      "reference": "docs/proof.md:38-49, browser/acquisition.spec.ts:61, Playwright browser output",
+      "detail": "The care title matched nearly the entire acquisition spec in an initial predecessor run, which was stopped after assertion failures. The first target run put shipment alignment and renewal destination cases in one database: shipment flips auto_align and subsequent renewal cases refused with subscription_delivery_alignment_admission_required. The normal starter runs these groups on separate databases. The focused continuity runs use explicit titles and run renewal destination cases before shipment alignment."
+    },
+    {
+      "title": "Application-owned readiness observer",
+      "reference": "upgrade/README.md:43-62, upgrade/v1-2-0.md:108-125 and 155-170, host/native-composition.ts:57, openlup verify exit 74 OPENLUP_E_CLI_FAILURE",
+      "detail": "The actual managed composeNativeBindings signature now requires StoreConfig before the keyring for its installed-policy checks. The migration guide omits the impact on existing verification modules. The CLI withheld the raw assembly error. Updated the demo observer to pass its selected config."
     }
   ],
-  "dataContinuity": {
-    "supplements": {
-      "subscriptions": {
-        "rows": 16,
-        "byteEqual": true,
-        "sha256": "2981088c6b657676b039423a9024c8cb6700f31b86273873546a0065f079eb29"
-      },
-      "commerce_orders": {
-        "rows": 22,
-        "byteEqual": true,
-        "sha256": "779b26c0845811d1f1e1d47f471848fde82d79205dba7d7cb59750dc03d98ad0"
-      },
-      "outbox_events": {
-        "rows": 92,
-        "byteEqual": true,
-        "sha256": "bc45db924d0ae0cd8da361ec6be15186d4ab3e09f8e4862c43f4047f89dacb3c"
-      },
-      "subscription_cycles": {
-        "rows": 19,
-        "byteEqual": true,
-        "sha256": "fcf2ac3934b8fbbf9f33b89582bf8165d076960b08d57473ef353ca966e9239e"
-      },
-      "subscription_renewal_operations": {
-        "rows": 5,
-        "byteEqual": true,
-        "sha256": "ce5b40c74daa7e00759a861b6e5b158fbb89efcd669f9a557222b73103161ab5"
-      },
-      "ledger": {
-        "ordinal": 156,
-        "rows": 157
-      }
-    },
-    "coffee": {
-      "subscriptions": {
-        "rows": 16,
-        "byteEqual": true,
-        "sha256": "94f02f2d6bf031be1c898b4b26de354a8d060c5da14b38f6d3d93bf3ccb04321"
-      },
-      "commerce_orders": {
-        "rows": 22,
-        "byteEqual": true,
-        "sha256": "a4a64599c4afae2a24388b074f4afbeeefd9098a439205e2dcd95414d3dd8470"
-      },
-      "outbox_events": {
-        "rows": 92,
-        "byteEqual": true,
-        "sha256": "2590ac47f648231d8db5fb2a61badfce262c81cf096c98772b2edb33a9eda01f"
-      },
-      "subscription_cycles": {
-        "rows": 19,
-        "byteEqual": true,
-        "sha256": "53cd2e5e06b53f6c3fa2ec3704d05085df7cc841601e5733b8cca902c8519db0"
-      },
-      "subscription_renewal_operations": {
-        "rows": 5,
-        "byteEqual": true,
-        "sha256": "eb28cf48915aa8383bd5dc83767e88aa939d52a0c84c4a78018df38e928b2cbf"
-      },
-      "ledger": {
-        "ordinal": 156,
-        "rows": 157
-      }
-    }
-  },
-  "subscriptionInvariant": {
-    "supplements": {
-      "cases": 4,
-      "retainedFromPreviousWitness": 2,
-      "new11WitnessCases": 2,
-      "lateArrivalExtends": true,
-      "noEarlierCycle": true,
-      "oneOriginalCycle": true,
-      "zeroRenewalOperations": true,
-      "oneOriginalAndOneReplacementParcel": true,
-      "oneArrivalReceiptPerReplacement": true,
-      "observationsSha256": "9eca1a10a0b5172e159d15c5dbe45cb4879c934b241f5d2b95615656656d4b58"
-    },
-    "coffee": {
-      "cases": 4,
-      "retainedFromPreviousWitness": 2,
-      "new11WitnessCases": 2,
-      "lateArrivalExtends": true,
-      "noEarlierCycle": true,
-      "oneOriginalCycle": true,
-      "zeroRenewalOperations": true,
-      "oneOriginalAndOneReplacementParcel": true,
-      "oneArrivalReceiptPerReplacement": true,
-      "observationsSha256": "a937d1159bcbddb187f8a3539e4200ebac0bea485388c9bf125661e20c907db7"
-    }
-  },
-  "catalogueOptIns": {
-    "supplements": {
-      "definitions": 0,
-      "backfilledSkus": 0,
-      "mappedProducts": 0,
-      "variantIdentities": 0,
-      "definitionInstalls": 0,
-      "priceWriterReceipts": 0
-    },
-    "coffee": {
-      "definitions": 0,
-      "backfilledSkus": 0,
-      "mappedProducts": 0,
-      "variantIdentities": 0,
-      "definitionInstalls": 0,
-      "priceWriterReceipts": 0
-    }
-  },
-  "evidenceHashes": {
-    "from.json": "f2c59bffb75c1bac5aa86c5d46c5d3f49d6190262af6ce9925543e442a0c3d21",
-    "to.json": "4db9ad4c678e99fa7bfcd05b58f3e03f4785f4e4034c52b0445ab6f399634ef3",
-    "snapshot-policy.json": "8f9dfa8b6f3300b1d3816ff46961547adc461235e2e6be0675f314e62e602ddb",
-    "plan-initial.json": "e00093459710e746a13eb1d9c3b38e775c0b3f897b492f8dc88ac74e866d6fc2",
-    "plan.json": "3afc1d72961102f67ec3655741a4d4b54f9353e9324b3c1f46c9acef32292a2a",
-    "apply.json": "9f9b7fd2467dfccdd62441486b6cd46e2dbc17b211ede4b76e2319215412b39a",
-    "apply-replay.json": "571749479ede40a4b056fdca9fa8e10e364b97d5db3692fe5e2e21b857c6a573",
-    "ownership-resolution.json": "99be974c80df357720b0c7da1265f19d2c18b149d1ce1d986a3d2d7765d4294a",
-    "data-before.json": "864b53fd3696ef908a5dc456f24cb44bde08e92c481160da70e06e582cc7674a",
-    "data-continuity.json": "f9447685dff75b5f582e95f36ed2b2fa4ec4623dfe00debf3188e97e33eb6ca3",
-    "subscription-invariant.json": "a6863c3a61133dd2fa479ed858ad1df2b14eb632c343f812f26b0028ac60357c",
-    "catalogue-opt-ins.json": "05b33d42be08e7dc20e0186fdce6c4e82764642116c33de31b9761da5c7d5074",
-    "owned-reconciliation.json": "6196a1b87ab7b7d3d0e0e02f44f26c79efac624e150fb2991a7975f9e6f888c1",
-    "npm-provenance.json": "9669dc8bfa7a50c5f959ab3f54025d65804422b21a2a27838d4a383f382795d0",
-    "application-provenance.json": "c674c6fa9f783c986a5893c87facf195904a06e827420ec107c9ddced0fc9030",
-    "restore-owner-acls.sql": "56192a40f3677b4e77a16969dd0e40889f060a07f576569ea356f5ec6bb58163",
-    "restore-projection-differences.json": "92899573b2c1be6f55f2cab10509bbf5d539a7e358cfa03da0ecc742e03e0256",
-    "restore-acl-repair.log": "429048b737925d79db8c37b59958a09ac9c487be8e4462582685920645b44b44",
-    "fresh-control-old.log": "ea11c69f909e20029152ad0973c19d50f59bf50541d4ad6ed8209f5013308b1a",
-    "fresh-control-target.log": "b83420fc38c07c79329919262c171fd76d6b7159d7e63b62cb357af0dce86b0d",
-    "upgraded-journey.mjs": "9d7e2f499ff9b027b3f35db7a9865e43824582516d72a40dd7d1defba22081fa",
-    "published-inputs.json": "5f74ecd6371b219660a7b283d147a229e0ced615396b47f8f135f95153da6be4",
-    "qualification-110/exact-set-qualification/exact-set-qualification.json": "bdfc52f4a5f3b42f8ae2d6893fe92ac6e40de35303133c168c514108c7deb6b6"
-  },
-  "pristineHashes": {
-    "predecessorLock": "8ce6f0a9cf14a1bfb4c0a80f035a42cf8c15b3b997366adfb3db58c88c93d8ab",
-    "predecessorOrigin": "d0525c480785a9042465fa4c4d2f302a4a60fcd85079c62561e97c4ce1c551a8",
-    "targetLock": "a5b60f451c86f278e7284ffefa7bd51d56040ddd6f479838900188eca44d0eb7",
-    "targetOrigin": "81c206330082fa9a95c42be8d645c231a60cace7f5a7f9841c04f64f2e3d7a82"
-  },
-  "localReceiptSha256": "bd7cb02f9de5a25ee6e2ab5584e241edbcbba7ee4fec454955e21261f25667e4",
-  "upstreamQualification": {
-    "url": "https://github.com/openlup/openlup/actions/runs/44255571945",
-    "tag": "openlup-core-v1.1.0",
-    "exactSetQualification": "PASS",
-    "upgrade": "PASS",
-    "schemaUpgrade": "PASS",
-    "canary": "PASS",
-    "imagePublication": "FAIL/refused; separate publication result not qualified by this demo PR"
-  },
-  "limits": [
-    "Local demo/verify.mjs passed install, typecheck, build and 329 tests, then failed the authenticated GHCR mirror pull because the configured token lacks scope. No credentials/settings changes or pull shim. Local browser/database proof used the already-cached verified pinned PG16 image. Hosted CI is separate.",
-    "Readiness remains unsatisfied for the pre-existing unsubscribe.apply port in both configurations; it was observed and not fixed.",
-    "Full native editor Compose journeys and the full database-browser matrix were not run; focused existing native and component witnesses were rerun.",
-    "No experimental catalogue definitions, quantity backfill, v2/v3 authoring, or base-price writer activation; database readback remains zero for definitions, mappings, backfill, variant identities and price-writer receipts.",
-    "No production, deployment, settings, secrets, credential changes, other-repository writes, merge, force-push or new PR."
-  ],
-  "recordedAt": "2026-11-18T07:21:42.132388+00:00"
+  "applicationCommit": "2e1c68e8382437fe32ad2ac8161c463a5eec888a"
 }
