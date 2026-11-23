@@ -43,7 +43,7 @@ export async function createVerificationInput() {
     ] };
     const observed = await createSchemaProbe(owner, async () => ({ database,
       version: status.pending.length ? status.applied.at(-1) ?? null : tail })).observe(requiredSchema);
-    native = await composeNativeBindings(input.runtimeUrl, createOriginPolicy(config, 4319), keyring);
+    native = await composeNativeBindings(input.runtimeUrl, createOriginPolicy(config, 4319), config, keyring);
     // These are the existing host's explicitly refused operations. application.status is handled by the HTTP host itself.
     const requiredPorts = operations.filter(name => name !== 'application.status' && !operationLimits[name]);
     const manifest = (name, version, extra) => ({ name, version, kind: 'rail', emits: [], handles: [], schedules: [],

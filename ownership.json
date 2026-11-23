@@ -10,6 +10,7 @@
     "owned/acquisition-addresses.ts",
     "owned/demo-seed.ts",
     "owned/fragments.ts",
+    "owned/settings-host.ts",
     "owned/store.config.ts",
     "public/media/coffee.svg",
     "public/media/collection.svg",

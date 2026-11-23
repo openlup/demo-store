@@ -65,14 +65,14 @@ This application is an unpublished local demonstration. It has no authority to
 publish, deploy, use credentials or create paid resources. Its fictional data
 must never be connected to a customer environment by changing a URL.
 
-Prepare the selected artifacts and dependencies as described in the [starter guide](https://github.com/openlup/openlup/blob/openlup-core-v1.2.0/packages/core/docs/guide/how-to/build/customize-the-starter.md).
+Prepare the selected artifacts and dependencies as described in the [starter guide](https://github.com/openlup/openlup/blob/openlup-core-v1.3.0/packages/core/docs/guide/how-to/build/customize-the-starter.md).
 For the local UI edit loop, run `npm run dev` and refresh the browser after a
-successful build or host restart. See the [starter guide](https://github.com/openlup/openlup/blob/openlup-core-v1.2.0/packages/core/docs/guide/how-to/build/customize-the-starter.md) for supported platforms
+successful build or host restart. See the [starter guide](https://github.com/openlup/openlup/blob/openlup-core-v1.3.0/packages/core/docs/guide/how-to/build/customize-the-starter.md) for supported platforms
 and limits. `npm run build` then `npm start` remains the ordinary one-shot preview.
 
 | Task | Application-relative route | Existing verification route |
 | --- | --- | --- |
-| Brand, copy, media, offer or cadence | `owned/store.config.ts`, `owned/copy.ts`, `public/media/`; start at [customization](https://github.com/openlup/openlup/blob/openlup-core-v1.2.0/packages/core/docs/guide/how-to/build/customize-the-starter.md) | `npm test`, `npm run typecheck`, `npm run build`; add new media to `ownership.json` |
+| Brand, copy, media, offer or cadence | `owned/store.config.ts`, `owned/copy.ts`, `public/media/`; start at [customization](https://github.com/openlup/openlup/blob/openlup-core-v1.3.0/packages/core/docs/guide/how-to/build/customize-the-starter.md) | `npm test`, `npm run typecheck`, `npm run build`; add new media to `ownership.json` |
 | Product, offer or checkout presentation | The three functions in `owned/fragments.ts` | Typecheck and build, then relevant browser proof |
 | Minimum-unit validation | Owned input, the shared `shared/offer.ts` validator and `test/offer.test.ts` | Relevant offer tests; preserve browser/host parity |
 | Languages and default | `market.locales` and `market.defaultLocale` from `owned/market.config.ts`, composed in `owned/store.config.ts`; supply every configured locale in owned copy | `test/locales.test.ts`; startup names missing copy keys/locales and refuses unsupported locales (currently only `en` and `pl`) |
@@ -83,7 +83,7 @@ and limits. `npm run build` then `npm start` remains the ordinary one-shot previ
 | Cancellation offers and retry timing | `owned/renewal.config.ts`, composed in `owned/store.config.ts`; see the installed starter guide's business-configuration convention | `test/renewal.test.ts`; startup refuses unknown retention reason keys/kinds (`starter_retention_configuration_invalid`) and retry ladders other than three rungs (`starter_database_retry_budget`); provider-recorded failures retain SQL timing |
 | Account actions and pause presets | `subscriptionCare.actions` and `pausePresets: choice(default, ...allowed)` in `owned/renewal.config.ts` | `test/renewal.test.ts`; named startup refusals for invalid lists/choices; UI and fresh command admission share the input, completed receipts replay before current membership; keep host and account page managed |
 | Post-renewal policy, including pause after exhausted retries | `owned/renewal-policy.ts`; compose public `isDunningLadderExhausted` and `createPostgresSubscriptionCommands` as described in the installed subscriptions guide | `test/renewal-policy.test.ts` for the default and ladder; real PostgreSQL for lock/recheck, command replay and refusal rollback; keep `host/renewal-job.ts` and `host/scheduled-renewal.ts` managed |
-| New route or whole-page change | [Changes that need a page copy](https://github.com/openlup/openlup/blob/openlup-core-v1.2.0/packages/core/docs/guide/how-to/build/customize-the-starter.md#change-a-page-or-add-a-route), `ownership.json` | Existing route tests and applicable bilingual browser proof; explain maintenance ownership |
+| New route or whole-page change | [Changes that need a page copy](https://github.com/openlup/openlup/blob/openlup-core-v1.3.0/packages/core/docs/guide/how-to/build/customize-the-starter.md#change-a-page-or-add-a-route), `ownership.json` | Existing route tests and applicable bilingual browser proof; explain maintenance ownership |
 | Unavailable action or integration error | `docs/limits.md`, `host/bindings.ts`, relevant composition and installed package contract | Follow the existing witness in [proof guidance](docs/proof.md); do not invent a success |
 
 The configuration is one typed input, and `shared/offer.ts` is the single
@@ -117,12 +117,31 @@ installation step installs it; start only reads and refuses
 policy migration and deliberately install a changed policy before restarting.
 New-purchase requests must use the installed horizon and cannot waive protection.
 
+## Change a business setting
+
+From the starter application root, run `npm --silent run settings -- list` to find the
+key by goal. For example, run
+`npm --silent run settings -- list --goal "renewal stock protection horizon"`, then
+`npm --silent run settings -- show inventory_renewal_protection --json`. Check the
+owner, allowed values, effect and frozen records before changing configuration.
+See `node_modules/@openlup/core/docs/guide/how-to/operate/configure-settings.md`
+for the read path and refusal guidance.
+
+Before changing renewal stock protection, run a connected, read-only preview.
+
+```sh
+npm --silent run settings -- preview inventory_renewal_protection --value '{"revision":"store-1","renewalProtectionDays":21}' --database-url <read-capable-url> --sku <sku> --json
+```
+
+Use the store's configuration and SKU. Read the effect, uncertainty and any
+remediation before using the documented installation change mechanism.
+
 ## First-party demo store
 
 Morrow is fictional. This is OpenLup's first-party demo store, seeded from the
 pristine released 0.43.0 extraction at openlup-core-v0.43.0.
 The original extraction identity and 0.43.0 lock are retained in Git history.
-The current application selects the published 1.2.0 package set.
+The current application selects the published 1.3.0 package set.
 Use sandbox providers, XTS test units and synthetic .test contacts only.
 Preserve the subscription invariant: late delivery extends the next cycle;
 never stack deliveries or move a cycle earlier. Confirm replacement alignment
