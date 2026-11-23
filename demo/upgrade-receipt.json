@@ -477,7 +477,7 @@
     "1.3.0": "Create the exact target settings binding, append the task route to AGENTS.md, port the existing catalogue unit factor and the two unchanged-from-predecessor helper strings. Retain the app catalogue validator.",
     "preserved": "Fictional products, brand, currency, prices, offer cadence, sandbox providers, settlement extension and CI gate. The existing catalogue validator remains selected."
   },
-  "localReceiptSha256": "6c8e0d4bce5eb15ac31cf42b8f1c371190a6d54abc8b427697823f96276fc0b6",
+  "localReceiptSha256": "14bcb218d9544e516fbbdba0ca5bad15e85711d749987d041dd7a47e98a9e3aa",
   "dx": [
     {
       "title": "Adjacent release ordering",
@@ -539,5 +539,6 @@
       "reference": "upgrade/README.md:43-62, upgrade/v1-2-0.md:108-125 and 155-170, host/native-composition.ts:57, openlup verify exit 74 OPENLUP_E_CLI_FAILURE",
       "detail": "The actual managed composeNativeBindings signature now requires StoreConfig before the keyring for its installed-policy checks. The migration guide omits the impact on existing verification modules. The CLI withheld the raw assembly error. Updated the demo observer to pass its selected config."
     }
-  ]
+  ],
+  "applicationCommit": "2e1c68e8382437fe32ad2ac8161c463a5eec888a"
 }

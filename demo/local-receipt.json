@@ -554,5 +554,6 @@
     "Original starter digest retained. The database evidence uses two new synthetic 1.1.0 installations populated through the predecessor app, then upgrades them in place.",
     "The default PostgreSQL runtime role covers the new reminder grant. Optional catalogue rules remain disabled, causing three expected application-test skips.",
     "The local rehearsal covers only the synthetic loopback store. Hosted CI has its own receipt."
-  ]
+  ],
+  "applicationCommit": "2e1c68e8382437fe32ad2ac8161c463a5eec888a"
 }
